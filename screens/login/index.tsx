@@ -8,9 +8,8 @@ import {
 import {SafeAreaView} from "react-native-safe-area-context";
 import {useNavigation} from "@react-navigation/native";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
-import {Input} from "../../components/input";
-import {Button} from "../../components/button";
 import {RootStackParamList} from "../../types/navigation";
+import {Input, Button} from "../../ui";
 import {theme} from "../../styles";
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, "Login">;

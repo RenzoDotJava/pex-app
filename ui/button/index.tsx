@@ -1,5 +1,5 @@
 import {StyleSheet, Text, TouchableOpacity} from "react-native";
-import theme from "../../styles";
+import {theme} from "../../styles";
 
 type ButtonProps = {
 	text: string;

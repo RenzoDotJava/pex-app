@@ -13,7 +13,7 @@ const Input: React.FC<InputProps> = ({
 	placeholder,
 	secureTextEntry
 }) => {
-	function getVariantStyle() {
+	const getVariantStyle = () => {
 		switch (variant) {
 			case "outlined":
 				return styles.outlined;
@@ -22,7 +22,7 @@ const Input: React.FC<InputProps> = ({
 			default:
 				return styles.outlined;
 		}
-	}
+	};
 
 	return (
 		<View style={[styles.input, getVariantStyle()]}>
