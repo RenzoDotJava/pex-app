@@ -1,7 +1,7 @@
+import {NavigationContainer} from "@react-navigation/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {LoginScreen} from "../screens";
 import {RootStackParamList} from "../types/navigation";
-import {NavigationContainer} from "@react-navigation/native";
 import Sidebar from "./sidebar";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();

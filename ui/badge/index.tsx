@@ -1,9 +1,6 @@
 import {StyleSheet, Text, View} from "react-native";
 import {theme} from "../../styles";
-
-type BadgeProps = {
-	text: string;
-};
+import type {BadgeProps} from "../../types/ui";
 
 const Badge: React.FC<BadgeProps> = ({text}) => {
 	return (
@@ -20,12 +17,12 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		borderWidth: 1,
 		borderRadius: 10,
-		backgroundColor: "black",
+		backgroundColor: theme.color.primary,
 		paddingVertical: 2,
 		paddingHorizontal: 10
 	},
 	text: {
-		color: "white",
+		color: theme.color.secondary,
 		fontSize: theme.fontSize.sm
 	}
 });

@@ -1,39 +1,26 @@
-import {View, TextInput, StyleSheet, TouchableOpacity} from "react-native";
-import {AntDesign} from "@expo/vector-icons";
-import {theme} from "../../styles";
-
-type InputProps = {
-	placeholder?: string;
-	variant?: "outlined" | "standard";
-	secureTextEntry?: boolean;
-};
+import {View, TextInput, StyleSheet, TouchableOpacity} from 'react-native';
+import {AntDesign} from '@expo/vector-icons';
+import {theme} from '../../styles';
+import {getVariantStyle} from '../../utils';
+import type {InputProps} from '../../types/ui';
 
 const Input: React.FC<InputProps> = ({
-	variant = "outlined",
+	variant = 'outlined',
 	placeholder,
-	secureTextEntry
+	secureTextEntry,
+	keyboardType = 'default'
 }) => {
-	const getVariantStyle = () => {
-		switch (variant) {
-			case "outlined":
-				return styles.outlined;
-			case "standard":
-				return styles.standard;
-			default:
-				return styles.outlined;
-		}
-	};
-
 	return (
-		<View style={[styles.input, getVariantStyle()]}>
+		<View style={[styles.input, getVariantStyle(variant, styles)]}>
 			<TextInput
-				style={{flex: 1}}
+				style={styles.text}
+				keyboardType={keyboardType}
 				placeholder={placeholder}
 				secureTextEntry={secureTextEntry}
 			/>
 			{secureTextEntry && (
 				<TouchableOpacity>
-					<AntDesign name="eye" color="black" size={24} />
+					<AntDesign name="eye" color={theme.color.primary} size={24} />
 				</TouchableOpacity>
 			)}
 		</View>
@@ -44,17 +31,16 @@ export default Input;
 
 const styles = StyleSheet.create({
 	label: {
-		fontWeight: "500",
+		fontWeight: '500',
 		fontSize: theme.fontSize.md,
 		marginBottom: 4
 	},
 	input: {
 		height: 40,
-		backgroundColor: "transparent",
-		alignItems: "center",
-		justifyContent: "space-between",
-		flexDirection: "row",
-		borderColor: "black"
+		backgroundColor: 'transparent',
+		alignItems: 'center',
+		flexDirection: 'row',
+		borderColor: theme.color.primary
 	},
 	outlined: {
 		borderWidth: 1,
@@ -63,5 +49,9 @@ const styles = StyleSheet.create({
 	},
 	standard: {
 		borderBottomWidth: 1
+	},
+	text: {
+		flex: 1,
+		fontSize: theme.fontSize.md
 	}
 });

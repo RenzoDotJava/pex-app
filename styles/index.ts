@@ -13,5 +13,9 @@ export const theme = {
     "7xl": 72,
     "8xl": 96,
     "9xl": 128,
+  },
+  color: {
+    "primary": "black",
+    "secondary": "white"
   }
 }

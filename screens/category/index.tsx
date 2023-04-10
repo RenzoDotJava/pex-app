@@ -1,6 +1,6 @@
+import {SidebarDrawerParamList} from "../../types/navigation";
 import {StyleSheet, Text, View} from "react-native";
 import {DrawerNavigationProp} from "@react-navigation/drawer";
-import {SidebarDrawerParamList} from "../../types/navigation";
 import {useNavigation} from "@react-navigation/native";
 
 type NavigationProp = DrawerNavigationProp<SidebarDrawerParamList, "Category">;

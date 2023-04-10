@@ -6,8 +6,14 @@ type RootStackParamList = {
 };
 
 type SidebarDrawerParamList = {
-	Expense: undefined;
+	Expense: NavigatorScreenParams<ExpenseParamList>;
 	Category: undefined;
 };
 
-export {RootStackParamList, SidebarDrawerParamList};
+type ExpenseParamList = {
+	Expenses: undefined;
+	AddExpense: undefined;
+	EditExpense: undefined;
+}
+
+export {RootStackParamList, SidebarDrawerParamList, ExpenseParamList};

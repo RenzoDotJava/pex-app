@@ -1,10 +1,5 @@
-import {StyleProp, TouchableOpacity, ViewStyle} from "react-native";
-
-type IconButtonProps = {
-	icon: React.ReactNode;
-	onPress?: () => void;
-	style?: StyleProp<ViewStyle>;
-};
+import {TouchableOpacity} from 'react-native';
+import type {IconButtonProps} from '../../types/ui';
 
 const IconButton: React.FC<IconButtonProps> = ({icon, onPress, style}) => {
 	return (

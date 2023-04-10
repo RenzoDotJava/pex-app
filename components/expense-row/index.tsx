@@ -1,42 +1,25 @@
-import type {RootState} from "../../store";
-import {StyleSheet, Text, View, TouchableOpacity} from "react-native";
-import {useSelector} from "react-redux";
-import {findExpenseInDeleteList} from "../../slices/expense";
-import Badge from "../../ui/badge";
-import {theme} from "../../styles";
-
-type ExpenseRowProps = {
-	id: number;
-	costCenter: string;
-	category: string;
-	place: string;
-	paymentMethod: string;
-	amount: number;
-	onPress: (onList: boolean, id: number, type: "normal" | "long") => void;
-};
+import {memo} from 'react';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {Badge} from '../../ui';
+import {theme} from '../../styles';
+import type {ExpenseRowProps} from '../../types/components';
 
 const ExpenseRow: React.FC<ExpenseRowProps> = ({
-	id,
 	costCenter,
 	category,
 	place,
 	paymentMethod,
 	amount,
-	onPress
+	backgroundColor,
+	onPress,
+	onLongPress
 }) => {
-	const onList = useSelector((state: RootState) =>
-		findExpenseInDeleteList(state, id)
-	);
-
 	return (
 		<TouchableOpacity
-			style={[
-				styles.container,
-				{backgroundColor: onList ? "red" : "transparent"}
-			]}
+			style={[styles.container, {backgroundColor}]}
 			activeOpacity={0.5}
-			onPress={() => onPress(onList, id, "normal")}
-			onLongPress={() => onPress(onList, id, "long")}
+			onPress={onPress}
+			onLongPress={onLongPress}
 			delayLongPress={400}
 		>
 			<View style={styles.container_left}>
@@ -53,37 +36,49 @@ const ExpenseRow: React.FC<ExpenseRowProps> = ({
 	);
 };
 
-export default ExpenseRow;
+const areEqual = (
+	prevProps: ExpenseRowProps,
+	nextProps: ExpenseRowProps
+): boolean => {
+	const {onList, selectMode} = nextProps;
+	const {onList: prevOnList, selectMode: prevSelectMode} = prevProps;
+
+	const onListEqual = selectMode === prevSelectMode && onList === prevOnList;
+
+	return onListEqual;
+};
+
+export default memo(ExpenseRow, areEqual);
 
 const styles = StyleSheet.create({
 	container: {
-		display: "flex",
-		flexDirection: "row",
+		display: 'flex',
+		flexDirection: 'row',
 		paddingHorizontal: 16,
 		paddingVertical: 10,
-		borderBottomColor: "gray",
+		borderBottomColor: 'gray',
 		borderBottomWidth: 1
 	},
 	container_left: {
 		flex: 1,
-		display: "flex",
-		justifyContent: "center",
+		display: 'flex',
+		justifyContent: 'center',
 		gap: 1
 	},
 	container_right: {
-		justifyContent: "center",
-		alignItems: "flex-end",
+		justifyContent: 'center',
+		alignItems: 'flex-end',
 		gap: 8
 	},
 	cost_center: {
 		fontSize: theme.fontSize.lg,
-		fontWeight: "500"
+		fontWeight: '500'
 	},
 	info: {
 		fontSize: theme.fontSize.sm
 	},
 	amount: {
-		fontSize: theme.fontSize["xl"],
-		fontWeight: "600"
+		fontSize: theme.fontSize['xl'],
+		fontWeight: '600'
 	}
 });
