@@ -1,14 +1,19 @@
-import {AnyAction} from "@reduxjs/toolkit";
-import {OnPressType} from "../enums";
+import {AnyAction} from '@reduxjs/toolkit';
+import {Control} from 'react-hook-form';
+import {OnPressType} from '../enums';
 
-type ExpenseProps = {
-	id: number;
+type ExpenseFormInputs = {
 	costCenter: string;
 	category: string;
 	place: string;
 	paymentMethod: string;
 	amount: number;
-}
+	date?: string;
+};
+
+type ExpenseProps = ExpenseFormInputs & {
+	id: number;
+};
 
 type ExpenseRowProps = ExpenseProps & {
 	selectMode: boolean;
@@ -18,4 +23,4 @@ type ExpenseRowProps = ExpenseProps & {
 	onLongPress: () => void;
 };
 
-export {ExpenseProps, ExpenseRowProps};
+export {ExpenseProps, ExpenseRowProps, ExpenseFormInputs};

@@ -84,7 +84,7 @@ const ExpensesScreen: React.FC = () => {
 						? `Total: S/. 980.00`
 						: `${
 								deleteList.length
-						} seleccionados ~ S/. -${totalDeleteAmount.toFixed(2)}`}
+							} seleccionados ~ S/. -${totalDeleteAmount.toFixed(2)}`}
 				</Text>
 			</View>
 			<FlatList

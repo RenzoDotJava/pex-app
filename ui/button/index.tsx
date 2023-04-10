@@ -5,15 +5,21 @@ import type {ButtonProps} from '../../types/ui';
 const Button: React.FC<ButtonProps> = ({
 	text,
 	variant = 'standard',
-	onPress
+	height = 45,
+	onPress,
+	disabled = false
 }) => {
 	return (
 		<TouchableOpacity
 			style={[
 				styles.button,
-				variant === 'outlined' ? styles.button_outlined : styles.button_standard
+				variant === 'outlined'
+					? styles.button_outlined
+					: styles.button_standard,
+				{height, opacity: !disabled ? 1 : 0.5}
 			]}
 			onPress={onPress}
+			disabled={disabled}
 		>
 			<Text
 				style={[
@@ -33,9 +39,6 @@ export default Button;
 const styles = StyleSheet.create({
 	button: {
 		display: 'flex',
-		//borderWidth: 1,
-		//borderColor: theme.color.primary,
-		height: 45,
 		justifyContent: 'center',
 		borderRadius: 6
 	},

@@ -1,5 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native';
-import {Input, Button, DateTimePicker, Select} from '../../ui';
+import {SubmitHandler, useForm} from 'react-hook-form';
+import {FormInput, Button, DateTimePicker, Select} from '../../ui';
+import type {ExpenseFormInputs} from '../../types/components';
 
 const costCenters = [
 	{
@@ -28,41 +30,78 @@ const costCenters = [
 	},
 	{
 		id: 7,
-		name: 'Centro de costo 7'
+		name: 'Centro de costo 67'
 	},
 	{
 		id: 8,
-		name: 'Centro de costo 8'
+		name: 'Centro de costo 68'
 	}
-]
+];
 
 const ExpenseForm = () => {
+	const {
+		control,
+		handleSubmit,
+		formState: {isValid}
+	} = useForm<ExpenseFormInputs>();
+
+	const onSubmit: SubmitHandler<ExpenseFormInputs> = (data) => {
+		console.log(data);
+	};
+
 	return (
 		<>
 			<View style={styles.form_group}>
 				<Text>Fecha</Text>
-				{/* <Input variant="standard" /> */}
-				<DateTimePicker variant="standard" />
+				<DateTimePicker name="date" variant="standard" />
 			</View>
 			<View style={styles.form_group}>
 				<Text>Cantidad</Text>
-				<Input variant="standard" keyboardType="numeric" />
+				<FormInput
+					control={control}
+					name="amount"
+					variant="standard"
+					keyboardType="numeric"
+					rules={{
+						required: 'Campo obligatorio',
+						validate: (value: number) =>
+							value > 0 || 'El monto debe ser mayor a 0'
+					}}
+				/>
 			</View>
 			<View style={styles.form_group}>
 				<Text>Centro de costo</Text>
-				{/* <Input variant="standard" /> */}
-				<Select variant="standard" title="Centro de costo" items={costCenters}/>
+				<Select
+					name="costCenter"
+					variant="standard"
+					title="Centro de costo"
+					items={costCenters}
+				/>
 			</View>
 			<View style={styles.form_group}>
 				<Text>Categoría</Text>
-				<Input variant="standard" />
+				<Select
+					name="category"
+					variant="standard"
+					title="Categoría"
+					items={costCenters}
+				/>
 			</View>
 			<View style={styles.form_group}>
 				<Text>Forma de pago</Text>
-				<Input variant="standard" />
+				<Select
+					name="paymentMethod"
+					variant="standard"
+					title="Forma de pago"
+					items={costCenters}
+				/>
 			</View>
 			<View style={{marginTop: 15}}>
-				<Button text="Guardar" onPress={() => console.log('Guardar')} />
+				<Button
+					text="Guardar"
+					onPress={handleSubmit(onSubmit)}
+					disabled={!isValid}
+				/>
 			</View>
 		</>
 	);

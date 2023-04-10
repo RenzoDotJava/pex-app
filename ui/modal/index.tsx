@@ -32,13 +32,15 @@ const Modal: React.FC<ModalProps> = ({
 					<View style={styles.surface}>
 						<TouchableWithoutFeedback>
 							<View style={styles.modal}>
-								<View style={styles.header}>
-									<Text style={styles.title}>{title}</Text>
-									<TouchableOpacity onPress={onRequestClose}>
-										<Ionicons name="close-circle" size={26} color="black" />
-									</TouchableOpacity>
-								</View>
-								<View style={styles.content}>{children}</View>
+								<>
+									<View style={styles.header}>
+										<Text style={styles.title}>{title}</Text>
+										<TouchableOpacity onPress={onRequestClose}>
+											<Ionicons name="close-circle" size={26} color="black" />
+										</TouchableOpacity>
+									</View>
+									<View style={styles.content}>{children}</View>
+								</>
 							</View>
 						</TouchableWithoutFeedback>
 					</View>
@@ -52,17 +54,19 @@ export default Modal;
 
 const styles = StyleSheet.create({
 	surface: {
+		position: 'relative',
 		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
 		backgroundColor: 'rgba(0, 0, 0, 0.30)'
 	},
 	modal: {
 		width: windowWidth - 32,
-		height: (1.25 * windowHeight) / 2,
+		height: (1.2 * windowHeight) / 2,
 		backgroundColor: 'white',
 		borderRadius: 16,
-		padding: 16
+		padding: 16,
+		position: 'absolute',
+		top: windowHeight / 5,
+		left: 16
 	},
 	header: {
 		flexDirection: 'row',
@@ -75,6 +79,6 @@ const styles = StyleSheet.create({
 	},
 	content: {
 		flex: 1,
-		marginVertical: 10
+		marginVertical: 5
 	}
 });

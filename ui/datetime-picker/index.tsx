@@ -8,7 +8,8 @@ import {getVariantStyle} from '../../utils';
 import type {DateTimePickerProps} from '../../types/ui';
 
 const DateTimePicker: React.FC<DateTimePickerProps> = ({
-	variant = 'outlined'
+	variant = 'outlined',
+	name
 }) => {
 	const [showPicker, setShowPicker] = useState(false);
 	const date = useRef(new Date());

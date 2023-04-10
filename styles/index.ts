@@ -16,6 +16,7 @@ export const theme = {
   },
   color: {
     "primary": "black",
-    "secondary": "white"
+    "secondary": "white",
+    "error": "red"
   }
 }
