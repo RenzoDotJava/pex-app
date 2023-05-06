@@ -11,3 +11,13 @@ export const getVariantStyle = (
 			return styles.outlined;
 	}
 };
+
+export const areEqual = (prevProps: any, nextProps: any): boolean => {
+	const {extraData} = nextProps;
+	const {extraData: prevExtraData} = prevProps;
+
+	//TODO: use lodash or some object comparator in order to do a correct comparison
+	const isEqual = JSON.stringify(extraData) === JSON.stringify(prevExtraData);
+
+	return isEqual;
+};

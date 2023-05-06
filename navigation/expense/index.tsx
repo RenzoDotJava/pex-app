@@ -11,10 +11,7 @@ import {theme} from '../../styles';
 import {IconButton} from '../../ui';
 import {useAppDispatch, useAppSelector} from '../../store';
 import {cleanDeleteList} from '../../slices/expense';
-import type {
-	ExpenseParamList
-} from '../../types/navigation';
-import {useRoute} from '@react-navigation/native';
+import type {ExpenseParamList} from '../../types/navigation';
 
 const Stack = createNativeStackNavigator<ExpenseParamList>();
 
@@ -116,7 +113,22 @@ const ExpenseNavigator: React.FC = () => {
 					)
 				})}
 			/>
-			<Stack.Screen name="EditExpense" component={EditExpenseScreen} />
+			<Stack.Screen
+				name="EditExpense"
+				component={EditExpenseScreen}
+				options={({navigation}) => ({
+					headerTitle: () => (
+						<Text style={styles.headerTitle}>Editar Gasto</Text>
+					),
+					headerBackVisible: false,
+					headerLeft: () => (
+						<IconButton
+							onPress={navigation.goBack}
+							icon={<AntDesign name="arrowleft" size={24} color="white" />}
+						/>
+					)
+				})}
+			/>
 		</Stack.Navigator>
 	);
 };

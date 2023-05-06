@@ -4,7 +4,7 @@ import {Control} from 'react-hook-form/dist/types';
 type FormControllerProps = {
 	control: Control<any>;
 	name: string;
-	rules: Object;
+	rules?: Object;
 };
 
 type VariantProps = {
@@ -12,7 +12,7 @@ type VariantProps = {
 };
 
 type SelectItemProps = {
-	id: number;
+	id: number | string;
 	name: string;
 };
 
@@ -20,9 +20,9 @@ type InputProps = VariantProps & {
 	placeholder?: string;
 	secureTextEntry?: boolean;
 	keyboardType?: 'default' | 'numeric';
-	onChangeText?: (text: string) => void;
 	value?: string;
 	error?: boolean;
+	onChangeText?: (text: string) => void;
 };
 
 type IconButtonProps = {
@@ -43,13 +43,16 @@ type BadgeProps = {
 };
 
 type DateTimePickerProps = VariantProps & {
-	name?: string;
+	value?: string;
+	onChange?: (name: number | string) => void;
 };
 
 type SelectProps = VariantProps & {
 	title?: string;
 	items: SelectItemProps[];
-	name?: string;
+	text?: string;
+	error?: boolean;
+	onChange?: (name: number | string) => void;
 };
 
 type ModalProps = ModalRNProps & {
@@ -60,6 +63,12 @@ type ModalProps = ModalRNProps & {
 type ItemListProps = {
 	onPress?: () => void;
 	name: string;
+	extraData?: Object;
+};
+
+type EmptyListProps = {
+	text: string;
+	onPress?: () => void;
 };
 
 export {
@@ -72,5 +81,6 @@ export {
 	SelectItemProps,
 	ModalProps,
 	ItemListProps,
-	FormControllerProps
+	FormControllerProps,
+	EmptyListProps
 };

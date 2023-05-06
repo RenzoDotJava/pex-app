@@ -3,11 +3,11 @@ import {
 	DrawerNavigationOptions,
 	createDrawerNavigator
 } from '@react-navigation/drawer';
-import {CategoryScreen} from '../../screens';
 import ExpenseNavigator from '../expense';
 import {DrawerContent} from '../../components';
 import {theme} from '../../styles';
 import type {SidebarDrawerParamList} from '../../types/navigation';
+import ConfigNavigator from '../config';
 
 const Drawer = createDrawerNavigator<SidebarDrawerParamList>();
 
@@ -32,12 +32,12 @@ const Sidebar: React.FC = () => {
 	return (
 		<Drawer.Navigator
 			useLegacyImplementation
-			initialRouteName="Expense"
+			initialRouteName="ExpenseNav"
 			screenOptions={drawerOptions}
 			drawerContent={(props) => <DrawerContent {...props} />}
 		>
 			<Drawer.Screen
-				name="Expense"
+				name="ExpenseNav"
 				component={ExpenseNavigator}
 				options={{
 					drawerLabel: (props) => (
@@ -48,12 +48,12 @@ const Sidebar: React.FC = () => {
 				}}
 			/>
 			<Drawer.Screen
-				name="Category"
-				component={CategoryScreen}
+				name="ConfigNav"
+				component={ConfigNavigator}
 				options={{
 					drawerLabel: (props) => (
 						<Text style={[styles.drawerLabel, {color: props.color}]}>
-							Categorías
+							Configuración
 						</Text>
 					)
 				}}

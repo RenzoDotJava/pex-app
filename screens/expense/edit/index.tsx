@@ -1,14 +1,14 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import {RouteProp, useRoute} from '@react-navigation/native';
+import {ExpenseForm} from '../../../components';
+import type {ExpenseParamList} from '../../../types/navigation';
 
-const EditExpenseScreen = () => {
-  return (
-    <View>
-      <Text>EditExpenseScreen</Text>
-    </View>
-  )
-}
+type EditExpenseScreenRouteProp = RouteProp<ExpenseParamList, 'EditExpense'>;
 
-export default EditExpenseScreen
+const EditExpenseScreen: React.FC = () => {
+	const route = useRoute<EditExpenseScreenRouteProp>();
+	const expense = route.params;
 
-const styles = StyleSheet.create({})
+	return <ExpenseForm expense={expense} />;
+};
+
+export default EditExpenseScreen;

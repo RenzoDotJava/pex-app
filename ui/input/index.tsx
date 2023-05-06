@@ -6,7 +6,7 @@ import {
 	Text
 } from 'react-native';
 import {AntDesign} from '@expo/vector-icons';
-import {Controller} from 'react-hook-form';
+import {Controller, FieldError} from 'react-hook-form';
 import {theme} from '../../styles';
 import {getVariantStyle} from '../../utils';
 import type {FormControllerProps, InputProps} from '../../types/ui';
@@ -54,25 +54,33 @@ export const FormInput: React.FC<FormControllerProps & InputProps> = ({
 	secureTextEntry,
 	keyboardType = 'default'
 }) => {
+	const renderItem = (
+		value: any,
+		onChange: (...event: any[]) => void,
+		error: FieldError | undefined
+	) => (
+		<>
+			<Input
+				variant={variant}
+				placeholder={placeholder}
+				secureTextEntry={secureTextEntry}
+				keyboardType={keyboardType}
+				value={value?.toString()}
+				onChangeText={onChange}
+				error={!!error}
+			/>
+			{error && <Text style={styles.text_error}>{error.message}</Text>}
+		</>
+	);
+
 	return (
 		<Controller
 			control={control}
 			name={name}
 			rules={rules}
-			render={({field: {value, onChange}, fieldState: {error}}) => (
-				<>
-					<Input
-						variant={variant}
-						placeholder={placeholder}
-						secureTextEntry={secureTextEntry}
-						keyboardType={keyboardType}
-						value={value}
-						onChangeText={onChange}
-						error={!!error}
-					/>
-					{error && <Text style={styles.text_error}>{error.message}</Text>}
-				</>
-			)}
+			render={({field: {value, onChange}, fieldState: {error}}) =>
+				renderItem(value, onChange, error)
+			}
 		/>
 	);
 };

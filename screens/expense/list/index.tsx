@@ -1,9 +1,10 @@
+import {useCallback} from 'react';
 import {StyleSheet, View, Text, FlatList} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {Entypo} from '@expo/vector-icons';
-import {IconButton} from '../../../ui';
-import {DateNavigator, ExpenseRow} from '../../../components';
+import {ExpenseRow} from '../../../components';
+import {DateNavigator, IconButton} from '../../../ui';
 import {
 	getTotalDeleteListAmount,
 	onPressExpenseRow
@@ -14,7 +15,10 @@ import {useAppDispatch, useAppSelector} from '../../../store';
 import type {SidebarDrawerParamList} from '../../../types/navigation';
 import type {ExpenseProps} from '../../../types/components';
 
-type NavigationProp = DrawerNavigationProp<SidebarDrawerParamList, 'Expense'>;
+type NavigationProp = DrawerNavigationProp<
+	SidebarDrawerParamList,
+	'ExpenseNav'
+>;
 
 const ExpensesScreen: React.FC = () => {
 	const dispatch = useAppDispatch();
@@ -26,34 +30,46 @@ const ExpensesScreen: React.FC = () => {
 	);
 	const navigation = useNavigation<NavigationProp>();
 
-	const renderItem = (item: ExpenseProps) => {
-		const onList = deleteList.includes(item.id);
-		const backgroundColor = onList ? 'rgba(255, 0, 0, 1)' : 'transparent';
-
-		return (
-			<ExpenseRow
-				id={item.id}
-				costCenter={item.costCenter}
-				category={item.category}
-				place={item.place}
-				paymentMethod={item.paymentMethod}
-				amount={item.amount}
-				selectMode={selectMode}
-				onList={onList}
-				backgroundColor={backgroundColor}
-				onPress={() =>
-					dispatch(
-						onPressExpenseRow(selectMode, onList, item.id, OnPressType.Normal)
-					)
-				}
-				onLongPress={() =>
-					dispatch(
-						onPressExpenseRow(selectMode, onList, item.id, OnPressType.Long)
-					)
-				}
-			/>
-		);
+	const goExpenseDetail = (expense: ExpenseProps) => {
+		navigation.navigate('ExpenseNav', {screen: 'EditExpense', params: expense});
 	};
+
+	const renderItem = useCallback(
+		(item: ExpenseProps) => {
+			const onList = deleteList.includes(item.id);
+			const backgroundColor = onList ? 'rgba(255, 0, 0, 1)' : 'transparent';
+
+			return (
+				<ExpenseRow
+					id={item.id}
+					costCenter={item.costCenter}
+					category={item.category}
+					place={item.place}
+					paymentMethod={item.paymentMethod}
+					amount={item.amount}
+					backgroundColor={backgroundColor}
+					onPress={() =>
+						dispatch(
+							onPressExpenseRow(
+								selectMode,
+								onList,
+								item.id,
+								OnPressType.Normal,
+								() => goExpenseDetail(item)
+							)
+						)
+					}
+					onLongPress={() =>
+						dispatch(
+							onPressExpenseRow(selectMode, onList, item.id, OnPressType.Long)
+						)
+					}
+					extraData={{selectMode, onList}}
+				/>
+			);
+		},
+		[selectMode, deleteList]
+	);
 
 	return (
 		<View style={styles.main}>
@@ -61,7 +77,7 @@ const ExpensesScreen: React.FC = () => {
 				<>
 					<IconButton
 						onPress={() =>
-							navigation.navigate('Expense', {screen: 'AddExpense'})
+							navigation.navigate('ExpenseNav', {screen: 'AddExpense'})
 						}
 						style={styles.plus}
 						icon={
@@ -84,7 +100,7 @@ const ExpensesScreen: React.FC = () => {
 						? `Total: S/. 980.00`
 						: `${
 								deleteList.length
-							} seleccionados ~ S/. -${totalDeleteAmount.toFixed(2)}`}
+						  } seleccionados ~ S/. -${totalDeleteAmount.toFixed(2)}`}
 				</Text>
 			</View>
 			<FlatList

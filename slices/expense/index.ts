@@ -8,91 +8,29 @@ const list = [
 	{
 		id: 1,
 		costCenter: 'Micaela',
+		costCenterId: 1,
 		category: 'Salud',
+		categoryId: 2,
 		place: 'San Judas Mateo',
+		placeId: 3,
 		paymentMethod: 'Crédito',
-		amount: 100
+		paymentMethodId: 4,
+		amount: 100,
+		date: '2023-04-12'
 	},
 	{
 		id: 2,
-		costCenter: 'Renzo',
-		category: 'Alimentación',
-		place: 'Quiosco',
-		paymentMethod: 'Efectivo',
-		amount: 0.8
+		costCenter: 'Micaela',
+		costCenterId: 1,
+		category: 'Salud',
+		categoryId: 2,
+		place: 'San Judas Mateo',
+		placeId: 3,
+		paymentMethod: 'Crédito',
+		paymentMethodId: 4,
+		amount: 100,
+		date: '2023-04-12'
 	},
-	{
-		id: 3,
-		costCenter: 'Valezka',
-		category: 'Ropa',
-		place: 'H&M',
-		paymentMethod: 'Débito',
-		amount: 200
-	},
-	{
-		id: 4,
-		costCenter: 'Valezka',
-		category: 'Ropa',
-		place: 'H&M',
-		paymentMethod: 'Débito',
-		amount: 200
-	},
-	{
-		id: 5,
-		costCenter: 'Valezka',
-		category: 'Ropa',
-		place: 'H&M',
-		paymentMethod: 'Débito',
-		amount: 200
-	},
-	{
-		id: 6,
-		costCenter: 'Valezka',
-		category: 'Ropa',
-		place: 'H&M',
-		paymentMethod: 'Débito',
-		amount: 200
-	},
-	{
-		id: 7,
-		costCenter: 'Valezka',
-		category: 'Ropa',
-		place: 'H&M',
-		paymentMethod: 'Débito',
-		amount: 200
-	},
-	{
-		id: 8,
-		costCenter: 'Valezka',
-		category: 'Ropa',
-		place: 'H&M',
-		paymentMethod: 'Débito',
-		amount: 200
-	},
-	{
-		id: 9,
-		costCenter: 'Valezka',
-		category: 'Ropa',
-		place: 'H&M',
-		paymentMethod: 'Débito',
-		amount: 200
-	},
-	{
-		id: 10,
-		costCenter: 'Valezka',
-		category: 'Ropa',
-		place: 'H&M',
-		paymentMethod: 'Débito',
-		amount: 200
-	},
-	{
-		id: 11,
-		costCenter: 'Valezka',
-		category: 'Ropa',
-		place: 'H&M',
-		paymentMethod: 'Débito',
-		amount: 200
-	}
 ];
 
 const initialState: ExpenseState = {
@@ -134,7 +72,13 @@ export const getTotalDeleteListAmount = (state: RootState): number =>
 	}, 0);
 
 export const onPressExpenseRow =
-	(selectMode: boolean, onList: boolean, id: number, type: OnPressType) =>
+	(
+		selectMode: boolean,
+		onList: boolean,
+		id: number,
+		type: OnPressType,
+		goExpenseDetail?: () => void
+	) =>
 	(dispatch: AppDispatch) => {
 		if (selectMode) {
 			if (onList) dispatch(deleteFromDeleteList(id));
@@ -142,8 +86,7 @@ export const onPressExpenseRow =
 		} else {
 			if (type === OnPressType.Long) dispatch(addToDeleteList(id));
 			else if (type === OnPressType.Normal) {
-				//TODO: navigate to expense detail
-				//navigation.navigate("ExpenseDetail", {id});
+				goExpenseDetail && goExpenseDetail();
 			}
 		}
 	};

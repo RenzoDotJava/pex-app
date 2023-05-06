@@ -1,17 +1,16 @@
 import {memo} from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {ItemListProps} from '../../types/ui';
+import {areEqual} from '../../utils';
 import {theme} from '../../styles';
 
-const ItemList: React.FC<ItemListProps> = ({name, onPress}) => {
-	return (
-		<TouchableOpacity style={styles.item} onPress={onPress}>
-			<Text style={styles.text}>{name}</Text>
-		</TouchableOpacity>
-	);
-};
+const ItemList: React.FC<ItemListProps> = ({name, onPress}) => (
+	<TouchableOpacity style={styles.item} onPress={onPress}>
+		<Text style={styles.text}>{name}</Text>
+	</TouchableOpacity>
+);
 
-export default memo(ItemList);
+export default memo(ItemList, areEqual);
 
 const styles = StyleSheet.create({
 	text: {
