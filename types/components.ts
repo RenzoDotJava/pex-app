@@ -1,7 +1,3 @@
-import {AnyAction} from '@reduxjs/toolkit';
-import {Control} from 'react-hook-form';
-import {OnPressType} from '../enums';
-
 //TODO: ver si trae id y name o luego hacer un nuevo request para traer los ids
 type RowProps = {
 	extraData?: Object;
@@ -15,7 +11,7 @@ type FormInputs = {
 };
 
 type ExpenseFormInputs = {
-	costCenterId: number;
+	expenseCenterId: number;
 	categoryId: number;
 	placeId: number;
 	paymentMethodId: number;
@@ -24,7 +20,7 @@ type ExpenseFormInputs = {
 };
 
 type ExpenseProps = {
-	costCenter: string;
+	expenseCenter: string;
 	category: string;
 	place: string;
 	paymentMethod: string;
@@ -37,7 +33,7 @@ type ExpenseFormProps = {
 	expense?: ExpenseProps;
 };
 
-type CostCenterProps = {
+type ExpenseCenterProps = {
 	id: number;
 	name: string;
 };
@@ -57,8 +53,8 @@ type PlaceProps = {
 	name: string;
 };
 
-type CostCenterFormProps = {
-	costCenter?: CostCenterProps;
+type ExpenseCenterFormProps = {
+	expenseCenter?: ExpenseCenterProps;
 };
 
 type CategoryFormProps = {
@@ -80,13 +76,22 @@ type ListRowProps = RowProps & {
 
 type ExpenseRowProps = ExpenseProps & RowProps;
 
+type SignInFormInputs = {
+	email: string;
+	password: string;
+};
+
+type SignUpFormInputs = SignInFormInputs & {
+	confirmPassword: string;
+};
+
 export {
 	ExpenseProps,
 	ExpenseRowProps,
 	ExpenseFormInputs,
 	ExpenseFormProps,
-	CostCenterProps,
-	CostCenterFormProps,
+	ExpenseCenterProps,
+	ExpenseCenterFormProps,
 	FormInputs,
 	ListRowProps,
 	CategoryProps,
@@ -94,5 +99,7 @@ export {
 	PlaceProps,
 	CategoryFormProps,
 	PaymentMethodFormProps,
-	PlaceFormProps
+	PlaceFormProps,
+	SignUpFormInputs,
+	SignInFormInputs
 };

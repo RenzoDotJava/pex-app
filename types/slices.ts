@@ -1,4 +1,9 @@
-import type {CategoryProps, CostCenterProps, ExpenseProps, PaymentMethodProps} from './components';
+import type {
+	CategoryProps,
+	ExpenseCenterProps,
+	ExpenseProps,
+	PaymentMethodProps
+} from './components';
 import {PlaceProps} from './components';
 
 type DeleteListProps = {
@@ -10,8 +15,8 @@ type ExpenseState = DeleteListProps & {
 	expenses: ExpenseProps[];
 };
 
-type CostCenterState = DeleteListProps & {
-	costsCenter: CostCenterProps[];
+type ExpenseCenterState = DeleteListProps & {
+	expenseCenters: ExpenseCenterProps[];
 };
 
 type CategoryState = DeleteListProps & {
@@ -26,4 +31,15 @@ type PlaceState = DeleteListProps & {
 	places: PlaceProps[];
 };
 
-export {ExpenseState, CostCenterState, CategoryState, PaymentMethodState, PlaceState};
+type NavigationState = {
+	isAuthenticated: boolean;
+};
+
+export {
+	ExpenseState,
+	ExpenseCenterState,
+	CategoryState,
+	PaymentMethodState,
+	PlaceState,
+	NavigationState
+};

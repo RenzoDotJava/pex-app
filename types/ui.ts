@@ -36,6 +36,7 @@ type ButtonProps = VariantProps & {
 	onPress?: () => void;
 	height?: number;
 	disabled?: boolean;
+	loading?: boolean;
 };
 
 type BadgeProps = {

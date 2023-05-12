@@ -6,7 +6,7 @@ import {areEqual} from '../../utils';
 import type {ExpenseRowProps} from '../../types/components';
 
 const ExpenseRow: React.FC<ExpenseRowProps> = ({
-	costCenter,
+	expenseCenter,
 	category,
 	place,
 	paymentMethod,
@@ -23,7 +23,7 @@ const ExpenseRow: React.FC<ExpenseRowProps> = ({
 		delayLongPress={400}
 	>
 		<View style={styles.container_left}>
-			<Text style={styles.cost_center}>{costCenter}</Text>
+			<Text style={styles.expense_center}>{expenseCenter}</Text>
 			<Text style={styles.info}>
 				{category} • {place}
 			</Text>
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
 		alignItems: 'flex-end',
 		gap: 8
 	},
-	cost_center: {
+	expense_center: {
 		fontSize: theme.fontSize.lg,
 		fontWeight: '500'
 	},

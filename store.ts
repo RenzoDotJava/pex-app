@@ -1,18 +1,20 @@
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 import {configureStore} from '@reduxjs/toolkit';
 import expenseReducer from './slices/expense';
-import costCenterReducer from './slices/cost-center';
+import expenseCenterReducer from './slices/expense-center';
 import categoryReducer from './slices/category';
 import placeReducer from './slices/place';
 import paymentMethodReducer from './slices/payment-method';
+import navigationReducer from './slices/navigation';
 
 export const store = configureStore({
 	reducer: {
 		expense: expenseReducer,
-		costCenter: costCenterReducer,
+		expenseCenter: expenseCenterReducer,
 		category: categoryReducer,
 		paymentMethod: paymentMethodReducer,
-		place: placeReducer
+		place: placeReducer,
+		navigation: navigationReducer
 	}
 });
 

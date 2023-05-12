@@ -1,7 +1,7 @@
 import {NavigatorScreenParams} from '@react-navigation/native';
 import type {
 	CategoryProps,
-	CostCenterProps,
+	ExpenseCenterProps,
 	ExpenseProps,
 	PaymentMethodProps,
 	PlaceProps
@@ -9,6 +9,7 @@ import type {
 
 type RootStackParamList = {
 	Login: undefined;
+	SignUp: undefined;
 	Sidebar: NavigatorScreenParams<SidebarDrawerParamList>;
 };
 
@@ -23,10 +24,10 @@ type ExpenseParamList = {
 	EditExpense: ExpenseProps;
 };
 
-type CostCenterParamList = {
-	CostCenter: undefined;
-	AddCostCenter: undefined;
-	EditCostCenter: CostCenterProps;
+type ExpenseCenterParamList = {
+	ExpenseCenter: undefined;
+	AddExpenseCenter: undefined;
+	EditExpenseCenter: ExpenseCenterProps;
 };
 
 type CategoryParamList = {
@@ -49,7 +50,7 @@ type PlaceParamList = {
 
 type ConfigParamList = {
 	Config: undefined;
-	CostCenterNav: NavigatorScreenParams<CostCenterParamList>;
+	ExpenseCenterNav: NavigatorScreenParams<ExpenseCenterParamList>;
 	CategoryNav: NavigatorScreenParams<CategoryParamList>;
 	PaymentMethodNav: NavigatorScreenParams<PaymentMethodParamList>;
 	PlaceNav: NavigatorScreenParams<PlaceParamList>;
@@ -59,7 +60,7 @@ export {
 	RootStackParamList,
 	SidebarDrawerParamList,
 	ExpenseParamList,
-	CostCenterParamList,
+	ExpenseCenterParamList,
 	CategoryParamList,
 	ConfigParamList,
 	PaymentMethodParamList,

@@ -42,7 +42,7 @@ const ExpensesScreen: React.FC = () => {
 			return (
 				<ExpenseRow
 					id={item.id}
-					costCenter={item.costCenter}
+					expenseCenter={item.expenseCenter}
 					category={item.category}
 					place={item.place}
 					paymentMethod={item.paymentMethod}
