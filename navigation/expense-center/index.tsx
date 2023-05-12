@@ -3,17 +3,17 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NativeStackNavigationOptions} from '@react-navigation/native-stack';
 import {Ionicons, MaterialIcons, AntDesign} from '@expo/vector-icons';
 import {
-	AddCostCenterScreen,
-	CostCenterScreen,
-	EditCostCenterScreen
-} from '../../screens/cost-center';
+	AddExpenseCenterScreen,
+	ExpenseCenterScreen,
+	EditExpenseCenterScreen
+} from '../../screens/expense-center';
 import {theme} from '../../styles';
 import {IconButton} from '../../ui';
 import {useAppDispatch, useAppSelector} from '../../store';
-import {cleanDeleteList} from '../../slices/cost-center';
-import type {CostCenterParamList} from '../../types/navigation';
+import {cleanDeleteList} from '../../slices/expense-center';
+import type {ExpenseCenterParamList} from '../../types/navigation';
 
-const Stack = createNativeStackNavigator<CostCenterParamList>();
+const Stack = createNativeStackNavigator<ExpenseCenterParamList>();
 
 const stackOptions: NativeStackNavigationOptions = {
 	headerStyle: {
@@ -26,14 +26,14 @@ const stackOptions: NativeStackNavigationOptions = {
 	headerShadowVisible: false
 };
 
-const CostCenterNavigator: React.FC = () => {
-	const {selectMode} = useAppSelector((state) => state.costCenter);
+const ExpenseCenterNavigator: React.FC = () => {
+	const {selectMode} = useAppSelector((state) => state.expenseCenter);
 	const dispatch = useAppDispatch();
 
-	const showAlertDeleteCostCenter = () => {
+	const showAlertDeleteExpenseCenter = () => {
 		Alert.alert(
 			'Eliminar',
-			'¿Está seguro de eliminar los centros de costo seleccionados?',
+			'¿Está seguro de eliminar los centros de gasto seleccionados?',
 			[
 				{
 					text: 'Cancelar',
@@ -48,17 +48,17 @@ const CostCenterNavigator: React.FC = () => {
 	};
 
 	return (
-		<Stack.Navigator initialRouteName="CostCenter" screenOptions={stackOptions}>
+		<Stack.Navigator initialRouteName="ExpenseCenter" screenOptions={stackOptions}>
 			<Stack.Screen
-				name="CostCenter"
-				component={CostCenterScreen}
+				name="ExpenseCenter"
+				component={ExpenseCenterScreen}
 				options={({navigation}) => ({
 					headerBackVisible: false,
 					headerStyle: {
 						backgroundColor: !selectMode ? theme.color.primary : 'gray'
 					},
 					headerTitle: () => (
-						<Text style={styles.headerTitle}>Centros de Costo</Text>
+						<Text style={styles.headerTitle}>Centros de Gasto</Text>
 					),
 					headerLeft: () => (
 						<IconButton
@@ -81,7 +81,7 @@ const CostCenterNavigator: React.FC = () => {
 					headerRight: () =>
 						selectMode && (
 							<IconButton
-								onPress={showAlertDeleteCostCenter}
+								onPress={showAlertDeleteExpenseCenter}
 								icon={
 									<MaterialIcons
 										name="delete"
@@ -94,11 +94,11 @@ const CostCenterNavigator: React.FC = () => {
 				})}
 			/>
 			<Stack.Screen
-				name="AddCostCenter"
-				component={AddCostCenterScreen}
+				name="AddExpenseCenter"
+				component={AddExpenseCenterScreen}
 				options={({navigation}) => ({
 					headerTitle: () => (
-						<Text style={styles.headerTitle}>Agregar Centro de Costo</Text>
+						<Text style={styles.headerTitle}>Agregar Centro de Gasto</Text>
 					),
 					headerBackVisible: false,
 					headerLeft: () => (
@@ -110,11 +110,11 @@ const CostCenterNavigator: React.FC = () => {
 				})}
 			/>
 			<Stack.Screen
-				name="EditCostCenter"
-				component={EditCostCenterScreen}
+				name="EditExpenseCenter"
+				component={EditExpenseCenterScreen}
 				options={({navigation}) => ({
 					headerTitle: () => (
-						<Text style={styles.headerTitle}>Editar Centro de Costo</Text>
+						<Text style={styles.headerTitle}>Editar Centro de Gasto</Text>
 					),
 					headerBackVisible: false,
 					headerLeft: () => (
@@ -129,7 +129,7 @@ const CostCenterNavigator: React.FC = () => {
 	);
 };
 
-export default CostCenterNavigator;
+export default ExpenseCenterNavigator;
 
 const styles = StyleSheet.create({
 	headerTitle: {

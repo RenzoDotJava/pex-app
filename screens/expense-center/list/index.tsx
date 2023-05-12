@@ -7,25 +7,30 @@ import {IconButton} from '../../../ui';
 import {theme} from '../../../styles';
 import {ListRow} from '../../../components';
 import {useAppDispatch, useAppSelector} from '../../../store';
-import {CostCenterProps} from '../../../types/components';
+import {ExpenseCenterProps} from '../../../types/components';
 import {OnPressType} from '../../../enums';
-import {onPressCostCenterRow} from '../../../slices/cost-center';
+import {onPressExpenseCenterRow} from '../../../slices/expense-center';
 import type {ConfigParamList} from '../../../types/navigation';
 
-type NavigationProp = DrawerNavigationProp<ConfigParamList, 'CostCenterNav'>;
+type NavigationProp = DrawerNavigationProp<ConfigParamList, 'ExpenseCenterNav'>;
 
-const CostCenterScreen = () => {
+const ExpenseCenterScreen: React.FC = () => {
 	const dispatch = useAppDispatch();
-	const {selectMode, deleteList, costsCenter} = useAppSelector((state) => state.costCenter);
+	const {selectMode, deleteList, expenseCenters} = useAppSelector(
+		(state) => state.expenseCenter
+	);
 
 	const navigation = useNavigation<NavigationProp>();
 
-	const goCostCenterDetail = (costCenter: CostCenterProps) => {
-		navigation.navigate('CostCenterNav', {screen: 'EditCostCenter', params: costCenter});
+	const goExpenseCenterDetail = (expenseCenter: ExpenseCenterProps) => {
+		navigation.navigate('ExpenseCenterNav', {
+			screen: 'EditExpenseCenter',
+			params: expenseCenter
+		});
 	};
 
 	const renderItem = useCallback(
-		(item: CostCenterProps) => {
+		(item: ExpenseCenterProps) => {
 			const onList = deleteList.includes(item.id);
 			const backgroundColor = onList ? 'rgba(255, 0, 0, 1)' : 'transparent';
 
@@ -36,18 +41,23 @@ const CostCenterScreen = () => {
 					backgroundColor={backgroundColor}
 					onPress={() =>
 						dispatch(
-							onPressCostCenterRow(
+							onPressExpenseCenterRow(
 								selectMode,
 								onList,
 								item.id,
 								OnPressType.Normal,
-								() => goCostCenterDetail(item)
+								() => goExpenseCenterDetail(item)
 							)
 						)
 					}
 					onLongPress={() =>
 						dispatch(
-							onPressCostCenterRow(selectMode, onList, item.id, OnPressType.Long)
+							onPressExpenseCenterRow(
+								selectMode,
+								onList,
+								item.id,
+								OnPressType.Long
+							)
 						)
 					}
 					extraData={{selectMode, onList}}
@@ -61,13 +71,13 @@ const CostCenterScreen = () => {
 		<View style={styles.main}>
 			<IconButton
 				onPress={() =>
-					navigation.navigate('CostCenterNav', {screen: 'AddCostCenter'})
+					navigation.navigate('ExpenseCenterNav', {screen: 'AddExpenseCenter'})
 				}
 				style={styles.plus}
 				icon={<Entypo name="plus" size={30} color={theme.color.secondary} />}
 			/>
 			<FlatList
-				data={costsCenter}
+				data={expenseCenters}
 				keyExtractor={(item) => item.id.toString()}
 				renderItem={({item}) => renderItem(item)}
 			/>
@@ -75,7 +85,7 @@ const CostCenterScreen = () => {
 	);
 };
 
-export default CostCenterScreen;
+export default ExpenseCenterScreen;
 
 const styles = StyleSheet.create({
 	main: {

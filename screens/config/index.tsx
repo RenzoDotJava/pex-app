@@ -23,10 +23,10 @@ const ConfigScreen = () => {
 			<TouchableOpacity
 				style={styles.subsection}
 				onPress={() =>
-					navigation.navigate('CostCenterNav', {screen: 'CostCenter'})
+					navigation.navigate('ExpenseCenterNav', {screen: 'ExpenseCenter'})
 				}
 			>
-				<Text style={styles.subsection_title}>Centros de costo</Text>
+				<Text style={styles.subsection_title}>Centros de gasto</Text>
 			</TouchableOpacity>
 			<TouchableOpacity
 				style={styles.subsection}

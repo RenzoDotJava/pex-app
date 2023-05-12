@@ -1,7 +1,7 @@
 import DrawerContent from './drawer-content';
 import ExpenseRow from './expense-row';
 import ExpenseForm from './expense-form';
-import CostCenterForm from './cost-center-form';
+import ExpenseCenterForm from './expense-center-form';
 import CategoryForm from './category-form';
 import PaymentMethodForm from './payment-method-form';
 import PlaceForm from './place-form';
@@ -12,7 +12,7 @@ export {
 	ExpenseRow,
 	ExpenseForm,
 	ListRow,
-	CostCenterForm,
+	ExpenseCenterForm,
 	CategoryForm,
 	PaymentMethodForm,
 	PlaceForm

@@ -6,8 +6,8 @@ import {
 import ExpenseNavigator from '../expense';
 import {DrawerContent} from '../../components';
 import {theme} from '../../styles';
-import type {SidebarDrawerParamList} from '../../types/navigation';
 import ConfigNavigator from '../config';
+import type {SidebarDrawerParamList} from '../../types/navigation';
 
 const Drawer = createDrawerNavigator<SidebarDrawerParamList>();
 
@@ -72,6 +72,6 @@ const styles = StyleSheet.create({
 	},
 	drawerLabel: {
 		fontWeight: '600',
-		fontSize: theme.fontSize.md
+		fontSize: theme.fontSize.lg
 	}
 });

@@ -1,21 +1,25 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View, Platform} from 'react-native';
 import {
 	DrawerContentScrollView,
 	DrawerContentComponentProps,
 	DrawerItemList
 } from '@react-navigation/drawer';
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../types/navigation';
 import {theme} from '../../styles';
-
-type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+import {supabase} from '../../supabase';
+import {setIsAuthenticated} from '../../slices/navigation';
+import {useAppDispatch} from '../../store';
 
 const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
-	const navigation = useNavigation<NavigationProp>();
-	
-	const logOut = () => {
-		navigation.navigate('Login');
+	const dispatch = useAppDispatch();
+
+	const logOut = async () => {
+		try {
+			const {error} = await supabase.auth.signOut();
+			if (error) throw new Error(error.message);
+			dispatch(setIsAuthenticated(false));
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	return (
@@ -41,11 +45,13 @@ const styles = StyleSheet.create({
 		flex: 1
 	},
 	footer: {
-		padding: 20,
+		paddingTop: 20,
+		paddingLeft: 20,
+		paddingBottom: Platform.OS === 'android' ? 20 : 40,
 		backgroundColor: theme.color.primary
 	},
 	footerLabel: {
-		fontSize: theme.fontSize.md,
+		fontSize: theme.fontSize.lg,
 		color: theme.color.secondary,
 		fontWeight: '500'
 	}

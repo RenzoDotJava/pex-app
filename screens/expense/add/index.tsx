@@ -1,6 +1,6 @@
 import {ExpenseForm} from '../../../components';
 
-const AddExpenseScreen = () => {
+const AddExpenseScreen: React.FC = () => {
 	return <ExpenseForm />;
 };
 

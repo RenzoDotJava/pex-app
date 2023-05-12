@@ -14,7 +14,7 @@ import type {ConfigParamList} from '../../../types/navigation';
 
 type NavigationProp = DrawerNavigationProp<ConfigParamList, 'PlaceNav'>;
 
-const PlaceScreen = () => {
+const PlaceScreen: React.FC = () => {
 	const dispatch = useAppDispatch();
 	const {selectMode, deleteList, places} = useAppSelector(
 		(state) => state.place

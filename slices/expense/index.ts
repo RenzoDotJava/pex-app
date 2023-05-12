@@ -7,8 +7,8 @@ import {OnPressType} from '../../enums';
 const list = [
 	{
 		id: 1,
-		costCenter: 'Micaela',
-		costCenterId: 1,
+		expenseCenter: 'Micaela',
+		expenseCenterId: 1,
 		category: 'Salud',
 		categoryId: 2,
 		place: 'San Judas Mateo',
@@ -20,8 +20,8 @@ const list = [
 	},
 	{
 		id: 2,
-		costCenter: 'Micaela',
-		costCenterId: 1,
+		expenseCenter: 'Micaela',
+		expenseCenterId: 1,
 		category: 'Salud',
 		categoryId: 2,
 		place: 'San Judas Mateo',

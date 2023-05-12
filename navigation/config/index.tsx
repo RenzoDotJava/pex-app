@@ -4,8 +4,8 @@ import {NativeStackNavigationOptions} from '@react-navigation/native-stack';
 import {Ionicons} from '@expo/vector-icons';
 import {theme} from '../../styles';
 import {IconButton} from '../../ui';
-import ConfigScreen from '../../screens/config';
-import CostCenterNavigator from '../cost-center';
+import {ConfigScreen} from '../../screens';
+import ExpenseCenterNavigator from '../expense-center';
 import CategoryNavigator from '../category';
 import PaymentMethodNavigator from '../payment-method';
 import PlaceNavigator from '../place';
@@ -52,8 +52,8 @@ const ConfigNavigator: React.FC = () => {
 				})}
 			/>
 			<Stack.Screen
-				name="CostCenterNav"
-				component={CostCenterNavigator}
+				name="ExpenseCenterNav"
+				component={ExpenseCenterNavigator}
 				options={{headerShown: false}}
 			/>
 			<Stack.Screen

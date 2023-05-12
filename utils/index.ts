@@ -21,3 +21,17 @@ export const areEqual = (prevProps: any, nextProps: any): boolean => {
 
 	return isEqual;
 };
+
+//TODO: use a better error parser, maybe use status code instead of the message
+export const parseSupabaseError = (message: string) => {
+	switch (message) {
+		case 'Password should be at least 6 characters':
+			return 'La contraseña debe tener al menos 6 caracteres';
+		case 'User already registered':
+			return 'El usuario ya está registrado';
+		case 'Invalid login credentials':
+			return 'Credenciales inválidas';
+		default:
+			return 'Hubo un error';
+	}
+};

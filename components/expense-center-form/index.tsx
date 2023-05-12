@@ -8,15 +8,15 @@ import {
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {Button, FormInput} from '../../ui';
 import {theme} from '../../styles';
-import type {CostCenterFormProps, FormInputs} from '../../types/components';
+import type {ExpenseCenterFormProps, FormInputs} from '../../types/components';
 
-const CostCenterForm: React.FC<CostCenterFormProps> = ({costCenter}) => {
+const ExpenseCenterForm: React.FC<ExpenseCenterFormProps> = ({expenseCenter}) => {
 	const {
 		control,
 		handleSubmit,
 		formState: {isValid}
 	} = useForm<FormInputs>({
-		defaultValues: costCenter
+		defaultValues: expenseCenter
 	});
 
 	const onSubmit: SubmitHandler<FormInputs> = (data) => {
@@ -49,7 +49,7 @@ const CostCenterForm: React.FC<CostCenterFormProps> = ({costCenter}) => {
 	);
 };
 
-export default CostCenterForm;
+export default ExpenseCenterForm;
 
 const styles = StyleSheet.create({
 	container: {

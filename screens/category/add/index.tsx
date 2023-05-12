@@ -1,6 +1,6 @@
 import {CategoryForm} from '../../../components';
 
-const AddCategoryScreen = () => {
+const AddCategoryScreen: React.FC = () => {
 	return <CategoryForm />;
 };
 

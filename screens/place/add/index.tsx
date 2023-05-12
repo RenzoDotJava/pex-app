@@ -1,6 +1,6 @@
 import {PlaceForm} from '../../../components';
 
-const AddPlaceScreen = () => {
+const AddPlaceScreen: React.FC = () => {
 	return <PlaceForm />;
 };
 

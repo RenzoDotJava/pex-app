@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 import type {PayloadAction} from '@reduxjs/toolkit';
 import type {AppDispatch, RootState} from '../../store';
-import type {CostCenterState} from '../../types/slices';
+import type {ExpenseCenterState} from '../../types/slices';
 import {OnPressType} from '../../enums';
 
 const list = [
@@ -19,14 +19,14 @@ const list = [
 	}
 ];
 
-const initialState: CostCenterState = {
+const initialState: ExpenseCenterState = {
 	selectMode: false,
 	deleteList: [],
-	costsCenter: list
+	expenseCenters: list
 };
 
-export const costCenterSlice = createSlice({
-	name: 'costCenter',
+export const expenseCenterSlice = createSlice({
+	name: 'expenseCenter',
 	initialState,
 	reducers: {
 		addToDeleteList: (state, action: PayloadAction<number>) => {
@@ -48,15 +48,15 @@ export const costCenterSlice = createSlice({
 });
 
 export const {addToDeleteList, deleteFromDeleteList, cleanDeleteList} =
-	costCenterSlice.actions;
+	expenseCenterSlice.actions;
 
-export const onPressCostCenterRow =
+export const onPressExpenseCenterRow =
 	(
 		selectMode: boolean,
 		onList: boolean,
 		id: number,
 		type: OnPressType,
-		goCostCenterDetail?: () => void
+		goExpenseCenterDetail?: () => void
 	) =>
 	(dispatch: AppDispatch) => {
 		if (selectMode) {
@@ -65,9 +65,9 @@ export const onPressCostCenterRow =
 		} else {
 			if (type === OnPressType.Long) dispatch(addToDeleteList(id));
 			else if (type === OnPressType.Normal) {
-				goCostCenterDetail && goCostCenterDetail();
+				goExpenseCenterDetail && goExpenseCenterDetail();
 			}
 		}
 	};
 
-export default costCenterSlice.reducer;
+export default expenseCenterSlice.reducer;

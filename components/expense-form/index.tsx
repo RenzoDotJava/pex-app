@@ -10,7 +10,7 @@ import {FormInput, Button, FormDateTimePicker, FormSelect} from '../../ui';
 import type {ExpenseFormInputs, ExpenseFormProps} from '../../types/components';
 import {theme} from '../../styles';
 
-const costCenters = [
+const expenseCenters = [
 	{
 		id: 1,
 		name: 'Renzo'
@@ -25,23 +25,23 @@ const costCenters = [
 	},
 	{
 		id: 4,
-		name: 'Centro de costo 4'
+		name: 'Centro de gasto 4'
 	},
 	{
 		id: 5,
-		name: 'Centro de costo 5'
+		name: 'Centro de gasto 5'
 	},
 	{
 		id: 6,
-		name: 'Centro de costo 6'
+		name: 'Centro de gasto 6'
 	},
 	{
 		id: 7,
-		name: 'Centro de costo 67'
+		name: 'Centro de gasto 67'
 	},
 	{
 		id: 8,
-		name: 'Centro de costo 68'
+		name: 'Centro de gasto 68'
 	}
 ];
 
@@ -84,13 +84,13 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({expense}) => {
 					/>
 				</View>
 				<View style={styles.form_group}>
-					<Text>Centro de costo</Text>
+					<Text>Centro de gasto</Text>
 					<FormSelect
 						control={control}
-						name="costCenterId"
+						name="expenseCenterId"
 						variant="standard"
-						title="Centro de costo"
-						items={costCenters}
+						title="Centro de gasto"
+						items={expenseCenters}
 						rules={{
 							required: 'Campo obligatorio'
 						}}
@@ -103,7 +103,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({expense}) => {
 						name="categoryId"
 						variant="standard"
 						title="Categoría"
-						items={costCenters}
+						items={expenseCenters}
 						rules={{
 							required: 'Campo obligatorio'
 						}}
@@ -116,7 +116,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({expense}) => {
 						name="paymentMethodId"
 						variant="standard"
 						title="Forma de pago"
-						items={costCenters}
+						items={expenseCenters}
 						rules={{
 							required: 'Campo obligatorio'
 						}}
@@ -129,7 +129,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({expense}) => {
 						name="placeId"
 						variant="standard"
 						title="Lugar"
-						items={costCenters}
+						items={expenseCenters}
 						rules={{
 							required: 'Campo obligatorio'
 						}}
