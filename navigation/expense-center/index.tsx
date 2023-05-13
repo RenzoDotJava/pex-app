@@ -10,8 +10,14 @@ import {
 import {theme} from '../../styles';
 import {IconButton} from '../../ui';
 import {useAppDispatch, useAppSelector} from '../../store';
-import {cleanDeleteList} from '../../slices/expense-center';
+import {
+	cleanDeleteList,
+	deleteExpenseCenters
+} from '../../slices/expense-center';
+import {setIsLoading} from '../../slices/navigation';
+import {useDeleteExpenseCenters} from '../../api/expense-center';
 import type {ExpenseCenterParamList} from '../../types/navigation';
+import {showAlert} from '../../utils';
 
 const Stack = createNativeStackNavigator<ExpenseCenterParamList>();
 
@@ -27,28 +33,31 @@ const stackOptions: NativeStackNavigationOptions = {
 };
 
 const ExpenseCenterNavigator: React.FC = () => {
-	const {selectMode} = useAppSelector((state) => state.expenseCenter);
+	const {selectMode, deleteList} = useAppSelector(
+		(state) => state.expenseCenter
+	);
 	const dispatch = useAppDispatch();
+	const {mutate} = useDeleteExpenseCenters({
+		onSuccess: () => {
+			dispatch(deleteExpenseCenters());
+			dispatch(setIsLoading(false));
+		},
+		onError: (error) => {
+			console.log(error.message);
+			dispatch(setIsLoading(false));
+		}
+	});
 
-	const showAlertDeleteExpenseCenter = () => {
-		Alert.alert(
-			'Eliminar',
-			'¿Está seguro de eliminar los centros de gasto seleccionados?',
-			[
-				{
-					text: 'Cancelar',
-					style: 'cancel'
-				},
-				{
-					text: 'Eliminar'
-					//onPress: () => dispatch(deleteExpenses())
-				}
-			]
-		);
+	const onDeleteExpenseCenter = () => {
+		dispatch(setIsLoading(true));
+		mutate(deleteList);
 	};
 
 	return (
-		<Stack.Navigator initialRouteName="ExpenseCenter" screenOptions={stackOptions}>
+		<Stack.Navigator
+			initialRouteName="ExpenseCenter"
+			screenOptions={stackOptions}
+		>
 			<Stack.Screen
 				name="ExpenseCenter"
 				component={ExpenseCenterScreen}
@@ -81,7 +90,22 @@ const ExpenseCenterNavigator: React.FC = () => {
 					headerRight: () =>
 						selectMode && (
 							<IconButton
-								onPress={showAlertDeleteExpenseCenter}
+								onPress={() =>
+									showAlert(
+										'Eliminar',
+										'¿Está seguro de eliminar los centros de gasto seleccionados?',
+										[
+											{
+												text: 'Cancelar',
+												style: 'cancel'
+											},
+											{
+												text: 'Eliminar',
+												onPress: onDeleteExpenseCenter
+											}
+										]
+									)
+								}
 								icon={
 									<MaterialIcons
 										name="delete"

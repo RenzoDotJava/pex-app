@@ -1,7 +1,7 @@
 import {useMutation} from '@tanstack/react-query';
 import {parseSupabaseError} from '../utils';
 import {supabase} from '../supabase';
-import type {HookProps, AuthReq} from '../types/api';
+import type {MutationProps, AuthReq} from '../types/api';
 
 const signUp = async ({email, password}: AuthReq) => {
 	const {data, error} = await supabase.auth.signUp({
@@ -25,23 +25,29 @@ const signInWithPassword = async ({email, password}: AuthReq) => {
 	return data;
 };
 
-export const useSignUpMutation = ({onSuccess, onError}: HookProps<AuthReq>) => {
+export const useSignUpMutation = ({
+	onSuccess,
+	onError
+}: MutationProps<AuthReq>) => {
 	const signUpMutation = useMutation({
 		mutationKey: ['signUp'],
 		mutationFn: signUp,
-		onSuccess: onSuccess,
-		onError: onError
+		onSuccess,
+		onError
 	});
 
 	return signUpMutation;
 };
 
-export const useSignInMutation = ({onSuccess, onError}: HookProps<AuthReq>) => {
+export const useSignInMutation = ({
+	onSuccess,
+	onError
+}: MutationProps<AuthReq>) => {
 	const signInMutation = useMutation({
 		mutationKey: ['signInWithPassword'],
 		mutationFn: signInWithPassword,
-		onSuccess: onSuccess,
-		onError: onError
+		onSuccess,
+		onError
 	});
 
 	return signInMutation;

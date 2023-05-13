@@ -1,28 +1,14 @@
 import {createSlice} from '@reduxjs/toolkit';
+import {OnPressType} from '../../enums';
 import type {PayloadAction} from '@reduxjs/toolkit';
 import type {AppDispatch, RootState} from '../../store';
 import type {ExpenseCenterState} from '../../types/slices';
-import {OnPressType} from '../../enums';
-
-const list = [
-	{
-		id: 1,
-		name: 'Micaela'
-	},
-	{
-		id: 2,
-		name: 'Renzo'
-	},
-	{
-		id: 3,
-		name: 'Valezka'
-	}
-];
+import type {ExpenseCenterProps} from '../../types/components';
 
 const initialState: ExpenseCenterState = {
 	selectMode: false,
 	deleteList: [],
-	expenseCenters: list
+	expenseCenters: []
 };
 
 export const expenseCenterSlice = createSlice({
@@ -43,12 +29,37 @@ export const expenseCenterSlice = createSlice({
 		cleanDeleteList: (state) => {
 			state.deleteList = [];
 			if (state.selectMode) state.selectMode = false;
+		},
+		setExpenseCenters: (state, action: PayloadAction<ExpenseCenterProps[]>) => {
+			state.expenseCenters = action.payload;
+		},
+		addExpenseCenter: (state, action: PayloadAction<ExpenseCenterProps>) => {
+			state.expenseCenters.push(action.payload);
+		},
+		updateExpenseCenter: (state, action: PayloadAction<ExpenseCenterProps>) => {
+			state.expenseCenters = state.expenseCenters.map((expenseCenter) =>
+				expenseCenter.id === action.payload.id ? action.payload : expenseCenter
+			);
+		},
+		deleteExpenseCenters: (state) => {
+			state.expenseCenters = state.expenseCenters.filter(
+				(expenseCenter) => !state.deleteList.includes(expenseCenter.id)
+			);
+			if (state.selectMode) state.selectMode = false;
+			state.deleteList = [];
 		}
 	}
 });
 
-export const {addToDeleteList, deleteFromDeleteList, cleanDeleteList} =
-	expenseCenterSlice.actions;
+export const {
+	addToDeleteList,
+	deleteFromDeleteList,
+	cleanDeleteList,
+	setExpenseCenters,
+	addExpenseCenter,
+	updateExpenseCenter,
+	deleteExpenseCenters
+} = expenseCenterSlice.actions;
 
 export const onPressExpenseCenterRow =
 	(

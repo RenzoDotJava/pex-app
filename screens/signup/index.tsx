@@ -7,7 +7,8 @@ import {
 	TouchableOpacity,
 	StyleSheet,
 	Platform,
-	StatusBar
+	StatusBar,
+	Alert
 } from 'react-native';
 import {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -16,23 +17,23 @@ import {SubmitHandler, useForm} from 'react-hook-form';
 import {Button, FormInput} from '../../ui';
 import {theme} from '../../styles';
 import {useSignUpMutation} from '../../api/auth';
+import {showAlert} from '../../utils';
 import type {RootStackParamList} from '../../types/navigation';
 import type {SignUpFormInputs} from '../../types/components';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignUp'>;
-//TODO: add toast notifications
+
 const SignUpScreen: React.FC = () => {
 	const [error, setError] = useState('');
 	const navigation = useNavigation<NavigationProp>();
-	const {
-		control,
-		handleSubmit,
-		watch,
-		formState: {isValid}
-	} = useForm<SignUpFormInputs>();
-	const signUpMutation = useSignUpMutation({
+	const {control, handleSubmit, watch} = useForm<SignUpFormInputs>();
+	const {mutate, isLoading} = useSignUpMutation({
 		onSuccess: () => {
-			navigation.navigate('Login');
+			showAlert('Info', 'Su cuenta ha sido creada satisfactoriamente', [
+				{
+					text: 'Aceptar'
+				}
+			]);
 		},
 		onError: (error) => {
 			setError(error.message);
@@ -42,7 +43,8 @@ const SignUpScreen: React.FC = () => {
 	const watchPassword = watch('password');
 
 	const onSubmit: SubmitHandler<SignUpFormInputs> = async (data) => {
-		signUpMutation.mutate({email: data.email, password: data.password});
+		Keyboard.dismiss();
+		mutate({email: data.email, password: data.password});
 	};
 
 	return (
@@ -85,7 +87,7 @@ const SignUpScreen: React.FC = () => {
 									validate: {
 										greaterThan: (value: string) =>
 											value.length >= 6 ||
-											'La contraseña debe tener al menos 6 caracteres'
+											'Ingrese una contraseña de al menos 6 caracteres'
 									}
 								}}
 								secureTextEntry
@@ -114,8 +116,7 @@ const SignUpScreen: React.FC = () => {
 						<Button
 							text="Crear cuenta"
 							onPress={handleSubmit(onSubmit)}
-							disabled={!isValid}
-							loading={signUpMutation.isLoading}
+							loading={isLoading}
 						/>
 					</View>
 				</View>

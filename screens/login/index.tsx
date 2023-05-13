@@ -28,7 +28,7 @@ const LoginScreen: React.FC = () => {
 	const [error, setError] = useState('');
 	const navigation = useNavigation<NavigationProp>();
 
-	const signInMutation = useSignInMutation({
+	const {mutate, isLoading} = useSignInMutation({
 		onSuccess: () => {
 			dispatch(setIsAuthenticated(true));
 		},
@@ -37,14 +37,11 @@ const LoginScreen: React.FC = () => {
 		}
 	});
 
-	const {
-		control,
-		handleSubmit,
-		formState: {isValid}
-	} = useForm<SignInFormInputs>();
+	const {control, handleSubmit} = useForm<SignInFormInputs>();
 
 	const onSubmit: SubmitHandler<SignInFormInputs> = async (data) => {
-		signInMutation.mutate({email: data.email, password: data.password});
+		Keyboard.dismiss();
+		mutate({email: data.email, password: data.password});
 	};
 
 	return (
@@ -93,8 +90,7 @@ const LoginScreen: React.FC = () => {
 						<Button
 							text="Ingresar"
 							onPress={handleSubmit(onSubmit)}
-							disabled={!isValid}
-							loading={signInMutation.isLoading}
+							loading={isLoading}
 						/>
 					</View>
 				</View>
