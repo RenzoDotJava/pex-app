@@ -14,9 +14,8 @@ const ExpoSecureStoreAdapter = {
 	}
 };
 //TODO: move it to env variables
-const supabaseUrl = 'https://htefsrvuxfoctobiyzth.supabase.co';
-const supabaseAnonKey =
-	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh0ZWZzcnZ1eGZvY3RvYml5enRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODM2ODE5MTcsImV4cCI6MTk5OTI1NzkxN30.kdRMKbX8Zai5agX5zl9kOqCYVMyg-nQMLoRIj6ZiqYQ';
+const supabaseUrl = '';
+const supabaseAnonKey = '';
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
 	auth: {
