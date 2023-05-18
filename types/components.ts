@@ -1,3 +1,5 @@
+import {GeneralReq} from './api';
+
 //TODO: ver si trae id y name o luego hacer un nuevo request para traer los ids
 type RowProps = {
 	extraData?: Object;
@@ -55,6 +57,8 @@ type PlaceProps = {
 
 type ExpenseCenterFormProps = {
 	expenseCenter?: ExpenseCenterProps;
+	action?: (req: GeneralReq) => void;
+	isLoading?: boolean;
 };
 
 type CategoryFormProps = {
@@ -85,6 +89,11 @@ type SignUpFormInputs = SignInFormInputs & {
 	confirmPassword: string;
 };
 
+type NavigatorWrapperProps = {
+	children: React.ReactNode;
+	onLayout?: () => void;
+};
+
 export {
 	ExpenseProps,
 	ExpenseRowProps,
@@ -101,5 +110,6 @@ export {
 	PaymentMethodFormProps,
 	PlaceFormProps,
 	SignUpFormInputs,
-	SignInFormInputs
+	SignInFormInputs,
+	NavigatorWrapperProps
 };

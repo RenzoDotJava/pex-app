@@ -6,6 +6,7 @@ import CategoryForm from './category-form';
 import PaymentMethodForm from './payment-method-form';
 import PlaceForm from './place-form';
 import ListRow from './list-row';
+import NavigatorWrapper from './navigator-wrapper';
 
 export {
 	DrawerContent,
@@ -15,5 +16,6 @@ export {
 	ExpenseCenterForm,
 	CategoryForm,
 	PaymentMethodForm,
-	PlaceForm
+	PlaceForm,
+	NavigatorWrapper
 };

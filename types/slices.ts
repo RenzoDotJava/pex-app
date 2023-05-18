@@ -33,6 +33,7 @@ type PlaceState = DeleteListProps & {
 
 type NavigationState = {
 	isAuthenticated: boolean;
+	isLoading: boolean;
 };
 
 export {

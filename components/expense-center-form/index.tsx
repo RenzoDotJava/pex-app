@@ -10,7 +10,11 @@ import {Button, FormInput} from '../../ui';
 import {theme} from '../../styles';
 import type {ExpenseCenterFormProps, FormInputs} from '../../types/components';
 
-const ExpenseCenterForm: React.FC<ExpenseCenterFormProps> = ({expenseCenter}) => {
+const ExpenseCenterForm: React.FC<ExpenseCenterFormProps> = ({
+	expenseCenter,
+	action,
+	isLoading = false
+}) => {
 	const {
 		control,
 		handleSubmit,
@@ -18,9 +22,9 @@ const ExpenseCenterForm: React.FC<ExpenseCenterFormProps> = ({expenseCenter}) =>
 	} = useForm<FormInputs>({
 		defaultValues: expenseCenter
 	});
-
+	//TODO: change FormInputs by GeneraReq, tai
 	const onSubmit: SubmitHandler<FormInputs> = (data) => {
-		console.log(data);
+		action && action(data);
 	};
 
 	return (
@@ -42,6 +46,7 @@ const ExpenseCenterForm: React.FC<ExpenseCenterFormProps> = ({expenseCenter}) =>
 						text="Guardar"
 						onPress={handleSubmit(onSubmit)}
 						disabled={!isValid}
+						loading={isLoading}
 					/>
 				</View>
 			</View>

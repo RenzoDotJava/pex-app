@@ -1,5 +1,6 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {ListRowProps} from '../../types/components';
+import {theme} from '../../styles';
 
 const ListRow: React.FC<ListRowProps> = ({
 	name,
@@ -15,7 +16,7 @@ const ListRow: React.FC<ListRowProps> = ({
 			onLongPress={onLongPress}
 			delayLongPress={400}
 		>
-			<Text>{name}</Text>
+			<Text style={{fontSize: theme.fontSize.md}}>{name}</Text>
 		</TouchableOpacity>
 	);
 };
@@ -27,7 +28,7 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		flexDirection: 'row',
 		paddingHorizontal: 16,
-		paddingVertical: 10,
+		paddingVertical: 14,
 		borderBottomColor: 'gray',
 		borderBottomWidth: 1
 	}

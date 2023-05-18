@@ -1,5 +1,5 @@
 import {useCallback} from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {FlatList, RefreshControl, StyleSheet, View} from 'react-native';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {useNavigation} from '@react-navigation/native';
 import {Entypo} from '@expo/vector-icons';
@@ -9,18 +9,26 @@ import {ListRow} from '../../../components';
 import {useAppDispatch, useAppSelector} from '../../../store';
 import {ExpenseCenterProps} from '../../../types/components';
 import {OnPressType} from '../../../enums';
-import {onPressExpenseCenterRow} from '../../../slices/expense-center';
+import {
+	onPressExpenseCenterRow,
+	setExpenseCenters
+} from '../../../slices/expense-center';
+import {useGetExpenseCenters} from '../../../api/expense-center';
 import type {ConfigParamList} from '../../../types/navigation';
 
 type NavigationProp = DrawerNavigationProp<ConfigParamList, 'ExpenseCenterNav'>;
 
 const ExpenseCenterScreen: React.FC = () => {
+	const navigation = useNavigation<NavigationProp>();
 	const dispatch = useAppDispatch();
 	const {selectMode, deleteList, expenseCenters} = useAppSelector(
 		(state) => state.expenseCenter
 	);
-
-	const navigation = useNavigation<NavigationProp>();
+	const {isLoading, refetch} = useGetExpenseCenters({
+		onSuccess: (data) => {
+			dispatch(setExpenseCenters(data));
+		}
+	});
 
 	const goExpenseCenterDetail = (expenseCenter: ExpenseCenterProps) => {
 		navigation.navigate('ExpenseCenterNav', {
@@ -60,11 +68,11 @@ const ExpenseCenterScreen: React.FC = () => {
 							)
 						)
 					}
-					extraData={{selectMode, onList}}
+					extraData={{selectMode, onList, expenseCenters}}
 				/>
 			);
 		},
-		[selectMode, deleteList]
+		[selectMode, deleteList, expenseCenters]
 	);
 
 	return (
@@ -80,6 +88,14 @@ const ExpenseCenterScreen: React.FC = () => {
 				data={expenseCenters}
 				keyExtractor={(item) => item.id.toString()}
 				renderItem={({item}) => renderItem(item)}
+				refreshControl={
+					<RefreshControl
+						refreshing={isLoading}
+						onRefresh={refetch}
+						colors={['#32373A']}
+						tintColor={'#32373A'}
+					/>
+				}
 			/>
 		</View>
 	);

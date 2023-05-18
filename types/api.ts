@@ -3,12 +3,20 @@ type AuthReq = {
 	password: string;
 };
 
-type HookProps<T> = {
+type GeneralReq = {
+	id?: number;
+	name: string;
+};
+
+type MutationProps<T> = {
 	onSuccess?: (data: any, variables: T) => void;
 	onError?: (error: any, variables: T) => void;
 };
 
-export {
-	AuthReq,
-	HookProps
-}
+type QueryProps = {
+	onSuccess?: (data: any) => void;
+	onError?: (error: any) => void;
+	select?: (data: any) => void;
+};
+
+export {AuthReq, MutationProps, QueryProps, GeneralReq};

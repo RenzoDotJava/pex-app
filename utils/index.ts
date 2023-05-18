@@ -1,3 +1,5 @@
+import {Alert, AlertButton} from 'react-native';
+
 export const getVariantStyle = (
 	variant: 'outlined' | 'standard' | undefined,
 	styles: any
@@ -34,4 +36,12 @@ export const parseSupabaseError = (message: string) => {
 		default:
 			return 'Hubo un error';
 	}
+};
+
+export const showAlert = (
+	title: string,
+	message: string,
+	buttons: AlertButton[]
+) => {
+	Alert.alert(title, message, buttons);
 };

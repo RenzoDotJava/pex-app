@@ -4,7 +4,8 @@ import type {AppDispatch, RootState} from '../../store';
 import type {NavigationState} from '../../types/slices';
 
 const initialState: NavigationState = {
-	isAuthenticated: false
+	isAuthenticated: false,
+	isLoading: false
 };
 
 export const navigationSlice = createSlice({
@@ -13,10 +14,13 @@ export const navigationSlice = createSlice({
 	reducers: {
 		setIsAuthenticated: (state, action: PayloadAction<boolean>) => {
 			state.isAuthenticated = action.payload;
+		},
+		setIsLoading: (state, action: PayloadAction<boolean>) => {
+			state.isLoading = action.payload;
 		}
 	}
 });
 
-export const {setIsAuthenticated} = navigationSlice.actions;
+export const {setIsAuthenticated, setIsLoading} = navigationSlice.actions;
 
 export default navigationSlice.reducer;
