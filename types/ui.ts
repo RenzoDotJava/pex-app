@@ -51,7 +51,7 @@ type DateTimePickerProps = VariantProps & {
 type SelectProps = VariantProps & {
 	title?: string;
 	items: SelectItemProps[];
-	text?: string;
+	selected?: SelectItemProps;
 	error?: boolean;
 	onChange?: (name: number | string) => void;
 };
@@ -64,6 +64,7 @@ type ModalProps = ModalRNProps & {
 type ItemListProps = {
 	onPress?: () => void;
 	name: string;
+	isSelected?: boolean;
 	extraData?: Object;
 };
 

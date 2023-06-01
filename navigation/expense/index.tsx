@@ -1,5 +1,6 @@
 import {Alert, StyleSheet, Text} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
 import {
 	ExpensesScreen,
 	AddExpenseScreen,
@@ -27,20 +28,21 @@ const stackOptions: NativeStackNavigationOptions = {
 };
 
 const ExpenseNavigator: React.FC = () => {
+	const {t} = useTranslation('global');
 	const {selectMode} = useAppSelector((state) => state.expense);
 	const dispatch = useAppDispatch();
 
 	const showAlertDeleteExpense = () => {
 		Alert.alert(
-			'Eliminar',
-			'¿Está seguro de eliminar los gastos seleccionados?',
+			t("options.delete"),
+			t("options.delete-expense") as string,
 			[
 				{
-					text: 'Cancelar',
+					text: t("options.cancel") as string,
 					style: 'cancel'
 				},
 				{
-					text: 'Eliminar'
+					text: t("options.delete") as string
 					//onPress: () => dispatch(deleteExpenses())
 				}
 			]
@@ -56,7 +58,7 @@ const ExpenseNavigator: React.FC = () => {
 					headerStyle: {
 						backgroundColor: !selectMode ? theme.color.primary : 'gray'
 					},
-					headerTitle: () => <Text style={styles.headerTitle}>Gastos</Text>,
+					headerTitle: () => <Text style={styles.headerTitle}>{t("expense.header")}</Text>,
 					headerLeft: () => (
 						<IconButton
 							onPress={() =>
@@ -102,7 +104,7 @@ const ExpenseNavigator: React.FC = () => {
 				component={AddExpenseScreen}
 				options={({navigation}) => ({
 					headerTitle: () => (
-						<Text style={styles.headerTitle}>Agregar Gasto</Text>
+						<Text style={styles.headerTitle}>{t("expense.add")}</Text>
 					),
 					headerBackVisible: false,
 					headerLeft: () => (
@@ -118,7 +120,7 @@ const ExpenseNavigator: React.FC = () => {
 				component={EditExpenseScreen}
 				options={({navigation}) => ({
 					headerTitle: () => (
-						<Text style={styles.headerTitle}>Editar Gasto</Text>
+						<Text style={styles.headerTitle}>{t("expense.edit")}</Text>
 					),
 					headerBackVisible: false,
 					headerLeft: () => (

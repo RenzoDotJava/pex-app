@@ -3,22 +3,25 @@ import {
 	Text,
 	ScrollView,
 	View,
-	TouchableOpacity
+	TouchableOpacity,
+	Switch
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
+import {useTranslation} from 'react-i18next';
 import {theme} from '../../styles';
 import type {ConfigParamList} from '../../types/navigation';
 
 type NavigationProp = DrawerNavigationProp<ConfigParamList, 'Config'>;
 
 const ConfigScreen = () => {
+	const {t} = useTranslation('global');
 	const navigation = useNavigation<NavigationProp>();
 
 	return (
 		<ScrollView>
 			<View style={styles.section}>
-				<Text style={styles.section_title}>Información de gasto</Text>
+				<Text style={styles.section_title}>{t("config.expense-info")}</Text>
 			</View>
 			<TouchableOpacity
 				style={styles.subsection}
@@ -26,13 +29,13 @@ const ConfigScreen = () => {
 					navigation.navigate('ExpenseCenterNav', {screen: 'ExpenseCenter'})
 				}
 			>
-				<Text style={styles.subsection_title}>Centros de gasto</Text>
+				<Text style={styles.subsection_title}>{t("config.expense-center")}</Text>
 			</TouchableOpacity>
 			<TouchableOpacity
 				style={styles.subsection}
 				onPress={() => navigation.navigate('CategoryNav', {screen: 'Category'})}
 			>
-				<Text style={styles.subsection_title}>Categorías</Text>
+				<Text style={styles.subsection_title}>{t("config.category")}</Text>
 			</TouchableOpacity>
 			<TouchableOpacity
 				style={styles.subsection}
@@ -40,14 +43,39 @@ const ConfigScreen = () => {
 					navigation.navigate('PaymentMethodNav', {screen: 'PaymentMethod'})
 				}
 			>
-				<Text style={styles.subsection_title}>Métodos de pago</Text>
+				<Text style={styles.subsection_title}>{t("config.payment-method")}</Text>
 			</TouchableOpacity>
 			<TouchableOpacity
 				style={styles.subsection}
 				onPress={() => navigation.navigate('PlaceNav', {screen: 'Place'})}
 			>
-				<Text style={styles.subsection_title}>Lugares</Text>
+				<Text style={styles.subsection_title}>{t("config.place")}</Text>
 			</TouchableOpacity>
+			<View style={styles.section}>
+				<Text style={styles.section_title}>{t("config.personal-config")}</Text>
+			</View>
+			<TouchableOpacity style={styles.subsection}>
+				<Text style={styles.subsection_title}>{t("config.currency")}</Text>
+			</TouchableOpacity>
+			<TouchableOpacity
+				style={styles.subsection}
+				onPress={() => navigation.navigate('Languages')}
+			>
+				<Text style={styles.subsection_title}>{t("config.language")}</Text>
+			</TouchableOpacity>
+			<View
+				style={[
+					styles.subsection,
+					{
+						flexDirection: 'row',
+						justifyContent: 'space-between',
+						alignItems: 'center'
+					}
+				]}
+			>
+				<Text style={styles.subsection_title}>{t("config.dark-mode")}</Text>
+				<Switch style={{marginVertical: -15}} />
+			</View>
 		</ScrollView>
 	);
 };

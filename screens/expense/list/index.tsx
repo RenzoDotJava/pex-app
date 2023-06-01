@@ -3,6 +3,7 @@ import {StyleSheet, View, Text, FlatList} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {Entypo} from '@expo/vector-icons';
+import {useTranslation} from 'react-i18next';
 import {ExpenseRow} from '../../../components';
 import {DateNavigator, IconButton} from '../../../ui';
 import {
@@ -21,6 +22,7 @@ type NavigationProp = DrawerNavigationProp<
 >;
 
 const ExpensesScreen: React.FC = () => {
+	const {t} = useTranslation('global');
 	const dispatch = useAppDispatch();
 	const {selectMode, deleteList, expenses} = useAppSelector(
 		(state) => state.expense
@@ -100,7 +102,7 @@ const ExpensesScreen: React.FC = () => {
 						? `Total: S/. 980.00`
 						: `${
 								deleteList.length
-						  } seleccionados ~ S/. -${totalDeleteAmount.toFixed(2)}`}
+						  } ${t("expense.selected")} ~ S/. -${totalDeleteAmount.toFixed(2)}`}
 				</Text>
 			</View>
 			<FlatList

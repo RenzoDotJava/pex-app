@@ -3,6 +3,7 @@ import {
 	DrawerNavigationOptions,
 	createDrawerNavigator
 } from '@react-navigation/drawer';
+import {useTranslation} from 'react-i18next';
 import ExpenseNavigator from '../expense';
 import {DrawerContent} from '../../components';
 import {theme} from '../../styles';
@@ -29,6 +30,8 @@ const drawerOptions: DrawerNavigationOptions = {
 };
 
 const Sidebar: React.FC = () => {
+	const {t} = useTranslation("global");
+
 	return (
 		<Drawer.Navigator
 			useLegacyImplementation
@@ -42,7 +45,7 @@ const Sidebar: React.FC = () => {
 				options={{
 					drawerLabel: (props) => (
 						<Text style={[styles.drawerLabel, {color: props.color}]}>
-							Gastos
+							{t("expense.header")}
 						</Text>
 					)
 				}}
@@ -53,7 +56,7 @@ const Sidebar: React.FC = () => {
 				options={{
 					drawerLabel: (props) => (
 						<Text style={[styles.drawerLabel, {color: props.color}]}>
-							Configuración
+							{t("config.header")}
 						</Text>
 					)
 				}}

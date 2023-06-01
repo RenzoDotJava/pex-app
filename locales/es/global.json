@@ -1,0 +1,85 @@
+{
+	"login": {
+		"email": "Correo electrónico",
+		"password": "Contraseña",
+		"login": "Iniciar sesión",
+		"no-account": "¿No tienes una cuenta?",
+		"signup": "Create una!"
+	},
+	"signup": {
+		"email": "Correo electrónico",
+		"password": "Contraseña",
+		"confirm-password": "Confirmar contraseña",
+		"create": "Crear cuenta",
+		"already-account": "¿Ya tienes una cuenta?",
+		"login": "Ingresa!",
+		"success": "Su cuenta ha sido creada satisfactoriamente"
+	},
+  "logout": "Cerrar Sesión",
+	"options": {
+		"confirm": "Aceptar",
+		"cancel": "Cancelar",
+    "delete": "Eliminar",
+    "save": "Guardar",
+		"search": "Buscar",
+		"create": "Crear",
+		"no-results": "No hay resultados",
+    "delete-expense-center": "¿Está seguro de eliminar los centros de gasto seleccionados?",
+		"delete-category": "¿Está seguro de eliminar las categorías seleccionados?",
+		"delete-payment-method": "¿Está seguro de eliminar los métodos de pago seleccionados?",
+		"delete-place": "¿Está seguro de eliminar los lugares seleccionados?",
+		"delete-expense": "¿Está seguro de eliminar los gastos seleccionados?"
+	},
+  "forms": {
+		"name": "Nombre",
+		"date": "Fecha",
+		"amount": "Cantidad",
+		"expense-center": "Centros de gasto",
+		"category": "Categoría",
+		"payment-method": "Método de pago",
+		"place": "Lugar"
+	},
+	"validation": {
+		"required": "Campo obligatorio",
+		"email": "Email inválido",
+    "create-password": "La contraseña debe tener al menos 6 caracteres",
+    "equal-passoword": "Las contraseñas deben ser iguales"
+	},
+  "expense": {
+		"header": "Gastos",
+		"add": "Agregar Gasto",
+		"edit": "Editar Gasto",
+		"selected": "seleccionado(s)"
+	},
+  "expense-center": {
+		"add": "Agregar Centro de Gasto",
+		"edit": "Editar Centro de Gasto"
+	},
+	"category": {
+		"add": "Agregar Categoría",
+		"edit": "Editar Categoría"
+	},
+	"payment-method": {
+		"add": "Agregar Método de Pago",
+		"edit": "Editar Método de Pago"
+	},
+	"place": {
+		"add": "Agregar Lugar",
+		"edit": "Editar Lugar"
+	},
+	"config": {
+		"header": "Configuración",
+    "expense-info": "Información de gasto",
+		"expense-center": "Centros de gasto",
+		"category": "Categorías",
+		"payment-method": "Métodos de pago",
+		"place": "Lugares",
+		"personal-config": "Configuración personal",
+		"language": "Idioma",
+		"currency": "Moneda principal",
+		"dark-mode": "Modo Oscuro"
+	},
+	"languages": {
+		"header": "Idiomas"
+	}
+}

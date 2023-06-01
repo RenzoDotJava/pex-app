@@ -6,6 +6,7 @@ import {
 	Keyboard
 } from 'react-native';
 import {SubmitHandler, useForm} from 'react-hook-form';
+import {useTranslation} from 'react-i18next';
 import {FormInput, Button, FormDateTimePicker, FormSelect} from '../../ui';
 import type {ExpenseFormInputs, ExpenseFormProps} from '../../types/components';
 import {theme} from '../../styles';
@@ -46,6 +47,7 @@ const expenseCenters = [
 ];
 
 const ExpenseForm: React.FC<ExpenseFormProps> = ({expense}) => {
+	const {t} = useTranslation('global');
 	const {
 		control,
 		handleSubmit,
@@ -62,7 +64,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({expense}) => {
 		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
 			<View style={styles.container}>
 				<View style={styles.form_group}>
-					<Text>Fecha</Text>
+					<Text>{t("forms.date")}</Text>
 					<FormDateTimePicker
 						name="date"
 						variant="standard"
@@ -70,74 +72,74 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({expense}) => {
 					/>
 				</View>
 				<View style={styles.form_group}>
-					<Text>Cantidad</Text>
+					<Text>{t("forms.amount")}</Text>
 					<FormInput
 						control={control}
 						name="amount"
 						variant="standard"
 						keyboardType="numeric"
 						rules={{
-							required: 'Campo obligatorio',
+							required: t("validation.required"),
 							validate: (value: number) =>
-								value > 0 || 'El monto debe ser mayor a 0'
+								value > 0 || t("validation.min-num")
 						}}
 					/>
 				</View>
 				<View style={styles.form_group}>
-					<Text>Centro de gasto</Text>
+					<Text>{t("forms.expense-center")}</Text>
 					<FormSelect
 						control={control}
 						name="expenseCenterId"
 						variant="standard"
-						title="Centro de gasto"
+						title={t("forms.expense-center") as string}
 						items={expenseCenters}
 						rules={{
-							required: 'Campo obligatorio'
+							required: t("validation.required")
 						}}
 					/>
 				</View>
 				<View style={styles.form_group}>
-					<Text>Categoría</Text>
+					<Text>{t("forms.category")}</Text>
 					<FormSelect
 						control={control}
 						name="categoryId"
 						variant="standard"
-						title="Categoría"
+						title={t("forms.category") as string}
 						items={expenseCenters}
 						rules={{
-							required: 'Campo obligatorio'
+							required: t("validation.required")
 						}}
 					/>
 				</View>
 				<View style={styles.form_group}>
-					<Text>Forma de pago</Text>
+					<Text>{t("forms.payment-method")}</Text>
 					<FormSelect
 						control={control}
 						name="paymentMethodId"
 						variant="standard"
-						title="Forma de pago"
+						title={t("forms.payment-method") as string}
 						items={expenseCenters}
 						rules={{
-							required: 'Campo obligatorio'
+							required: t("validation.required")
 						}}
 					/>
 				</View>
 				<View style={styles.form_group}>
-					<Text>Lugar</Text>
+					<Text>{t("forms.place")}</Text>
 					<FormSelect
 						control={control}
 						name="placeId"
 						variant="standard"
-						title="Lugar"
+						title={t("forms.place") as string}
 						items={expenseCenters}
 						rules={{
-							required: 'Campo obligatorio'
+							required: t("validation.required")
 						}}
 					/>
 				</View>
 				<View style={{marginTop: 15}}>
 					<Button
-						text="Guardar"
+						text={t("options.save")}
 						onPress={handleSubmit(onSubmit)}
 						disabled={!isValid}
 					/>

@@ -1,0 +1,86 @@
+{
+	"login": {
+		"email": "Email",
+		"password": "Password",
+		"login": "Login",
+		"no-account": "Don't have an account?",
+		"signup": "Sign up!"
+	},
+	"signup": {
+		"email": "Email",
+		"password": "Password",
+		"confirm-password": "Confirm password",
+		"create": "Create account",
+		"already-account": "Already have an account?",
+		"login": "Sign in!",
+		"success": "Your account has been created successfully"
+	},
+	"logout": "Logout",
+	"options": {
+		"confirm": "Confirm",
+		"cancel": "Cancel",
+		"delete": "Delete",
+		"save": "Save",
+		"search": "Search",
+		"create": "Create",
+		"no-results": "No results found",
+		"delete-expense-center": "Are you sure to delete the selected expense centers?",
+		"delete-category": "Are you sure to delete the selected categories?",
+		"delete-payment-method": "Are you sure to delete the selected payment methods?",
+		"delete-place": "Are you sure to delete the selected places?",
+		"delete-expense": "Are you sure to delete the selected expenses?"
+	},
+	"forms": {
+		"name": "Name",
+		"date": "Date",
+		"amount": "Amount",
+		"expense-center": "Expense center",
+		"category": "Category",
+		"payment-method": "Payment method",
+		"place": "Place"
+	},
+	"validation": {
+		"required": "Field required",
+		"email": "Invalid email",
+		"create-password": "The password must be at least 6 characters",
+		"equal-passoword": "Passwords must be the same",
+		"min-num": "The value must be greater than or equal to 0"
+	},
+	"expense": {
+		"header": "Expenses",
+		"add": "Add Expense",
+		"edit": "Edit Expense",
+		"selected": "selected"
+	},
+	"expense-center": {
+		"add": "Add Expense Center",
+		"edit": "Edit Expense Center"
+	},
+	"category": {
+		"add": "Add Category",
+		"edit": "Edit Category"
+	},
+	"payment-method": {
+		"add": "Add Payment Method",
+		"edit": "Edit Payment Method"
+	},
+	"place": {
+		"add": "Add Place",
+		"edit": "Edit Place"
+	},
+	"config": {
+		"header": "Configuration",
+		"expense-info": "Expense information",
+		"expense-center": "Expenses center",
+		"category": "Categories",
+		"payment-method": "Payment methods",
+		"place": "Places",
+		"personal-config": "Personal configuration",
+		"language": "Language",
+		"currency": "Currency",
+		"dark-mode": "Dark mode"
+	},
+	"languages": {
+		"header": "Languages"
+	}
+}

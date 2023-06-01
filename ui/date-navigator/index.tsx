@@ -1,14 +1,16 @@
+import 'moment/locale/es';
 import {useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {AntDesign} from '@expo/vector-icons';
+import {useTranslation} from 'react-i18next';
 import moment from 'moment-timezone';
 import {theme} from '../../styles';
 import IconButton from '../icon-button';
-import 'moment/locale/es';
 
 moment.locale('es');
 
 const DateNavigator: React.FC = () => {
+	const {i18n} = useTranslation('global');
 	const [date, setDate] = useState(new Date());
 
 	const addDate = () => {
@@ -24,7 +26,7 @@ const DateNavigator: React.FC = () => {
 			<IconButton
 				icon={<AntDesign name="left" size={26} color={theme.color.secondary} onPress={subtractDate} />}
 			/>
-			<Text style={styles.label}>{moment(date).locale('es').format('LL')}</Text>
+			<Text style={styles.label}>{moment(date).locale(i18n.language).format('LL')}</Text>
 			<IconButton
 				icon={
 					<AntDesign name="right" size={26} color={theme.color.secondary} onPress={addDate} />

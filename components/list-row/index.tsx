@@ -1,10 +1,12 @@
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {AntDesign} from '@expo/vector-icons';
 import {ListRowProps} from '../../types/components';
 import {theme} from '../../styles';
 
 const ListRow: React.FC<ListRowProps> = ({
 	name,
 	backgroundColor,
+	isSelected,
 	onPress,
 	onLongPress
 }) => {
@@ -16,7 +18,8 @@ const ListRow: React.FC<ListRowProps> = ({
 			onLongPress={onLongPress}
 			delayLongPress={400}
 		>
-			<Text style={{fontSize: theme.fontSize.md}}>{name}</Text>
+			<Text style={styles.text}>{name}</Text>
+			{isSelected && <AntDesign name="check" size={24} color="black" />}
 		</TouchableOpacity>
 	);
 };
@@ -24,6 +27,10 @@ const ListRow: React.FC<ListRowProps> = ({
 export default ListRow;
 
 const styles = StyleSheet.create({
+	text: {
+		flex: 1,
+		fontSize: theme.fontSize.md
+	},
 	container: {
 		display: 'flex',
 		flexDirection: 'row',

@@ -2,6 +2,7 @@ import {Alert, StyleSheet, Text} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NativeStackNavigationOptions} from '@react-navigation/native-stack';
 import {Ionicons, MaterialIcons, AntDesign} from '@expo/vector-icons';
+import {useTranslation} from 'react-i18next';
 import {
 	AddPaymentMethodScreen,
 	EditPaymentMethodScreen,
@@ -27,20 +28,21 @@ const stackOptions: NativeStackNavigationOptions = {
 };
 
 const PaymentMethodNavigator: React.FC = () => {
+	const {t} = useTranslation('global');
 	const {selectMode} = useAppSelector((state) => state.paymentMethod);
 	const dispatch = useAppDispatch();
 
 	const showAlertDeletePaymentMethod = () => {
 		Alert.alert(
-			'Eliminar',
-			'¿Está seguro de eliminar los métodos de pagos seleccionados?',
+			t("options.delete"),
+			t("options.delete-payment-method") as string,
 			[
 				{
-					text: 'Cancelar',
+					text: t("options.cancel") as string,
 					style: 'cancel'
 				},
 				{
-					text: 'Eliminar'
+					text: t("options.delete") as string
 					//onPress: () => dispatch(deleteExpenses())
 				}
 			]
@@ -61,7 +63,7 @@ const PaymentMethodNavigator: React.FC = () => {
 						backgroundColor: !selectMode ? theme.color.primary : 'gray'
 					},
 					headerTitle: () => (
-						<Text style={styles.headerTitle}>Métodos de Pago</Text>
+						<Text style={styles.headerTitle}>{t("config.payment-method")}</Text>
 					),
 					headerLeft: () => (
 						<IconButton
@@ -101,7 +103,7 @@ const PaymentMethodNavigator: React.FC = () => {
 				component={AddPaymentMethodScreen}
 				options={({navigation}) => ({
 					headerTitle: () => (
-						<Text style={styles.headerTitle}>Agregar Método de Pago</Text>
+						<Text style={styles.headerTitle}>{t("payment-method.add")}</Text>
 					),
 					headerBackVisible: false,
 					headerLeft: () => (
@@ -117,7 +119,7 @@ const PaymentMethodNavigator: React.FC = () => {
 				component={EditPaymentMethodScreen}
 				options={({navigation}) => ({
 					headerTitle: () => (
-						<Text style={styles.headerTitle}>Editar Método de Pago</Text>
+						<Text style={styles.headerTitle}>{t("payment-method.edit")}</Text>
 					),
 					headerBackVisible: false,
 					headerLeft: () => (
