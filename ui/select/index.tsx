@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import {AntDesign} from '@expo/vector-icons';
 import {Controller, FieldError} from 'react-hook-form';
+import {useTranslation} from 'react-i18next';
 import {useToggle, useSearch} from '../../hooks';
 import {getVariantStyle} from '../../utils';
 import {theme} from '../../styles';
@@ -25,10 +26,11 @@ const Select: React.FC<SelectProps> = ({
 	variant = 'outlined',
 	title,
 	items,
-	text,
+	selected,
 	error,
 	onChange
 }) => {
+	const {t} = useTranslation('global');
 	const [query, handleSearch, filteredItems] = useSearch(items);
 	const [isOpen, toggler] = useToggle({onClose: () => Keyboard.dismiss()});
 
@@ -39,14 +41,18 @@ const Select: React.FC<SelectProps> = ({
 	};
 
 	const renderItem = useCallback(
-		(item: SelectItemProps) => (
-			<ItemList
-				onPress={() => onPressItem(item.id)}
-				name={item.name}
-				extraData={{isOpen}}
-			/>
-		),
-		[isOpen]
+		(item: SelectItemProps) => {
+			const isSelected = item.id === selected?.id;
+			return (
+				<ItemList
+					onPress={() => onPressItem(item.id)}
+					name={item.name}
+					isSelected={isSelected}
+					extraData={{isOpen, selected}}
+				/>
+			);
+		},
+		[isOpen, selected]
 	);
 
 	return (
@@ -59,12 +65,12 @@ const Select: React.FC<SelectProps> = ({
 				]}
 				onPress={toggler}
 			>
-				<Text style={styles.text}>{text}</Text>
+				<Text style={styles.text}>{selected?.name}</Text>
 				<AntDesign name="down" size={20} color={theme.color.primary} />
 			</TouchableOpacity>
 			<Modal visible={isOpen} onRequestClose={toggler} title={title}>
 				<Input
-					placeholder="Buscar"
+					placeholder={t("options.search") as string}
 					variant="standard"
 					onChangeText={handleSearch}
 					value={query}
@@ -74,7 +80,7 @@ const Select: React.FC<SelectProps> = ({
 					data={filteredItems}
 					keyExtractor={(item) => item.id.toString()}
 					renderItem={({item}) => renderItem(item)}
-					ListEmptyComponent={<EmptyList text="No hay resultados" />}
+					ListEmptyComponent={<EmptyList text={t("options.no-results") as string} />}
 				/>
 			</Modal>
 		</>
@@ -94,7 +100,7 @@ export const FormSelect: React.FC<FormControllerProps & SelectProps> = ({
 		onChange: (name: number | string) => void,
 		error: FieldError | undefined
 	) => {
-		const item = items.find((item) => item.id === value);
+		const selected = items.find((item) => item.id === value);
 
 		return (
 			<>
@@ -102,7 +108,7 @@ export const FormSelect: React.FC<FormControllerProps & SelectProps> = ({
 					variant={variant}
 					title={title}
 					items={items}
-					text={item?.name}
+					selected={selected}
 					onChange={onChange}
 					error={!!error}
 				/>

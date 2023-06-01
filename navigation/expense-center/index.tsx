@@ -2,6 +2,7 @@ import {Alert, StyleSheet, Text} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NativeStackNavigationOptions} from '@react-navigation/native-stack';
 import {Ionicons, MaterialIcons, AntDesign} from '@expo/vector-icons';
+import {useTranslation} from 'react-i18next';
 import {
 	AddExpenseCenterScreen,
 	ExpenseCenterScreen,
@@ -33,6 +34,7 @@ const stackOptions: NativeStackNavigationOptions = {
 };
 
 const ExpenseCenterNavigator: React.FC = () => {
+	const {t} = useTranslation('global');
 	const {selectMode, deleteList} = useAppSelector(
 		(state) => state.expenseCenter
 	);
@@ -67,7 +69,7 @@ const ExpenseCenterNavigator: React.FC = () => {
 						backgroundColor: !selectMode ? theme.color.primary : 'gray'
 					},
 					headerTitle: () => (
-						<Text style={styles.headerTitle}>Centros de Gasto</Text>
+						<Text style={styles.headerTitle}>{t("config.expense-center")}</Text>
 					),
 					headerLeft: () => (
 						<IconButton
@@ -92,15 +94,15 @@ const ExpenseCenterNavigator: React.FC = () => {
 							<IconButton
 								onPress={() =>
 									showAlert(
-										'Eliminar',
-										'¿Está seguro de eliminar los centros de gasto seleccionados?',
+										t("options.delete"),
+										t("options.delete-expense-center"),
 										[
 											{
-												text: 'Cancelar',
+												text: t("options.cancel") as string,
 												style: 'cancel'
 											},
 											{
-												text: 'Eliminar',
+												text: t("options.delete") as string,
 												onPress: onDeleteExpenseCenter
 											}
 										]
@@ -122,7 +124,7 @@ const ExpenseCenterNavigator: React.FC = () => {
 				component={AddExpenseCenterScreen}
 				options={({navigation}) => ({
 					headerTitle: () => (
-						<Text style={styles.headerTitle}>Agregar Centro de Gasto</Text>
+						<Text style={styles.headerTitle}>{t("expense-center.add")}</Text>
 					),
 					headerBackVisible: false,
 					headerLeft: () => (
@@ -138,7 +140,7 @@ const ExpenseCenterNavigator: React.FC = () => {
 				component={EditExpenseCenterScreen}
 				options={({navigation}) => ({
 					headerTitle: () => (
-						<Text style={styles.headerTitle}>Editar Centro de Gasto</Text>
+						<Text style={styles.headerTitle}>{t("expense-center.edit")}</Text>
 					),
 					headerBackVisible: false,
 					headerLeft: () => (

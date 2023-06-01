@@ -6,6 +6,7 @@ import {
 	View
 } from 'react-native';
 import {SubmitHandler, useForm} from 'react-hook-form';
+import {useTranslation} from 'react-i18next';
 import {Button, FormInput} from '../../ui';
 import {theme} from '../../styles';
 import type {ExpenseCenterFormProps, FormInputs} from '../../types/components';
@@ -15,6 +16,7 @@ const ExpenseCenterForm: React.FC<ExpenseCenterFormProps> = ({
 	action,
 	isLoading = false
 }) => {
+	const {t} = useTranslation('global');
 	const {
 		control,
 		handleSubmit,
@@ -31,19 +33,19 @@ const ExpenseCenterForm: React.FC<ExpenseCenterFormProps> = ({
 		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
 			<View style={styles.container}>
 				<View style={styles.form_group}>
-					<Text>Nombre</Text>
+					<Text>{t("forms.name")}</Text>
 					<FormInput
 						control={control}
 						name="name"
 						variant="standard"
 						rules={{
-							required: 'Campo obligatorio'
+							required: t("validation.required")
 						}}
 					/>
 				</View>
 				<View style={{marginTop: 15}}>
 					<Button
-						text="Guardar"
+						text={t("options.save")}
 						onPress={handleSubmit(onSubmit)}
 						disabled={!isValid}
 						loading={isLoading}

@@ -54,6 +54,7 @@ type ConfigParamList = {
 	CategoryNav: NavigatorScreenParams<CategoryParamList>;
 	PaymentMethodNav: NavigatorScreenParams<PaymentMethodParamList>;
 	PlaceNav: NavigatorScreenParams<PlaceParamList>;
+	Languages: undefined;
 };
 
 export {

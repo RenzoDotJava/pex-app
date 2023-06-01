@@ -4,12 +4,14 @@ import {
 	DrawerContentComponentProps,
 	DrawerItemList
 } from '@react-navigation/drawer';
+import {useTranslation} from 'react-i18next';
 import {theme} from '../../styles';
 import {supabase} from '../../supabase';
 import {setIsAuthenticated} from '../../slices/navigation';
 import {useAppDispatch} from '../../store';
 
 const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
+	const {t} = useTranslation("global");
 	const dispatch = useAppDispatch();
 
 	const logOut = async () => {
@@ -32,7 +34,7 @@ const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
 				activeOpacity={0.6}
 				onPress={logOut}
 			>
-				<Text style={styles.footerLabel}>Cerrar Sesión</Text>
+				<Text style={styles.footerLabel}>{t("logout")}</Text>
 			</TouchableOpacity>
 		</View>
 	);

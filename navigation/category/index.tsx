@@ -2,6 +2,7 @@ import {Alert, StyleSheet, Text} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NativeStackNavigationOptions} from '@react-navigation/native-stack';
 import {Ionicons, MaterialIcons, AntDesign} from '@expo/vector-icons';
+import {useTranslation} from 'react-i18next';
 import {
 	AddCategoryScreen,
 	CategoryScreen,
@@ -27,20 +28,21 @@ const stackOptions: NativeStackNavigationOptions = {
 };
 
 const CategoryNavigator: React.FC = () => {
+	const {t} = useTranslation('global');
 	const {selectMode} = useAppSelector((state) => state.category);
 	const dispatch = useAppDispatch();
 
 	const showAlertDeleteCategory = () => {
 		Alert.alert(
-			'Eliminar',
-			'¿Está seguro de eliminar las categorías seleccionados?',
+			t("options.delete"),
+			t("options.delete-category") as string,
 			[
 				{
-					text: 'Cancelar',
+					text: t("options.cancel") as string,
 					style: 'cancel'
 				},
 				{
-					text: 'Eliminar'
+					text: t("options.delete") as string
 					//onPress: () => dispatch(deleteExpenses())
 				}
 			]
@@ -58,7 +60,7 @@ const CategoryNavigator: React.FC = () => {
 						backgroundColor: !selectMode ? theme.color.primary : 'gray'
 					},
 					headerTitle: () => (
-						<Text style={styles.headerTitle}>Categorías</Text>
+						<Text style={styles.headerTitle}>{t("config.category")}</Text>
 					),
 					headerLeft: () => (
 						<IconButton
@@ -98,7 +100,7 @@ const CategoryNavigator: React.FC = () => {
 				component={AddCategoryScreen}
 				options={({navigation}) => ({
 					headerTitle: () => (
-						<Text style={styles.headerTitle}>Agregar Categoría</Text>
+						<Text style={styles.headerTitle}>{t("category.add")}</Text>
 					),
 					headerBackVisible: false,
 					headerLeft: () => (
@@ -114,7 +116,7 @@ const CategoryNavigator: React.FC = () => {
 				component={EditCategoryScreen}
 				options={({navigation}) => ({
 					headerTitle: () => (
-						<Text style={styles.headerTitle}>Editar Categoría</Text>
+						<Text style={styles.headerTitle}>{t("category.edit")}</Text>
 					),
 					headerBackVisible: false,
 					headerLeft: () => (

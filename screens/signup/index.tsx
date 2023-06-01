@@ -7,13 +7,13 @@ import {
 	TouchableOpacity,
 	StyleSheet,
 	Platform,
-	StatusBar,
-	Alert
+	StatusBar
 } from 'react-native';
 import {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {SubmitHandler, useForm} from 'react-hook-form';
+import {useTranslation} from 'react-i18next';
 import {Button, FormInput} from '../../ui';
 import {theme} from '../../styles';
 import {useSignUpMutation} from '../../api/auth';
@@ -24,14 +24,15 @@ import type {SignUpFormInputs} from '../../types/components';
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignUp'>;
 
 const SignUpScreen: React.FC = () => {
+	const {t} = useTranslation("global");
 	const [error, setError] = useState('');
 	const navigation = useNavigation<NavigationProp>();
 	const {control, handleSubmit, watch} = useForm<SignUpFormInputs>();
 	const {mutate, isLoading} = useSignUpMutation({
 		onSuccess: () => {
-			showAlert('Info', 'Su cuenta ha sido creada satisfactoriamente', [
+			showAlert('Info', t("signup.success"), [
 				{
-					text: 'Aceptar'
+					text: t("options.confirm") as string
 				}
 			]);
 		},
@@ -59,53 +60,51 @@ const SignUpScreen: React.FC = () => {
 					<Text style={styles.title}>Pex</Text>
 					<View style={{marginHorizontal: 48, rowGap: 20, marginTop: 15}}>
 						<View>
-							<Text style={styles.label}>Email</Text>
+							<Text style={styles.label}>{t("signup.email")}</Text>
 							<FormInput
 								control={control}
 								name="email"
 								variant="standard"
 								keyboardType="default"
 								rules={{
-									required: 'Campo obligatorio',
+									required: t("validation.required"),
 									pattern: {
 										value:
 											/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-										message: 'Email inválido'
+										message: t("validation.email")
 									}
 								}}
 							/>
 						</View>
 						<View>
-							<Text style={styles.label}>Contraseña</Text>
+							<Text style={styles.label}>{t("signup.password")}</Text>
 							<FormInput
 								control={control}
 								name="password"
 								variant="standard"
 								keyboardType="default"
 								rules={{
-									required: 'Campo obligatorio',
+									required: t("validation.required"),
 									validate: {
 										greaterThan: (value: string) =>
-											value.length >= 6 ||
-											'Ingrese una contraseña de al menos 6 caracteres'
+											value.length >= 6 || t("validation.create-password")
 									}
 								}}
 								secureTextEntry
 							/>
 						</View>
 						<View>
-							<Text style={styles.label}>Repetir contraseña</Text>
+							<Text style={styles.label}>{t("signup.confirm-password")}</Text>
 							<FormInput
 								control={control}
 								name="confirmPassword"
 								variant="standard"
 								keyboardType="default"
 								rules={{
-									required: 'Campo obligatorio',
+									required: t("validation.required"),
 									validate: {
 										areEqual: (value: string) =>
-											value === watchPassword ||
-											'Las contraseñas deben ser iguales'
+											value === watchPassword || t("validation.equal-passoword")
 									}
 								}}
 								secureTextEntry
@@ -114,7 +113,7 @@ const SignUpScreen: React.FC = () => {
 					</View>
 					<View style={{marginHorizontal: 48, marginTop: 30}}>
 						<Button
-							text="Crear cuenta"
+							text={t("signup.create")}
 							onPress={handleSubmit(onSubmit)}
 							loading={isLoading}
 						/>
@@ -148,9 +147,9 @@ const SignUpScreen: React.FC = () => {
 					flexDirection: 'row'
 				}}
 			>
-				<Text style={{fontSize: 16}}>¿Ya tienes una cuenta? </Text>
+				<Text style={{fontSize: 16}}>{t("signup.already-account")} </Text>
 				<TouchableOpacity onPress={() => navigation.navigate('Login')}>
-					<Text style={{fontWeight: 'bold', fontSize: 16}}>Ingresa!</Text>
+					<Text style={{fontWeight: 'bold', fontSize: 16}}>{t("signup.login")}</Text>
 				</TouchableOpacity>
 			</View>
 		</SafeAreaView>

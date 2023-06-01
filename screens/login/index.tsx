@@ -13,6 +13,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {SubmitHandler, useForm} from 'react-hook-form';
+import {useTranslation} from 'react-i18next';
 import {Button, FormInput} from '../../ui';
 import {theme} from '../../styles';
 import {useSignInMutation} from '../../api/auth';
@@ -24,6 +25,7 @@ import type {SignInFormInputs} from '../../types/components';
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 const LoginScreen: React.FC = () => {
+	const {t} = useTranslation("global");
 	const dispatch = useAppDispatch();
 	const [error, setError] = useState('');
 	const navigation = useNavigation<NavigationProp>();
@@ -56,31 +58,31 @@ const LoginScreen: React.FC = () => {
 					<Text style={styles.title}>Pex</Text>
 					<View style={{marginHorizontal: 48, rowGap: 20, marginTop: 20}}>
 						<View>
-							<Text style={styles.label}>Email</Text>
+							<Text style={styles.label}>{t("login.email")}</Text>
 							<FormInput
 								control={control}
 								name="email"
 								variant="standard"
 								keyboardType="default"
 								rules={{
-									required: 'Campo obligatorio',
+									required: t("validation.required"),
 									pattern: {
 										value:
 											/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-										message: 'Email inválido'
+										message: t("validation.email")
 									}
 								}}
 							/>
 						</View>
 						<View>
-							<Text style={styles.label}>Password</Text>
+							<Text style={styles.label}>{t("login.password")}</Text>
 							<FormInput
 								control={control}
 								name="password"
 								variant="standard"
 								keyboardType="default"
 								rules={{
-									required: 'Campo obligatorio'
+									required: t("validation.required")
 								}}
 								secureTextEntry
 							/>
@@ -88,7 +90,7 @@ const LoginScreen: React.FC = () => {
 					</View>
 					<View style={{marginHorizontal: 48, marginTop: 30}}>
 						<Button
-							text="Ingresar"
+							text={t("login.login")}
 							onPress={handleSubmit(onSubmit)}
 							loading={isLoading}
 						/>
@@ -122,9 +124,9 @@ const LoginScreen: React.FC = () => {
 					flexDirection: 'row'
 				}}
 			>
-				<Text style={{fontSize: 16}}>¿No tienes una cuenta? </Text>
+				<Text style={{fontSize: 16}}>{t("login.no-account")} </Text>
 				<TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-					<Text style={{fontWeight: 'bold', fontSize: 16}}>Create una!</Text>
+					<Text style={{fontWeight: 'bold', fontSize: 16}}>{t("login.signup")}</Text>
 				</TouchableOpacity>
 			</View>
 		</SafeAreaView>

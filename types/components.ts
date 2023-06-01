@@ -55,6 +55,12 @@ type PlaceProps = {
 	name: string;
 };
 
+type LanguageProps = {
+	id: number;
+	name: string;
+	code: string;
+};
+
 type ExpenseCenterFormProps = {
 	expenseCenter?: ExpenseCenterProps;
 	action?: (req: GeneralReq) => void;
@@ -76,6 +82,7 @@ type PlaceFormProps = {
 type ListRowProps = RowProps & {
 	id: number;
 	name: string;
+	isSelected?: boolean;
 };
 
 type ExpenseRowProps = ExpenseProps & RowProps;
@@ -94,12 +101,18 @@ type NavigatorWrapperProps = {
 	onLayout?: () => void;
 };
 
+type ListWrapperProps = {
+	children: React.ReactNode;
+	onPressAdd?: () => void;
+};
+
 export {
 	ExpenseProps,
 	ExpenseRowProps,
 	ExpenseFormInputs,
 	ExpenseFormProps,
 	ExpenseCenterProps,
+	LanguageProps,
 	ExpenseCenterFormProps,
 	FormInputs,
 	ListRowProps,
@@ -111,5 +124,6 @@ export {
 	PlaceFormProps,
 	SignUpFormInputs,
 	SignInFormInputs,
-	NavigatorWrapperProps
+	NavigatorWrapperProps,
+	ListWrapperProps
 };

@@ -1,11 +1,9 @@
 import {useCallback} from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {FlatList, StyleSheet} from 'react-native';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {useNavigation} from '@react-navigation/native';
-import {Entypo} from '@expo/vector-icons';
-import {IconButton} from '../../../ui';
 import {theme} from '../../../styles';
-import {ListRow} from '../../../components';
+import {ListRow, ListWrapper} from '../../../components';
 import {useAppDispatch, useAppSelector} from '../../../store';
 import {OnPressType} from '../../../enums';
 import {onPressPlaceRow} from '../../../slices/place';
@@ -63,40 +61,18 @@ const PlaceScreen: React.FC = () => {
 	);
 
 	return (
-		<View style={styles.main}>
-			<IconButton
-				onPress={() =>
-					navigation.navigate('CategoryNav', {screen: 'AddCategory'})
-				}
-				style={styles.plus}
-				icon={<Entypo name="plus" size={30} color={theme.color.secondary} />}
-			/>
+		<ListWrapper
+			onPressAdd={() =>
+				navigation.navigate('CategoryNav', {screen: 'AddCategory'})
+			}
+		>
 			<FlatList
 				data={places}
 				keyExtractor={(item) => item.id.toString()}
 				renderItem={({item}) => renderItem(item)}
 			/>
-		</View>
+		</ListWrapper>
 	);
 };
 
 export default PlaceScreen;
-
-const styles = StyleSheet.create({
-	main: {
-		flex: 1,
-		backgroundColor: theme.color.secondary
-	},
-	plus: {
-		position: 'absolute',
-		bottom: 40,
-		right: 15,
-		backgroundColor: theme.color.primary,
-		width: 55,
-		height: 55,
-		borderRadius: 55 / 2,
-		alignItems: 'center',
-		justifyContent: 'center',
-		zIndex: 1
-	}
-});

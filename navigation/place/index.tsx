@@ -2,6 +2,7 @@ import {Alert, StyleSheet, Text} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NativeStackNavigationOptions} from '@react-navigation/native-stack';
 import {Ionicons, MaterialIcons, AntDesign} from '@expo/vector-icons';
+import {useTranslation} from 'react-i18next';
 import {
 	AddPlaceScreen,
 	PlaceScreen,
@@ -27,20 +28,21 @@ const stackOptions: NativeStackNavigationOptions = {
 };
 
 const PlaceNavigator: React.FC = () => {
+	const {t} = useTranslation('global');
 	const {selectMode} = useAppSelector((state) => state.place);
 	const dispatch = useAppDispatch();
 
 	const showAlertDeletePlace = () => {
 		Alert.alert(
-			'Eliminar',
-			'¿Está seguro de eliminar los lugares seleccionados?',
+			t("options.delete"),
+			t("options.delete-payment-method") as string,
 			[
 				{
-					text: 'Cancelar',
+					text: t("options.cancel") as string,
 					style: 'cancel'
 				},
 				{
-					text: 'Eliminar'
+					text: t("options.delete") as string
 					//onPress: () => dispatch(deleteExpenses())
 				}
 			]
@@ -57,7 +59,7 @@ const PlaceNavigator: React.FC = () => {
 					headerStyle: {
 						backgroundColor: !selectMode ? theme.color.primary : 'gray'
 					},
-					headerTitle: () => <Text style={styles.headerTitle}>Lugares</Text>,
+					headerTitle: () => <Text style={styles.headerTitle}>{t("config.place")}</Text>,
 					headerLeft: () => (
 						<IconButton
 							onPress={() =>
@@ -96,7 +98,7 @@ const PlaceNavigator: React.FC = () => {
 				component={AddPlaceScreen}
 				options={({navigation}) => ({
 					headerTitle: () => (
-						<Text style={styles.headerTitle}>Agregar Lugar</Text>
+						<Text style={styles.headerTitle}>{t("place.add")}</Text>
 					),
 					headerBackVisible: false,
 					headerLeft: () => (
@@ -112,7 +114,7 @@ const PlaceNavigator: React.FC = () => {
 				component={EditPlaceScreen}
 				options={({navigation}) => ({
 					headerTitle: () => (
-						<Text style={styles.headerTitle}>Editar Lugar</Text>
+						<Text style={styles.headerTitle}>{t("place.edit")}</Text>
 					),
 					headerBackVisible: false,
 					headerLeft: () => (
