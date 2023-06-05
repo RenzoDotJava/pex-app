@@ -61,6 +61,12 @@ type LanguageProps = {
 	code: string;
 };
 
+type CurrencyProps = {
+	id: number;
+	name: string;
+	code: string;
+};
+
 type ExpenseCenterFormProps = {
 	expenseCenter?: ExpenseCenterProps;
 	action?: (req: GeneralReq) => void;
@@ -125,5 +131,6 @@ export {
 	SignUpFormInputs,
 	SignInFormInputs,
 	NavigatorWrapperProps,
-	ListWrapperProps
+	ListWrapperProps,
+	CurrencyProps
 };

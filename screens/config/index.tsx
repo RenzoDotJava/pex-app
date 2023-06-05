@@ -54,7 +54,10 @@ const ConfigScreen = () => {
 			<View style={styles.section}>
 				<Text style={styles.section_title}>{t("config.personal-config")}</Text>
 			</View>
-			<TouchableOpacity style={styles.subsection}>
+			<TouchableOpacity
+				style={styles.subsection}
+				onPress={() => navigation.navigate('Currencies')}
+			>
 				<Text style={styles.subsection_title}>{t("config.currency")}</Text>
 			</TouchableOpacity>
 			<TouchableOpacity

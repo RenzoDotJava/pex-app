@@ -82,5 +82,8 @@
 	},
 	"languages": {
 		"header": "Languages"
+	},
+	"currencies": {
+		"header": "Currencies"
 	}
 }

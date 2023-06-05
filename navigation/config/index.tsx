@@ -5,7 +5,7 @@ import {Ionicons, AntDesign} from '@expo/vector-icons';
 import {useTranslation} from 'react-i18next';
 import {theme} from '../../styles';
 import {IconButton} from '../../ui';
-import {ConfigScreen, LanguagesScreen} from '../../screens';
+import {ConfigScreen, LanguagesScreen, CurrencyScreen} from '../../screens';
 import ExpenseCenterNavigator from '../expense-center';
 import CategoryNavigator from '../category';
 import PaymentMethodNavigator from '../payment-method';
@@ -79,6 +79,20 @@ const ConfigNavigator: React.FC = () => {
 				component={LanguagesScreen}
 				options={({navigation}) => ({
 					headerTitle: () => <Text style={styles.headerTitle}>{t("languages.header")}</Text>,
+					headerBackVisible: false,
+					headerLeft: () => (
+						<IconButton
+							onPress={navigation.goBack}
+							icon={<AntDesign name="arrowleft" size={24} color="white" />}
+						/>
+					)
+				})}
+			/>
+			<Stack.Screen
+				name="Currencies"
+				component={CurrencyScreen}
+				options={({navigation}) => ({
+					headerTitle: () => <Text style={styles.headerTitle}>{t("currencies.header")}</Text>,
 					headerBackVisible: false,
 					headerLeft: () => (
 						<IconButton
