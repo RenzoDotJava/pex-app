@@ -9,11 +9,12 @@ const EmptyList: React.FC<EmptyListProps> = ({text, onPress}) => {
 	return (
 		<View style={styles.empty_container}>
 			<Text style={styles.empty_text}>{text}</Text>
-			<Button
-				onPress={onPress}
-				text={t("options.create")}
-				height={35}
-			/>
+			{onPress &&
+				<Button
+					onPress={onPress}
+					text={t("options.create")}
+					height={35}
+				/>}
 		</View>
 	)
 };

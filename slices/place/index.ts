@@ -3,6 +3,7 @@ import {OnPressType} from '../../enums';
 import type {PayloadAction} from '@reduxjs/toolkit';
 import type {AppDispatch} from '../../store';
 import type {PlaceState} from '../../types/slices';
+import type {PlaceProps} from '../../types/components';
 
 const list = [
 	{
@@ -22,7 +23,7 @@ const list = [
 const initialState: PlaceState = {
 	selectMode: false,
 	deleteList: [],
-	places: list
+	places: []
 };
 
 export const placeSlice = createSlice({
@@ -43,12 +44,37 @@ export const placeSlice = createSlice({
 		cleanDeleteList: (state) => {
 			state.deleteList = [];
 			if (state.selectMode) state.selectMode = false;
+		},
+		setPlaces: (state, action: PayloadAction<PlaceProps[]>) => {
+			state.places = action.payload;
+		},
+		addPlace: (state, action: PayloadAction<PlaceProps>) => {
+			state.places.push(action.payload);
+		},
+		updatePlace: (state, action: PayloadAction<PlaceProps>) => {
+			state.places = state.places.map((place) =>
+				place.id === action.payload.id ? action.payload : place
+			);
+		},
+		deletePlace: (state) => {
+			state.places = state.places.filter(
+				(place) => !state.deleteList.includes(place.id)
+			);
+			if (state.selectMode) state.selectMode = false;
+			state.deleteList = [];
 		}
 	}
 });
 
-export const {addToDeleteList, deleteFromDeleteList, cleanDeleteList} =
-  placeSlice.actions;
+export const {
+	addToDeleteList,
+	deleteFromDeleteList,
+	cleanDeleteList,
+	setPlaces,
+	addPlace,
+	updatePlace,
+	deletePlace
+} = placeSlice.actions;
 
 export const onPressPlaceRow =
 	(

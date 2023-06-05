@@ -1,14 +1,46 @@
-import {RouteProp, useRoute} from '@react-navigation/native';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {CategoryForm} from '../../../components';
-import type {CategoryParamList} from '../../../types/navigation';
+import {useAppDispatch} from '../../../store';
+import {useUpdateCategory} from '../../../api/category';
+import {updateCategory} from '../../../slices/category';
+import type {CategoryParamList, ConfigParamList} from '../../../types/navigation';
+import type {GeneralReq} from '../../../types/api';
 
 type EditCategoryScreenRouteProp = RouteProp<CategoryParamList, 'EditCategory'>;
 
+type NavigationProp = DrawerNavigationProp<ConfigParamList, 'CategoryNav'>;
+
 const EditCategoryScreen: React.FC = () => {
+	const navigation = useNavigation<NavigationProp>();
 	const route = useRoute<EditCategoryScreenRouteProp>();
 	const category = route.params;
+	const dispatch = useAppDispatch();
+	const {mutate, isLoading} = useUpdateCategory({
+		onSuccess: (data) => {
+			if (data) dispatch(updateCategory(data));
+			navigation.navigate('CategoryNav', {screen: 'Category'});
+		},
+		onError: (error) => {
+			console.log(error.message);
+		}
+	});
 
-	return <CategoryForm category={category} />;
+	const action = (data: GeneralReq) => {
+		if (data.name !== category.name) {
+			mutate(data);
+		} else {
+			navigation.navigate('CategoryNav', {screen: 'Category'});
+		}
+	};
+
+	return (
+		<CategoryForm
+			category={category}
+			action={action}
+			isLoading={isLoading}
+		/>
+	);
 };
 
 export default EditCategoryScreen;

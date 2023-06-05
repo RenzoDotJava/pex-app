@@ -1,4 +1,4 @@
-import {Alert, StyleSheet, Text} from 'react-native';
+import {StyleSheet, Text} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NativeStackNavigationOptions} from '@react-navigation/native-stack';
 import {Ionicons, MaterialIcons, AntDesign} from '@expo/vector-icons';
@@ -17,8 +17,8 @@ import {
 } from '../../slices/expense-center';
 import {setIsLoading} from '../../slices/navigation';
 import {useDeleteExpenseCenters} from '../../api/expense-center';
-import type {ExpenseCenterParamList} from '../../types/navigation';
 import {showAlert} from '../../utils';
+import type {ExpenseCenterParamList} from '../../types/navigation';
 
 const Stack = createNativeStackNavigator<ExpenseCenterParamList>();
 

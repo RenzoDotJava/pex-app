@@ -3,6 +3,7 @@ import {OnPressType} from '../../enums';
 import type {PayloadAction} from '@reduxjs/toolkit';
 import type {AppDispatch} from '../../store';
 import type {CategoryState} from '../../types/slices';
+import type {CategoryProps} from '../../types/components';
 
 const list = [
 	{
@@ -22,7 +23,7 @@ const list = [
 const initialState: CategoryState = {
 	selectMode: false,
 	deleteList: [],
-	categories: list
+	categories: []
 };
 
 export const categorySlice = createSlice({
@@ -43,12 +44,37 @@ export const categorySlice = createSlice({
 		cleanDeleteList: (state) => {
 			state.deleteList = [];
 			if (state.selectMode) state.selectMode = false;
+		},
+		setCategories: (state, action: PayloadAction<CategoryProps[]>) => {
+			state.categories = action.payload;
+		},
+		addCategory: (state, action: PayloadAction<CategoryProps>) => {
+			state.categories.push(action.payload);
+		},
+		updateCategory: (state, action: PayloadAction<CategoryProps>) => {
+			state.categories = state.categories.map((category) =>
+				category.id === action.payload.id ? action.payload : category
+			);
+		},
+		deleteCategories: (state) => {
+			state.categories = state.categories.filter(
+				(category) => !state.deleteList.includes(category.id)
+			);
+			if (state.selectMode) state.selectMode = false;
+			state.deleteList = [];
 		}
 	}
 });
 
-export const {addToDeleteList, deleteFromDeleteList, cleanDeleteList} =
-	categorySlice.actions;
+export const {
+	addToDeleteList,
+	deleteFromDeleteList,
+	cleanDeleteList,
+	setCategories,
+	addCategory,
+	updateCategory,
+	deleteCategories
+} = categorySlice.actions;
 
 export const onPressCategoryRow =
 	(

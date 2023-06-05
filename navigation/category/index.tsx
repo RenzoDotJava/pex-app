@@ -11,8 +11,11 @@ import {
 import {theme} from '../../styles';
 import {IconButton} from '../../ui';
 import {useAppDispatch, useAppSelector} from '../../store';
-import {cleanDeleteList} from '../../slices/category';
+import {cleanDeleteList, deleteCategories} from '../../slices/category';
+import {useDeleteCategories} from '../../api/category';
+import {setIsLoading} from '../../slices/navigation';
 import type {CategoryParamList} from '../../types/navigation';
+import {showAlert} from '../../utils';
 
 const Stack = createNativeStackNavigator<CategoryParamList>();
 
@@ -29,24 +32,22 @@ const stackOptions: NativeStackNavigationOptions = {
 
 const CategoryNavigator: React.FC = () => {
 	const {t} = useTranslation('global');
-	const {selectMode} = useAppSelector((state) => state.category);
+	const {selectMode, deleteList} = useAppSelector((state) => state.category);
 	const dispatch = useAppDispatch();
+	const {mutate} = useDeleteCategories({
+		onSuccess: () => {
+			dispatch(deleteCategories());
+			dispatch(setIsLoading(false));
+		},
+		onError: (error) => {
+			console.log(error.message);
+			dispatch(setIsLoading(false));
+		}
+	});
 
-	const showAlertDeleteCategory = () => {
-		Alert.alert(
-			t("options.delete"),
-			t("options.delete-category") as string,
-			[
-				{
-					text: t("options.cancel") as string,
-					style: 'cancel'
-				},
-				{
-					text: t("options.delete") as string
-					//onPress: () => dispatch(deleteExpenses())
-				}
-			]
-		);
+	const onDeleteCategory = () => {
+		dispatch(setIsLoading(true));
+		mutate(deleteList);
 	};
 
 	return (
@@ -83,7 +84,22 @@ const CategoryNavigator: React.FC = () => {
 					headerRight: () =>
 						selectMode && (
 							<IconButton
-								onPress={showAlertDeleteCategory}
+								onPress={() =>
+									showAlert(
+										t("options.delete"),
+										t("options.delete-category") as string,
+										[
+											{
+												text: t("options.cancel") as string,
+												style: 'cancel'
+											},
+											{
+												text: t("options.delete") as string,
+												onPress: onDeleteCategory
+											}
+										]
+									)
+								}
 								icon={
 									<MaterialIcons
 										name="delete"
