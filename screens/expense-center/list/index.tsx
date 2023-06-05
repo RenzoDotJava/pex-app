@@ -2,20 +2,23 @@ import {useCallback} from 'react';
 import {FlatList, RefreshControl} from 'react-native';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {useNavigation} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
 import {ListRow, ListWrapper} from '../../../components';
 import {useAppDispatch, useAppSelector} from '../../../store';
-import {ExpenseCenterProps} from '../../../types/components';
+import {EmptyList} from '../../../ui';
 import {OnPressType} from '../../../enums';
 import {
 	onPressExpenseCenterRow,
 	setExpenseCenters
 } from '../../../slices/expense-center';
 import {useGetExpenseCenters} from '../../../api/expense-center';
+import type {ExpenseCenterProps} from '../../../types/components';
 import type {ConfigParamList} from '../../../types/navigation';
 
 type NavigationProp = DrawerNavigationProp<ConfigParamList, 'ExpenseCenterNav'>;
 
 const ExpenseCenterScreen: React.FC = () => {
+	const {t} = useTranslation('global');
 	const navigation = useNavigation<NavigationProp>();
 	const dispatch = useAppDispatch();
 	const {selectMode, deleteList, expenseCenters} = useAppSelector(
@@ -90,6 +93,7 @@ const ExpenseCenterScreen: React.FC = () => {
 						tintColor={'#32373A'}
 					/>
 				}
+				ListEmptyComponent={<EmptyList text={t("expense-center.empty")} />}
 			/>
 		</ListWrapper>
 	);

@@ -50,23 +50,28 @@
 		"header": "Expenses",
 		"add": "Add Expense",
 		"edit": "Edit Expense",
-		"selected": "selected"
+		"selected": "selected",
+		"empty": "No expenses found!"
 	},
 	"expense-center": {
 		"add": "Add Expense Center",
-		"edit": "Edit Expense Center"
+		"edit": "Edit Expense Center",
+		"empty": "No expense centers found!"
 	},
 	"category": {
 		"add": "Add Category",
-		"edit": "Edit Category"
+		"edit": "Edit Category",
+		"empty": "No categories found!"
 	},
 	"payment-method": {
 		"add": "Add Payment Method",
-		"edit": "Edit Payment Method"
+		"edit": "Edit Payment Method",
+		"empty": "No payment methods found!"
 	},
 	"place": {
 		"add": "Add Place",
-		"edit": "Edit Place"
+		"edit": "Edit Place",
+		"empty": "No places found!"
 	},
 	"config": {
 		"header": "Configuration",

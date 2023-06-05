@@ -1,4 +1,3 @@
-import {useRef} from 'react';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {ExpenseCenterForm} from '../../../components';
@@ -22,7 +21,6 @@ const EditExpenseCenterScreen: React.FC = () => {
 	const navigation = useNavigation<NavigationProp>();
 	const route = useRoute<EditExpenseCenterScreenRouteProp>();
 	const expenseCenter = route.params;
-	const expenseCenterAux = useRef(expenseCenter);
 	const dispatch = useAppDispatch();
 	const {mutate, isLoading} = useUpdateExpenseCenter({
 		onSuccess: (data) => {
@@ -35,10 +33,10 @@ const EditExpenseCenterScreen: React.FC = () => {
 	});
 
 	const action = (data: GeneralReq) => {
-		if (data.name !== expenseCenterAux.current.name) {
+		if (data.name !== expenseCenter.name) {
 			mutate(data);
 		} else {
-			console.log("igual")
+			console.log("xd")
 			navigation.navigate('ExpenseCenterNav', {screen: 'ExpenseCenter'});
 		}
 	};

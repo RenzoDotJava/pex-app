@@ -11,7 +11,11 @@ import {Button, FormInput} from '../../ui';
 import {theme} from '../../styles';
 import type {CategoryFormProps, FormInputs} from '../../types/components';
 
-const CategoryForm: React.FC<CategoryFormProps> = ({category}) => {
+const CategoryForm: React.FC<CategoryFormProps> = ({
+	category,
+	action,
+	isLoading = false
+}) => {
 	const {t} = useTranslation('global');
 	const {
 		control,
@@ -22,7 +26,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({category}) => {
 	});
 
 	const onSubmit: SubmitHandler<FormInputs> = (data) => {
-		console.log(data);
+		action && action(data);
 	};
 
 	return (
@@ -44,6 +48,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({category}) => {
 						text={t("options.save")}
 						onPress={handleSubmit(onSubmit)}
 						disabled={!isValid}
+						loading={isLoading}
 					/>
 				</View>
 			</View>

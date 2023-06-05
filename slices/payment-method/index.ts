@@ -3,6 +3,7 @@ import {OnPressType} from '../../enums';
 import type {PayloadAction} from '@reduxjs/toolkit';
 import type {AppDispatch} from '../../store';
 import type {PaymentMethodState} from '../../types/slices';
+import type {PaymentMethodProps} from '../../types/components';
 
 const list = [
 	{
@@ -22,7 +23,7 @@ const list = [
 const initialState: PaymentMethodState = {
 	selectMode: false,
 	deleteList: [],
-	paymentMethods: list
+	paymentMethods: []
 };
 
 export const paymentMethodSlice = createSlice({
@@ -43,12 +44,37 @@ export const paymentMethodSlice = createSlice({
 		cleanDeleteList: (state) => {
 			state.deleteList = [];
 			if (state.selectMode) state.selectMode = false;
+		},
+		setPaymentMethods: (state, action: PayloadAction<PaymentMethodProps[]>) => {
+			state.paymentMethods = action.payload;
+		},
+		addPaymentMethod: (state, action: PayloadAction<PaymentMethodProps>) => {
+			state.paymentMethods.push(action.payload);
+		},
+		updatePaymentMethod: (state, action: PayloadAction<PaymentMethodProps>) => {
+			state.paymentMethods = state.paymentMethods.map((paymentMethod) =>
+				paymentMethod.id === action.payload.id ? action.payload : paymentMethod
+			);
+		},
+		deletePaymentMethods: (state) => {
+			state.paymentMethods = state.paymentMethods.filter(
+				(paymentMethod) => !state.deleteList.includes(paymentMethod.id)
+			);
+			if (state.selectMode) state.selectMode = false;
+			state.deleteList = [];
 		}
 	}
 });
 
-export const {addToDeleteList, deleteFromDeleteList, cleanDeleteList} =
-	paymentMethodSlice.actions;
+export const {
+	addToDeleteList,
+	deleteFromDeleteList,
+	cleanDeleteList,
+	setPaymentMethods,
+	addPaymentMethod,
+	updatePaymentMethod,
+	deletePaymentMethods
+} = paymentMethodSlice.actions;
 
 export const onPressCategoryRow =
 	(

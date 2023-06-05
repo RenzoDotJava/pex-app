@@ -75,6 +75,8 @@ type ExpenseCenterFormProps = {
 
 type CategoryFormProps = {
 	category?: CategoryProps;
+	action?: (req: GeneralReq) => void;
+	isLoading?: boolean;
 };
 
 type PaymentMethodFormProps = {

@@ -49,23 +49,28 @@
 		"header": "Gastos",
 		"add": "Agregar Gasto",
 		"edit": "Editar Gasto",
-		"selected": "seleccionado(s)"
+		"selected": "seleccionado(s)",
+		"empty": "¡No hay gastos registrados!"
 	},
   "expense-center": {
 		"add": "Agregar Centro de Gasto",
-		"edit": "Editar Centro de Gasto"
+		"edit": "Editar Centro de Gasto",
+		"empty": "¡No hay centros de gasto registrados!"
 	},
 	"category": {
 		"add": "Agregar Categoría",
-		"edit": "Editar Categoría"
+		"edit": "Editar Categoría",
+		"empty": "¡No hay categorías registradas!"
 	},
 	"payment-method": {
 		"add": "Agregar Método de Pago",
-		"edit": "Editar Método de Pago"
+		"edit": "Editar Método de Pago",
+		"empty": "¡No hay métodos de pago registrados!"
 	},
 	"place": {
 		"add": "Agregar Lugar",
-		"edit": "Editar Lugar"
+		"edit": "Editar Lugar",
+		"empty": "¡No hay lugares registrados!"
 	},
 	"config": {
 		"header": "Configuración",
