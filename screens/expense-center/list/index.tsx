@@ -93,7 +93,7 @@ const ExpenseCenterScreen: React.FC = () => {
 						tintColor={'#32373A'}
 					/>
 				}
-				ListEmptyComponent={<EmptyList text={t("expense-center.empty")} />}
+				ListEmptyComponent={!isLoading ? <EmptyList text={t("expense-center.empty")} /> : <></>}
 			/>
 		</ListWrapper>
 	);

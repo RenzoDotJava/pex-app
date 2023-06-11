@@ -85,7 +85,7 @@ const CategoryScreen = () => {
 						tintColor={'#32373A'}
 					/>
 				}
-				ListEmptyComponent={<EmptyList text={t("category.empty")} />}
+				ListEmptyComponent={!isLoading ? <EmptyList text={t("category.empty")} /> : <></>}
 			/>
 		</ListWrapper>
 	);

@@ -11,7 +11,7 @@ import {Button, FormInput} from '../../ui';
 import {theme} from '../../styles';
 import type {PlaceFormProps, FormInputs} from '../../types/components';
 
-const PlaceForm: React.FC<PlaceFormProps> = ({place}) => {
+const PlaceForm: React.FC<PlaceFormProps> = ({place, action, isLoading}) => {
 	const {t} = useTranslation('global');
 	const {
 		control,
@@ -22,7 +22,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({place}) => {
 	});
 
 	const onSubmit: SubmitHandler<FormInputs> = (data) => {
-		console.log(data);
+		action && action(data);
 	};
 
 	return (
@@ -44,6 +44,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({place}) => {
 						text={t("options.save")}
 						onPress={handleSubmit(onSubmit)}
 						disabled={!isValid}
+						loading={isLoading}
 					/>
 				</View>
 			</View>

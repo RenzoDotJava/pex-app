@@ -81,10 +81,14 @@ type CategoryFormProps = {
 
 type PaymentMethodFormProps = {
 	paymentMethod?: PaymentMethodProps;
+	action?: (req: GeneralReq) => void;
+	isLoading?: boolean;
 };
 
 type PlaceFormProps = {
 	place?: PlaceProps;
+	action?: (req: GeneralReq) => void;
+	isLoading?: boolean;
 };
 
 type ListRowProps = RowProps & {

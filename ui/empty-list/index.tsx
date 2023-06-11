@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		marginTop: 15,
 		fontSize: theme.fontSize.md,
-		fontWeight: '500'
+		fontWeight: '500',
+		lineHeight: 28
 	}
 });

@@ -5,21 +5,6 @@ import type {AppDispatch} from '../../store';
 import type {PaymentMethodState} from '../../types/slices';
 import type {PaymentMethodProps} from '../../types/components';
 
-const list = [
-	{
-		id: 1,
-		name: 'Micaela'
-	},
-	{
-		id: 2,
-		name: 'Renzo'
-	},
-	{
-		id: 3,
-		name: 'Valezka'
-	}
-];
-
 const initialState: PaymentMethodState = {
 	selectMode: false,
 	deleteList: [],
@@ -76,7 +61,7 @@ export const {
 	deletePaymentMethods
 } = paymentMethodSlice.actions;
 
-export const onPressCategoryRow =
+export const onPressPaymentMethodRow =
 	(
 		selectMode: boolean,
 		onList: boolean,

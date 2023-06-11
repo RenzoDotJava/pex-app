@@ -12,7 +12,9 @@ import {theme} from '../../styles';
 import type {PaymentMethodFormProps, FormInputs} from '../../types/components';
 
 const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({
-	paymentMethod
+	paymentMethod, 
+	action,
+	isLoading = false
 }) => {
 	const {t} = useTranslation('global');
 	const {
@@ -24,7 +26,7 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({
 	});
 
 	const onSubmit: SubmitHandler<FormInputs> = (data) => {
-		console.log(data);
+		action && action(data);
 	};
 
 	return (
@@ -46,6 +48,7 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({
 						text={t("options.save")}
 						onPress={handleSubmit(onSubmit)}
 						disabled={!isValid}
+						loading={isLoading}
 					/>
 				</View>
 			</View>
