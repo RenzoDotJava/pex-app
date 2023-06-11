@@ -1,24 +1,31 @@
 import {useCallback} from 'react';
-import {FlatList, StyleSheet} from 'react-native';
+import {FlatList, RefreshControl} from 'react-native';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {useNavigation} from '@react-navigation/native';
-import {theme} from '../../../styles';
+import {useTranslation} from 'react-i18next';
 import {ListRow, ListWrapper} from '../../../components';
 import {useAppDispatch, useAppSelector} from '../../../store';
 import {OnPressType} from '../../../enums';
-import {onPressPlaceRow} from '../../../slices/place';
+import {onPressPlaceRow, setPlaces} from '../../../slices/place';
+import {useGetPlaces} from '../../../api/place';
+import {EmptyList} from '../../../ui';
 import type {PlaceProps} from '../../../types/components';
 import type {ConfigParamList} from '../../../types/navigation';
 
 type NavigationProp = DrawerNavigationProp<ConfigParamList, 'PlaceNav'>;
 
 const PlaceScreen: React.FC = () => {
+	const {t} = useTranslation('global');
+	const navigation = useNavigation<NavigationProp>();
 	const dispatch = useAppDispatch();
 	const {selectMode, deleteList, places} = useAppSelector(
 		(state) => state.place
 	);
-
-	const navigation = useNavigation<NavigationProp>();
+	const {isLoading, refetch} = useGetPlaces({
+		onSuccess: (data) => {
+			dispatch(setPlaces(data));
+		}
+	});
 
 	const goCategoryPlace = (category: PlaceProps) => {
 		navigation.navigate('PlaceNav', {
@@ -57,19 +64,28 @@ const PlaceScreen: React.FC = () => {
 				/>
 			);
 		},
-		[selectMode, deleteList]
+		[selectMode, deleteList, places]
 	);
 
 	return (
 		<ListWrapper
 			onPressAdd={() =>
-				navigation.navigate('CategoryNav', {screen: 'AddCategory'})
+				navigation.navigate('PlaceNav', {screen: 'AddPlace'})
 			}
 		>
 			<FlatList
 				data={places}
 				keyExtractor={(item) => item.id.toString()}
 				renderItem={({item}) => renderItem(item)}
+				refreshControl={
+					<RefreshControl
+						refreshing={isLoading}
+						onRefresh={refetch}
+						colors={['#32373A']}
+						tintColor={'#32373A'}
+					/>
+				}
+				ListEmptyComponent={!isLoading ? <EmptyList text={t("place.empty")} /> : <></>}
 			/>
 		</ListWrapper>
 	);

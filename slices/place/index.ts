@@ -56,7 +56,7 @@ export const placeSlice = createSlice({
 				place.id === action.payload.id ? action.payload : place
 			);
 		},
-		deletePlace: (state) => {
+		deletePlaces: (state) => {
 			state.places = state.places.filter(
 				(place) => !state.deleteList.includes(place.id)
 			);
@@ -73,7 +73,7 @@ export const {
 	setPlaces,
 	addPlace,
 	updatePlace,
-	deletePlace
+	deletePlaces
 } = placeSlice.actions;
 
 export const onPressPlaceRow =

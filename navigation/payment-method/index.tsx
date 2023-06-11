@@ -11,8 +11,11 @@ import {
 import {theme} from '../../styles';
 import {IconButton} from '../../ui';
 import {useAppDispatch, useAppSelector} from '../../store';
-import {cleanDeleteList} from '../../slices/category';
+import {useDeletePaymentMethods} from '../../api/payment-method';
+import {cleanDeleteList, deletePaymentMethods} from '../../slices/payment-method';
+import {setIsLoading} from '../../slices/navigation';
 import type {PaymentMethodParamList} from '../../types/navigation';
+import {showAlert} from '../../utils';
 
 const Stack = createNativeStackNavigator<PaymentMethodParamList>();
 
@@ -29,24 +32,22 @@ const stackOptions: NativeStackNavigationOptions = {
 
 const PaymentMethodNavigator: React.FC = () => {
 	const {t} = useTranslation('global');
-	const {selectMode} = useAppSelector((state) => state.paymentMethod);
+	const {selectMode, deleteList} = useAppSelector((state) => state.paymentMethod);
 	const dispatch = useAppDispatch();
+	const {mutate} = useDeletePaymentMethods({
+		onSuccess: () => {
+			dispatch(deletePaymentMethods());
+			dispatch(setIsLoading(false));
+		},
+		onError: (error) => {
+			console.log(error.message);
+			dispatch(setIsLoading(false));
+		}
+	});
 
-	const showAlertDeletePaymentMethod = () => {
-		Alert.alert(
-			t("options.delete"),
-			t("options.delete-payment-method") as string,
-			[
-				{
-					text: t("options.cancel") as string,
-					style: 'cancel'
-				},
-				{
-					text: t("options.delete") as string
-					//onPress: () => dispatch(deleteExpenses())
-				}
-			]
-		);
+	const onDeletePaymentMethod = () => {
+		dispatch(setIsLoading(true));
+		mutate(deleteList);
 	};
 
 	return (
@@ -86,7 +87,22 @@ const PaymentMethodNavigator: React.FC = () => {
 					headerRight: () =>
 						selectMode && (
 							<IconButton
-								onPress={showAlertDeletePaymentMethod}
+								onPress={() =>
+									showAlert(
+										t("options.delete"),
+										t("options.delete-payment-method") as string,
+										[
+											{
+												text: t("options.cancel") as string,
+												style: 'cancel'
+											},
+											{
+												text: t("options.delete") as string,
+												onPress: onDeletePaymentMethod
+											}
+										]
+									)
+								}
 								icon={
 									<MaterialIcons
 										name="delete"

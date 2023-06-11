@@ -14,8 +14,8 @@ import {useAppDispatch, useAppSelector} from '../../store';
 import {cleanDeleteList, deleteCategories} from '../../slices/category';
 import {useDeleteCategories} from '../../api/category';
 import {setIsLoading} from '../../slices/navigation';
-import type {CategoryParamList} from '../../types/navigation';
 import {showAlert} from '../../utils';
+import type {CategoryParamList} from '../../types/navigation';
 
 const Stack = createNativeStackNavigator<CategoryParamList>();
 

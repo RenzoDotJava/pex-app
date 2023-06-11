@@ -1,23 +1,31 @@
 import {useCallback} from 'react';
-import {FlatList} from 'react-native';
+import {FlatList, RefreshControl} from 'react-native';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {useNavigation} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
 import {ListRow, ListWrapper} from '../../../components';
 import {useAppDispatch, useAppSelector} from '../../../store';
 import {OnPressType} from '../../../enums';
-import {onPressCategoryRow} from '../../../slices/category';
+import {useGetPaymentMethods} from '../../../api/payment-method';
+import {onPressPaymentMethodRow, setPaymentMethods} from '../../../slices/payment-method';
 import type {PaymentMethodProps} from '../../../types/components';
 import type {ConfigParamList} from '../../../types/navigation';
+import {EmptyList} from '../../../ui';
 
 type NavigationProp = DrawerNavigationProp<ConfigParamList, 'PaymentMethodNav'>;
 
 const PaymentMethodScreen = () => {
+	const {t} = useTranslation('global');
+	const navigation = useNavigation<NavigationProp>();
 	const dispatch = useAppDispatch();
 	const {selectMode, deleteList, paymentMethods} = useAppSelector(
 		(state) => state.paymentMethod
 	);
-
-	const navigation = useNavigation<NavigationProp>();
+	const {isLoading, refetch} = useGetPaymentMethods({
+		onSuccess: (data) => {
+			dispatch(setPaymentMethods(data));
+		}
+	});
 
 	const goPaymentMethodDetail = (paymentMethod: PaymentMethodProps) => {
 		navigation.navigate('PaymentMethodNav', {
@@ -38,7 +46,7 @@ const PaymentMethodScreen = () => {
 					backgroundColor={backgroundColor}
 					onPress={() =>
 						dispatch(
-							onPressCategoryRow(
+							onPressPaymentMethodRow(
 								selectMode,
 								onList,
 								item.id,
@@ -49,14 +57,14 @@ const PaymentMethodScreen = () => {
 					}
 					onLongPress={() =>
 						dispatch(
-							onPressCategoryRow(selectMode, onList, item.id, OnPressType.Long)
+							onPressPaymentMethodRow(selectMode, onList, item.id, OnPressType.Long)
 						)
 					}
 					extraData={{selectMode, onList}}
 				/>
 			);
 		},
-		[selectMode, deleteList]
+		[selectMode, deleteList, paymentMethods]
 	);
 
 	return (
@@ -69,6 +77,15 @@ const PaymentMethodScreen = () => {
 				data={paymentMethods}
 				keyExtractor={(item) => item.id.toString()}
 				renderItem={({item}) => renderItem(item)}
+				refreshControl={
+					<RefreshControl
+						refreshing={isLoading}
+						onRefresh={refetch}
+						colors={['#32373A']}
+						tintColor={'#32373A'}
+					/>
+				}
+				ListEmptyComponent={!isLoading ? <EmptyList text={t("payment-method.empty")} /> : <></>}
 			/>
 		</ListWrapper>
 	);

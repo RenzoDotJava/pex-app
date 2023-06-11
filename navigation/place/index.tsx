@@ -11,7 +11,10 @@ import {
 import {theme} from '../../styles';
 import {IconButton} from '../../ui';
 import {useAppDispatch, useAppSelector} from '../../store';
-import {cleanDeleteList} from '../../slices/category';
+import {useDeletePlaces} from '../../api/place';
+import {deletePlaces, cleanDeleteList} from '../../slices/place';
+import {setIsLoading} from '../../slices/navigation';
+import {showAlert} from '../../utils';
 import type {PlaceParamList} from '../../types/navigation';
 
 const Stack = createNativeStackNavigator<PlaceParamList>();
@@ -29,24 +32,22 @@ const stackOptions: NativeStackNavigationOptions = {
 
 const PlaceNavigator: React.FC = () => {
 	const {t} = useTranslation('global');
-	const {selectMode} = useAppSelector((state) => state.place);
+	const {selectMode, deleteList} = useAppSelector((state) => state.place);
 	const dispatch = useAppDispatch();
+	const {mutate} = useDeletePlaces({
+		onSuccess: () => {
+			dispatch(deletePlaces());
+			dispatch(setIsLoading(false));
+		},
+		onError: (error) => {
+			console.log(error.message);
+			dispatch(setIsLoading(false));
+		}
+	});
 
-	const showAlertDeletePlace = () => {
-		Alert.alert(
-			t("options.delete"),
-			t("options.delete-payment-method") as string,
-			[
-				{
-					text: t("options.cancel") as string,
-					style: 'cancel'
-				},
-				{
-					text: t("options.delete") as string
-					//onPress: () => dispatch(deleteExpenses())
-				}
-			]
-		);
+	const onDeletePlace = () => {
+		dispatch(setIsLoading(true));
+		mutate(deleteList);
 	};
 
 	return (
@@ -81,7 +82,22 @@ const PlaceNavigator: React.FC = () => {
 					headerRight: () =>
 						selectMode && (
 							<IconButton
-								onPress={showAlertDeletePlace}
+								onPress={() =>
+									showAlert(
+										t("options.delete"),
+										t("options.delete-place") as string,
+										[
+											{
+												text: t("options.cancel") as string,
+												style: 'cancel'
+											},
+											{
+												text: t("options.delete") as string,
+												onPress: onDeletePlace
+											}
+										]
+									)
+								}
 								icon={
 									<MaterialIcons
 										name="delete"
