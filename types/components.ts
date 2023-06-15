@@ -18,14 +18,15 @@ type ExpenseFormInputs = {
 	placeId: number;
 	paymentMethodId: number;
 	amount: number;
-	date?: string;
+	date: string;
+	id?: number;
 };
 
 type ExpenseProps = {
-	expenseCenter: string;
-	category: string;
-	place: string;
-	paymentMethod: string;
+	expense_center: ExpenseCenterProps;
+	category: CategoryProps;
+	place: PlaceProps;
+	payment_method: PaymentMethodProps;
 	amount: number;
 	date?: string;
 	id: number;
@@ -33,6 +34,8 @@ type ExpenseProps = {
 
 type ExpenseFormProps = {
 	expense?: ExpenseProps;
+	action?: (req: ExpenseFormInputs) => void;
+	isLoading: boolean;
 };
 
 type ExpenseCenterProps = {

@@ -1,42 +1,16 @@
 import {createSlice} from '@reduxjs/toolkit';
+import moment from 'moment-timezone';
+import {OnPressType} from '../../enums';
+import {ExpenseProps} from '../../types/components';
 import type {PayloadAction} from '@reduxjs/toolkit';
 import type {AppDispatch, RootState} from '../../store';
 import type {ExpenseState} from '../../types/slices';
-import {OnPressType} from '../../enums';
-
-const list = [
-	{
-		id: 1,
-		expenseCenter: 'Micaela',
-		expenseCenterId: 1,
-		category: 'Salud',
-		categoryId: 2,
-		place: 'San Judas Mateo',
-		placeId: 3,
-		paymentMethod: 'Crédito',
-		paymentMethodId: 4,
-		amount: 100,
-		date: '2023-04-12'
-	},
-	{
-		id: 2,
-		expenseCenter: 'Micaela',
-		expenseCenterId: 1,
-		category: 'Salud',
-		categoryId: 2,
-		place: 'San Judas Mateo',
-		placeId: 3,
-		paymentMethod: 'Crédito',
-		paymentMethodId: 4,
-		amount: 100,
-		date: '2023-04-12'
-	},
-];
 
 const initialState: ExpenseState = {
 	selectMode: false,
 	deleteList: [],
-	expenses: list
+	expenses: [],
+	date: moment(new Date()).format('YYYY-MM-DD')
 };
 
 export const expenseSlice = createSlice({
@@ -57,16 +31,61 @@ export const expenseSlice = createSlice({
 		cleanDeleteList: (state) => {
 			state.deleteList = [];
 			if (state.selectMode) state.selectMode = false;
+		},
+		setExpenses: (state, action: PayloadAction<ExpenseProps[]>) => {
+			state.expenses = action.payload;
+		},
+		addExpense: (state, action: PayloadAction<ExpenseProps>) => {
+			if (state.date === action.payload.date)
+				state.expenses.push(action.payload);
+		},
+		updateExpense: (state, action: PayloadAction<ExpenseProps>) => {
+			if (state.date === action.payload.date)
+				state.expenses = state.expenses.map((expense) =>
+					expense.id === action.payload.id ? action.payload : expense
+				);
+			else
+				state.expenses = state.expenses.filter(
+					(expense) => expense.id !== action.payload.id
+				);
+		},
+		deleteExpenses: (state) => {
+			state.expenses = state.expenses.filter(
+				(expense) => !state.deleteList.includes(expense.id)
+			);
+			if (state.selectMode) state.selectMode = false;
+			state.deleteList = [];
+		},
+		addDate: (state) => {
+			state.date = moment(state.date).add(1, 'days').format('YYYY-MM-DD');
+		},
+		subtractDate: (state) => {
+			state.date = moment(state.date).subtract(1, 'days').format('YYYY-MM-DD');
 		}
 	}
 });
 
-export const {addToDeleteList, deleteFromDeleteList, cleanDeleteList} =
-	expenseSlice.actions;
+export const {
+	addToDeleteList,
+	deleteFromDeleteList,
+	cleanDeleteList,
+	setExpenses,
+	addDate,
+	subtractDate,
+	addExpense,
+	updateExpense,
+	deleteExpenses
+} = expenseSlice.actions;
 
 export const getTotalDeleteListAmount = (state: RootState): number =>
 	state.expense.deleteList.reduce((total, id) => {
 		const expense = state.expense.expenses.find((expense) => expense.id === id);
+		if (expense) return total + expense.amount;
+		else return total;
+	}, 0);
+
+export const getTotalAmountByDate = (state: RootState): number =>
+	state.expense.expenses.reduce((total, expense) => {
 		if (expense) return total + expense.amount;
 		else return total;
 	}, 0);

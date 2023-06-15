@@ -6,10 +6,10 @@ import {areEqual} from '../../utils';
 import type {ExpenseRowProps} from '../../types/components';
 
 const ExpenseRow: React.FC<ExpenseRowProps> = ({
-	expenseCenter,
+	expense_center,
 	category,
 	place,
-	paymentMethod,
+	payment_method,
 	amount,
 	backgroundColor,
 	onPress,
@@ -23,13 +23,13 @@ const ExpenseRow: React.FC<ExpenseRowProps> = ({
 		delayLongPress={400}
 	>
 		<View style={styles.container_left}>
-			<Text style={styles.expense_center}>{expenseCenter}</Text>
+			<Text style={styles.expense_center}>{expense_center.name}</Text>
 			<Text style={styles.info}>
-				{category} • {place}
+				{category.name} • {place.name}
 			</Text>
 		</View>
 		<View style={styles.container_right}>
-			<Badge text={paymentMethod} />
+			<Badge text={payment_method.name} />
 			<Text style={styles.amount}>S/. {amount.toFixed(2)}</Text>
 		</View>
 	</TouchableOpacity>

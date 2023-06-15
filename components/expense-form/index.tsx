@@ -3,148 +3,176 @@ import {
 	Text,
 	View,
 	TouchableWithoutFeedback,
-	Keyboard
+	Keyboard,
+	ActivityIndicator
 } from 'react-native';
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
+import moment from 'moment-timezone';
 import {FormInput, Button, FormDateTimePicker, FormSelect} from '../../ui';
-import type {ExpenseFormInputs, ExpenseFormProps} from '../../types/components';
 import {theme} from '../../styles';
+import {useGetExpenseCenters} from '../../api/expense-center';
+import {useGetCategories} from '../../api/category';
+import {useGetPaymentMethods} from '../../api/payment-method';
+import {useGetPlaces} from '../../api/place';
+import {setCategories} from '../../slices/category';
+import {setPaymentMethods} from '../../slices/payment-method';
+import {setPlaces} from '../../slices/place';
+import {setExpenseCenters} from '../../slices/expense-center';
+import {useAppDispatch, useAppSelector} from '../../store';
+import type {ExpenseFormInputs, ExpenseFormProps} from '../../types/components';
 
-const expenseCenters = [
-	{
-		id: 1,
-		name: 'Renzo'
-	},
-	{
-		id: 2,
-		name: 'Alimentación'
-	},
-	{
-		id: 3,
-		name: 'Efectivo'
-	},
-	{
-		id: 4,
-		name: 'Centro de gasto 4'
-	},
-	{
-		id: 5,
-		name: 'Centro de gasto 5'
-	},
-	{
-		id: 6,
-		name: 'Centro de gasto 6'
-	},
-	{
-		id: 7,
-		name: 'Centro de gasto 67'
-	},
-	{
-		id: 8,
-		name: 'Centro de gasto 68'
-	}
-];
-
-const ExpenseForm: React.FC<ExpenseFormProps> = ({expense}) => {
+const ExpenseForm: React.FC<ExpenseFormProps> = ({
+	expense,
+	action,
+	isLoading = false
+}) => {
 	const {t} = useTranslation('global');
 	const {
 		control,
 		handleSubmit,
 		formState: {isValid}
 	} = useForm<ExpenseFormInputs>({
-		defaultValues: expense
+		defaultValues: {
+			...expense,
+			date: expense?.date || moment(new Date()).format('YYYY-MM-DD'),
+			categoryId: expense?.category.id,
+			paymentMethodId: expense?.payment_method.id,
+			expenseCenterId: expense?.expense_center.id,
+			placeId: expense?.place.id,
+		}
+	});
+	const {categories} = useAppSelector(
+		(state) => state.category
+	);
+	const {expenseCenters} = useAppSelector(
+		(state) => state.expenseCenter
+	);
+	const {places} = useAppSelector(
+		(state) => state.place
+	);
+	const {paymentMethods} = useAppSelector(
+		(state) => state.paymentMethod
+	);
+	const dispatch = useAppDispatch();
+	const {isLoading: isLoadingCategories} = useGetCategories({
+		onSuccess: (data) => {
+			dispatch(setCategories(data));
+		}
+	});
+	const {isLoading: isLoadingExpenseCenters} = useGetExpenseCenters({
+		onSuccess: (data) => {
+			dispatch(setExpenseCenters(data));
+		}
+	});
+	const {isLoading: isLoadingPaymentMethods} = useGetPaymentMethods({
+		onSuccess: (data) => {
+			dispatch(setPaymentMethods(data));
+		}
+	});
+	const {isLoading: isLoadingPlaces} = useGetPlaces({
+		onSuccess: (data) => {
+			dispatch(setPlaces(data));
+		}
 	});
 
 	const onSubmit: SubmitHandler<ExpenseFormInputs> = (data) => {
-		console.log(data);
+		action && action(data);
 	};
 
 	return (
 		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-			<View style={styles.container}>
-				<View style={styles.form_group}>
-					<Text>{t("forms.date")}</Text>
-					<FormDateTimePicker
-						name="date"
-						variant="standard"
-						control={control}
-					/>
-				</View>
-				<View style={styles.form_group}>
-					<Text>{t("forms.amount")}</Text>
-					<FormInput
-						control={control}
-						name="amount"
-						variant="standard"
-						keyboardType="numeric"
-						rules={{
-							required: t("validation.required"),
-							validate: (value: number) =>
-								value > 0 || t("validation.min-num")
-						}}
-					/>
-				</View>
-				<View style={styles.form_group}>
-					<Text>{t("forms.expense-center")}</Text>
-					<FormSelect
-						control={control}
-						name="expenseCenterId"
-						variant="standard"
-						title={t("forms.expense-center") as string}
-						items={expenseCenters}
-						rules={{
-							required: t("validation.required")
-						}}
-					/>
-				</View>
-				<View style={styles.form_group}>
-					<Text>{t("forms.category")}</Text>
-					<FormSelect
-						control={control}
-						name="categoryId"
-						variant="standard"
-						title={t("forms.category") as string}
-						items={expenseCenters}
-						rules={{
-							required: t("validation.required")
-						}}
-					/>
-				</View>
-				<View style={styles.form_group}>
-					<Text>{t("forms.payment-method")}</Text>
-					<FormSelect
-						control={control}
-						name="paymentMethodId"
-						variant="standard"
-						title={t("forms.payment-method") as string}
-						items={expenseCenters}
-						rules={{
-							required: t("validation.required")
-						}}
-					/>
-				</View>
-				<View style={styles.form_group}>
-					<Text>{t("forms.place")}</Text>
-					<FormSelect
-						control={control}
-						name="placeId"
-						variant="standard"
-						title={t("forms.place") as string}
-						items={expenseCenters}
-						rules={{
-							required: t("validation.required")
-						}}
-					/>
-				</View>
-				<View style={{marginTop: 15}}>
-					<Button
-						text={t("options.save")}
-						onPress={handleSubmit(onSubmit)}
-						disabled={!isValid}
-					/>
-				</View>
-			</View>
+			{isLoadingCategories || isLoadingExpenseCenters || isLoadingPaymentMethods || isLoadingPlaces ?
+				<View style={styles.loading}>
+					<ActivityIndicator color={'black'} size={60} />
+					<Text style={{color: 'black', marginTop: 10, fontSize: 18}}>
+						Cargando
+					</Text>
+				</View> :
+				<View style={styles.container}>
+					<View style={styles.form_group}>
+						<Text>{t("forms.date")}</Text>
+						<FormDateTimePicker
+							name="date"
+							variant="standard"
+							control={control}
+						/>
+					</View>
+					<View style={styles.form_group}>
+						<Text>{t("forms.amount")}</Text>
+						<FormInput
+							control={control}
+							name="amount"
+							variant="standard"
+							keyboardType="numeric"
+							rules={{
+								required: t("validation.required"),
+								validate: (value: number) =>
+									value > 0 || t("validation.min-num")
+							}}
+						/>
+					</View>
+					<View style={styles.form_group}>
+						<Text>{t("forms.expense-center")}</Text>
+						<FormSelect
+							control={control}
+							name="expenseCenterId"
+							variant="standard"
+							title={t("forms.expense-center") as string}
+							items={expenseCenters}
+							rules={{
+								required: t("validation.required")
+							}}
+						/>
+					</View>
+					<View style={styles.form_group}>
+						<Text>{t("forms.category")}</Text>
+						<FormSelect
+							control={control}
+							name="categoryId"
+							variant="standard"
+							title={t("forms.category") as string}
+							items={categories}
+							rules={{
+								required: t("validation.required")
+							}}
+						/>
+					</View>
+					<View style={styles.form_group}>
+						<Text>{t("forms.payment-method")}</Text>
+						<FormSelect
+							control={control}
+							name="paymentMethodId"
+							variant="standard"
+							title={t("forms.payment-method") as string}
+							items={paymentMethods}
+							rules={{
+								required: t("validation.required")
+							}}
+						/>
+					</View>
+					<View style={styles.form_group}>
+						<Text>{t("forms.place")}</Text>
+						<FormSelect
+							control={control}
+							name="placeId"
+							variant="standard"
+							title={t("forms.place") as string}
+							items={places}
+							rules={{
+								required: t("validation.required")
+							}}
+						/>
+					</View>
+					<View style={{marginTop: 15}}>
+						<Button
+							text={t("options.save")}
+							onPress={handleSubmit(onSubmit)}
+							disabled={!isValid}
+							loading={isLoading}
+						/>
+					</View>
+				</View>}
 		</TouchableWithoutFeedback>
 	);
 };
@@ -152,6 +180,12 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({expense}) => {
 export default ExpenseForm;
 
 const styles = StyleSheet.create({
+	loading: {
+		flex: 1,
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
 	container: {
 		flex: 1,
 		paddingHorizontal: 24,

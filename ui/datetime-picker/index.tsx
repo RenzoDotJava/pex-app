@@ -45,9 +45,9 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
 				confirmTextIOS="Confirmar"
 				cancelTextIOS="Cancelar"
 				date={date.current}
-				locale="es_ES"
-				//timeZoneOffsetInMinutes={+5}
-				//locale='es-ES'
+				locale="es-ES"
+			//timeZoneOffsetInMinutes={+5}
+			//locale='es-ES'
 			/>
 		</>
 	);

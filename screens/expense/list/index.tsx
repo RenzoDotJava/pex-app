@@ -1,18 +1,21 @@
 import {useCallback} from 'react';
-import {StyleSheet, View, Text, FlatList} from 'react-native';
+import {StyleSheet, View, Text, FlatList, RefreshControl} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {Entypo} from '@expo/vector-icons';
 import {useTranslation} from 'react-i18next';
 import {ExpenseRow} from '../../../components';
-import {DateNavigator, IconButton} from '../../../ui';
+import {DateNavigator, EmptyList, IconButton} from '../../../ui';
 import {
+	getTotalAmountByDate,
 	getTotalDeleteListAmount,
-	onPressExpenseRow
+	onPressExpenseRow,
+	setExpenses
 } from '../../../slices/expense';
 import {theme} from '../../../styles';
 import {OnPressType} from '../../../enums';
 import {useAppDispatch, useAppSelector} from '../../../store';
+import {useGetExpenses} from '../../../api/expense';
 import type {SidebarDrawerParamList} from '../../../types/navigation';
 import type {ExpenseProps} from '../../../types/components';
 
@@ -24,12 +27,21 @@ type NavigationProp = DrawerNavigationProp<
 const ExpensesScreen: React.FC = () => {
 	const {t} = useTranslation('global');
 	const dispatch = useAppDispatch();
-	const {selectMode, deleteList, expenses} = useAppSelector(
+	const {selectMode, deleteList, expenses, date} = useAppSelector(
 		(state) => state.expense
+	);
+	const totalByDate = useAppSelector((state) =>
+		getTotalAmountByDate(state)
 	);
 	const totalDeleteAmount = useAppSelector((state) =>
 		getTotalDeleteListAmount(state)
 	);
+	const {isLoading, refetch} = useGetExpenses({
+		date,
+		onSuccess: (data) => {
+			dispatch(setExpenses(data));
+		}
+	});
 	const navigation = useNavigation<NavigationProp>();
 
 	const goExpenseDetail = (expense: ExpenseProps) => {
@@ -44,10 +56,10 @@ const ExpensesScreen: React.FC = () => {
 			return (
 				<ExpenseRow
 					id={item.id}
-					expenseCenter={item.expenseCenter}
+					expense_center={item.expense_center}
 					category={item.category}
 					place={item.place}
-					paymentMethod={item.paymentMethod}
+					payment_method={item.payment_method}
 					amount={item.amount}
 					backgroundColor={backgroundColor}
 					onPress={() =>
@@ -66,11 +78,11 @@ const ExpensesScreen: React.FC = () => {
 							onPressExpenseRow(selectMode, onList, item.id, OnPressType.Long)
 						)
 					}
-					extraData={{selectMode, onList}}
+					extraData={{selectMode, onList, expenses}}
 				/>
 			);
 		},
-		[selectMode, deleteList]
+		[selectMode, deleteList, expenses]
 	);
 
 	return (
@@ -99,16 +111,24 @@ const ExpensesScreen: React.FC = () => {
 			>
 				<Text style={styles.subheader_text}>
 					{!selectMode
-						? `Total: S/. 980.00`
-						: `${
-								deleteList.length
-						  } ${t("expense.selected")} ~ S/. -${totalDeleteAmount.toFixed(2)}`}
+						? `Total: S/. ${totalByDate.toFixed(2)}`
+						: `${deleteList.length
+						} ${t("expense.selected")} ~ S/. -${totalDeleteAmount.toFixed(2)}`}
 				</Text>
 			</View>
 			<FlatList
 				data={expenses}
 				keyExtractor={(item) => item.id.toString()}
 				renderItem={({item}) => renderItem(item)}
+				refreshControl={
+					<RefreshControl
+						refreshing={isLoading}
+						onRefresh={refetch}
+						colors={['#32373A']}
+						tintColor={'#32373A'}
+					/>
+				}
+				ListEmptyComponent={!isLoading ? <EmptyList text={t("expense.empty")} /> : <></>}
 			/>
 		</View>
 	);

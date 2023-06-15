@@ -5,21 +5,6 @@ import type {AppDispatch} from '../../store';
 import type {CategoryState} from '../../types/slices';
 import type {CategoryProps} from '../../types/components';
 
-const list = [
-	{
-		id: 1,
-		name: 'Micaela'
-	},
-	{
-		id: 2,
-		name: 'Renzo'
-	},
-	{
-		id: 3,
-		name: 'Valezka'
-	}
-];
-
 const initialState: CategoryState = {
 	selectMode: false,
 	deleteList: [],

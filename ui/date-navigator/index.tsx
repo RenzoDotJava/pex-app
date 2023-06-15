@@ -1,35 +1,29 @@
 import 'moment/locale/es';
-import {useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {AntDesign} from '@expo/vector-icons';
 import {useTranslation} from 'react-i18next';
 import moment from 'moment-timezone';
 import {theme} from '../../styles';
 import IconButton from '../icon-button';
+import {useAppDispatch, useAppSelector} from '../../store';
+import {addDate, subtractDate} from '../../slices/expense';
 
 moment.locale('es');
 
 const DateNavigator: React.FC = () => {
 	const {i18n} = useTranslation('global');
-	const [date, setDate] = useState(new Date());
-
-	const addDate = () => {
-		setDate(moment(date).add(1, 'days').toDate());
-	}
-
-	const subtractDate = () => {
-		setDate(moment(date).subtract(1, 'days').toDate());
-	}
+	const dispatch = useAppDispatch();
+	const {date} = useAppSelector((state) => state.expense); //TODO: make this component generic
 
 	return (
 		<View style={styles.container}>
 			<IconButton
-				icon={<AntDesign name="left" size={26} color={theme.color.secondary} onPress={subtractDate} />}
+				icon={<AntDesign name="left" size={26} color={theme.color.secondary} onPress={() => dispatch(subtractDate())} />}
 			/>
 			<Text style={styles.label}>{moment(date).locale(i18n.language).format('LL')}</Text>
 			<IconButton
 				icon={
-					<AntDesign name="right" size={26} color={theme.color.secondary} onPress={addDate} />
+					<AntDesign name="right" size={26} color={theme.color.secondary} onPress={() => dispatch(addDate())} />
 				}
 			/>
 		</View>
