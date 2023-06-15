@@ -14,6 +14,7 @@ type MutationProps<T> = {
 };
 
 type QueryProps = {
+	date?: string;
 	onSuccess?: (data: any) => void;
 	onError?: (error: any) => void;
 	select?: (data: any) => void;

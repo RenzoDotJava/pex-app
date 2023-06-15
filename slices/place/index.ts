@@ -5,21 +5,6 @@ import type {AppDispatch} from '../../store';
 import type {PlaceState} from '../../types/slices';
 import type {PlaceProps} from '../../types/components';
 
-const list = [
-	{
-		id: 1,
-		name: 'Micaela'
-	},
-	{
-		id: 2,
-		name: 'Renzo'
-	},
-	{
-		id: 3,
-		name: 'Valezka'
-	}
-];
-
 const initialState: PlaceState = {
 	selectMode: false,
 	deleteList: [],

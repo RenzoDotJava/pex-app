@@ -1,3 +1,4 @@
+import {Moment} from 'moment-timezone';
 import type {
 	CategoryProps,
 	ExpenseCenterProps,
@@ -13,6 +14,7 @@ type DeleteListProps = {
 
 type ExpenseState = DeleteListProps & {
 	expenses: ExpenseProps[];
+	date: string;
 };
 
 type ExpenseCenterState = DeleteListProps & {

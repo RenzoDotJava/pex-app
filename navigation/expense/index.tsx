@@ -1,4 +1,4 @@
-import {Alert, StyleSheet, Text} from 'react-native';
+import {StyleSheet, Text} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useTranslation} from 'react-i18next';
 import {
@@ -11,7 +11,10 @@ import {Ionicons, MaterialIcons, AntDesign} from '@expo/vector-icons';
 import {theme} from '../../styles';
 import {IconButton} from '../../ui';
 import {useAppDispatch, useAppSelector} from '../../store';
-import {cleanDeleteList} from '../../slices/expense';
+import {cleanDeleteList, deleteExpenses} from '../../slices/expense';
+import {setIsLoading} from '../../slices/navigation';
+import {useDeleteExpenses} from '../../api/expense';
+import {showAlert} from '../../utils';
 import type {ExpenseParamList} from '../../types/navigation';
 
 const Stack = createNativeStackNavigator<ExpenseParamList>();
@@ -29,24 +32,22 @@ const stackOptions: NativeStackNavigationOptions = {
 
 const ExpenseNavigator: React.FC = () => {
 	const {t} = useTranslation('global');
-	const {selectMode} = useAppSelector((state) => state.expense);
+	const {selectMode, deleteList} = useAppSelector((state) => state.expense);
 	const dispatch = useAppDispatch();
+	const {mutate} = useDeleteExpenses({
+		onSuccess: () => {
+			dispatch(deleteExpenses());
+			dispatch(setIsLoading(false));
+		},
+		onError: (error) => {
+			console.log(error.message);
+			dispatch(setIsLoading(false));
+		}
+	});
 
-	const showAlertDeleteExpense = () => {
-		Alert.alert(
-			t("options.delete"),
-			t("options.delete-expense") as string,
-			[
-				{
-					text: t("options.cancel") as string,
-					style: 'cancel'
-				},
-				{
-					text: t("options.delete") as string
-					//onPress: () => dispatch(deleteExpenses())
-				}
-			]
-		);
+	const onDeleteExpense = () => {
+		dispatch(setIsLoading(true));
+		mutate(deleteList);
 	};
 
 	return (
@@ -78,7 +79,20 @@ const ExpenseNavigator: React.FC = () => {
 					headerRight: () => (
 						<IconButton
 							onPress={() =>
-								!selectMode ? undefined : showAlertDeleteExpense()
+								showAlert(
+									t("options.delete"),
+									t("options.delete-expense") as string,
+									[
+										{
+											text: t("options.cancel") as string,
+											style: 'cancel'
+										},
+										{
+											text: t("options.delete") as string,
+											onPress: onDeleteExpense
+										}
+									]
+								)
 							}
 							icon={
 								!selectMode ? (
