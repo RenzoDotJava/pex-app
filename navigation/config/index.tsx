@@ -1,16 +1,16 @@
-import {StyleSheet, Text} from 'react-native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {NativeStackNavigationOptions} from '@react-navigation/native-stack';
-import {Ionicons, AntDesign} from '@expo/vector-icons';
-import {useTranslation} from 'react-i18next';
-import {theme} from '../../styles';
-import {IconButton} from '../../ui';
-import {ConfigScreen, LanguagesScreen, CurrencyScreen} from '../../screens';
+import { StyleSheet, Text } from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
+import { Ionicons, AntDesign } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
+import { theme } from '../../styles';
+import { IconButton } from '../../ui';
+import { ConfigScreen, LanguagesScreen, CurrencyScreen } from '../../screens';
 import ExpenseCenterNavigator from '../expense-center';
 import CategoryNavigator from '../category';
 import PaymentMethodNavigator from '../payment-method';
 import PlaceNavigator from '../place';
-import type {ConfigParamList} from '../../types/navigation';
+import type { ConfigParamList } from '../../types/navigation';
 
 const Stack = createNativeStackNavigator<ConfigParamList>();
 
@@ -26,14 +26,14 @@ const stackOptions: NativeStackNavigationOptions = {
 };
 
 const ConfigNavigator: React.FC = () => {
-	const {t} = useTranslation('global');
+	const { t } = useTranslation('global');
 
 	return (
 		<Stack.Navigator initialRouteName="Config" screenOptions={stackOptions}>
 			<Stack.Screen
 				name="Config"
 				component={ConfigScreen}
-				options={({navigation}) => ({
+				options={({ navigation }) => ({
 					headerStyle: {
 						backgroundColor: theme.color.primary
 					},
@@ -51,33 +51,51 @@ const ConfigNavigator: React.FC = () => {
 								/>
 							}
 						/>
-					)
+					),
+					animation: 'slide_from_right',
+					animationTypeForReplace: 'push'
 				})}
 			/>
 			<Stack.Screen
 				name="ExpenseCenterNav"
 				component={ExpenseCenterNavigator}
-				options={{headerShown: false}}
+				options={{
+					headerShown: false,
+					animation: 'slide_from_right',
+					animationTypeForReplace: 'push'
+				}}
 			/>
 			<Stack.Screen
 				name="CategoryNav"
 				component={CategoryNavigator}
-				options={{headerShown: false}}
+				options={{
+					headerShown: false,
+					animation: 'slide_from_right',
+					animationTypeForReplace: 'push'
+				}}
 			/>
 			<Stack.Screen
 				name="PaymentMethodNav"
 				component={PaymentMethodNavigator}
-				options={{headerShown: false}}
+				options={{
+					headerShown: false,
+					animation: 'slide_from_right',
+					animationTypeForReplace: 'push'
+				}}
 			/>
 			<Stack.Screen
 				name="PlaceNav"
 				component={PlaceNavigator}
-				options={{headerShown: false}}
+				options={{
+					headerShown: false,
+					animation: 'slide_from_right',
+					animationTypeForReplace: 'push'
+				}}
 			/>
 			<Stack.Screen
 				name="Languages"
 				component={LanguagesScreen}
-				options={({navigation}) => ({
+				options={({ navigation }) => ({
 					headerTitle: () => <Text style={styles.headerTitle}>{t("languages.header")}</Text>,
 					headerBackVisible: false,
 					headerLeft: () => (
@@ -85,13 +103,15 @@ const ConfigNavigator: React.FC = () => {
 							onPress={navigation.goBack}
 							icon={<AntDesign name="arrowleft" size={24} color="white" />}
 						/>
-					)
+					),
+					animation: 'slide_from_right',
+					animationTypeForReplace: 'push'
 				})}
 			/>
 			<Stack.Screen
 				name="Currencies"
 				component={CurrencyScreen}
-				options={({navigation}) => ({
+				options={({ navigation }) => ({
 					headerTitle: () => <Text style={styles.headerTitle}>{t("currencies.header")}</Text>,
 					headerBackVisible: false,
 					headerLeft: () => (
@@ -99,7 +119,9 @@ const ConfigNavigator: React.FC = () => {
 							onPress={navigation.goBack}
 							icon={<AntDesign name="arrowleft" size={24} color="white" />}
 						/>
-					)
+					),
+					animation: 'slide_from_right',
+					animationTypeForReplace: 'push'
 				})}
 			/>
 		</Stack.Navigator>

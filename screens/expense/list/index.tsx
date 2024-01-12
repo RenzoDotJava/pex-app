@@ -1,23 +1,23 @@
-import {useCallback} from 'react';
-import {StyleSheet, View, Text, FlatList, RefreshControl} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {DrawerNavigationProp} from '@react-navigation/drawer';
-import {Entypo} from '@expo/vector-icons';
-import {useTranslation} from 'react-i18next';
-import {ExpenseRow} from '../../../components';
-import {DateNavigator, EmptyList, IconButton} from '../../../ui';
+import { useCallback } from 'react';
+import { StyleSheet, View, Text, FlatList, RefreshControl } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { Entypo } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
+import { ExpenseRow } from '../../../components';
+import { DateNavigator, EmptyList, IconButton } from '../../../ui';
 import {
 	getTotalAmountByDate,
 	getTotalDeleteListAmount,
 	onPressExpenseRow,
 	setExpenses
 } from '../../../slices/expense';
-import {theme} from '../../../styles';
-import {OnPressType} from '../../../enums';
-import {useAppDispatch, useAppSelector} from '../../../store';
-import {useGetExpenses} from '../../../api/expense';
-import type {SidebarDrawerParamList} from '../../../types/navigation';
-import type {ExpenseProps} from '../../../types/components';
+import { theme } from '../../../styles';
+import { OnPressType } from '../../../enums';
+import { useAppDispatch, useAppSelector } from '../../../store';
+import { useGetExpenses } from '../../../api/expense';
+import type { SidebarDrawerParamList } from '../../../types/navigation';
+import type { ExpenseProps } from '../../../types/components';
 
 type NavigationProp = DrawerNavigationProp<
 	SidebarDrawerParamList,
@@ -25,9 +25,9 @@ type NavigationProp = DrawerNavigationProp<
 >;
 
 const ExpensesScreen: React.FC = () => {
-	const {t} = useTranslation('global');
+	const { t } = useTranslation('global');
 	const dispatch = useAppDispatch();
-	const {selectMode, deleteList, expenses, date} = useAppSelector(
+	const { selectMode, deleteList, expenses, date } = useAppSelector(
 		(state) => state.expense
 	);
 	const totalByDate = useAppSelector((state) =>
@@ -36,7 +36,7 @@ const ExpensesScreen: React.FC = () => {
 	const totalDeleteAmount = useAppSelector((state) =>
 		getTotalDeleteListAmount(state)
 	);
-	const {isLoading, refetch} = useGetExpenses({
+	const { isLoading, refetch } = useGetExpenses({
 		date,
 		onSuccess: (data) => {
 			dispatch(setExpenses(data));
@@ -45,7 +45,7 @@ const ExpensesScreen: React.FC = () => {
 	const navigation = useNavigation<NavigationProp>();
 
 	const goExpenseDetail = (expense: ExpenseProps) => {
-		navigation.navigate('ExpenseNav', {screen: 'EditExpense', params: expense});
+		navigation.navigate('ExpenseNav', { screen: 'EditExpense', params: expense });
 	};
 
 	const renderItem = useCallback(
@@ -78,7 +78,7 @@ const ExpensesScreen: React.FC = () => {
 							onPressExpenseRow(selectMode, onList, item.id, OnPressType.Long)
 						)
 					}
-					extraData={{selectMode, onList, expenses}}
+					extraData={{ selectMode, onList, expenses }}
 				/>
 			);
 		},
@@ -91,7 +91,7 @@ const ExpensesScreen: React.FC = () => {
 				<>
 					<IconButton
 						onPress={() =>
-							navigation.navigate('ExpenseNav', {screen: 'AddExpense'})
+							navigation.navigate('ExpenseNav', { screen: 'AddExpense' })
 						}
 						style={styles.plus}
 						icon={
@@ -106,7 +106,7 @@ const ExpensesScreen: React.FC = () => {
 			<View
 				style={[
 					styles.subheader,
-					{backgroundColor: !selectMode ? theme.color.primary : '#C0C0C0'}
+					{ backgroundColor: !selectMode ? theme.color.primary : '#C0C0C0' }
 				]}
 			>
 				<Text style={styles.subheader_text}>
@@ -119,7 +119,7 @@ const ExpensesScreen: React.FC = () => {
 			<FlatList
 				data={expenses}
 				keyExtractor={(item) => item.id.toString()}
-				renderItem={({item}) => renderItem(item)}
+				renderItem={({ item }) => renderItem(item)}
 				refreshControl={
 					<RefreshControl
 						refreshing={isLoading}

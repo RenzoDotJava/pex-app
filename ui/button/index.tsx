@@ -4,8 +4,8 @@ import {
 	TouchableOpacity,
 	ActivityIndicator
 } from 'react-native';
-import {theme} from '../../styles';
-import type {ButtonProps} from '../../types/ui';
+import { theme } from '../../styles';
+import type { ButtonProps } from '../../types/ui';
 
 const Button: React.FC<ButtonProps> = ({
 	text,
@@ -13,7 +13,8 @@ const Button: React.FC<ButtonProps> = ({
 	height = 45,
 	onPress,
 	disabled = false,
-	loading = false
+	loading = false,
+	flexible = false
 }) => {
 	return (
 		<TouchableOpacity
@@ -22,7 +23,7 @@ const Button: React.FC<ButtonProps> = ({
 				variant === 'outlined'
 					? styles.button_outlined
 					: styles.button_standard,
-				{height, opacity: disabled || loading ? 0.65 : 1}
+				{ height, opacity: disabled || loading ? 0.65 : 1, flex: flexible ? 1 : 0 }
 			]}
 			onPress={onPress}
 			disabled={disabled || loading}

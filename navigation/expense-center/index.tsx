@@ -1,24 +1,24 @@
-import {StyleSheet, Text} from 'react-native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {NativeStackNavigationOptions} from '@react-navigation/native-stack';
-import {Ionicons, MaterialIcons, AntDesign} from '@expo/vector-icons';
-import {useTranslation} from 'react-i18next';
+import { StyleSheet, Text } from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
+import { Ionicons, MaterialIcons, AntDesign } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import {
 	AddExpenseCenterScreen,
 	ExpenseCenterScreen,
 	EditExpenseCenterScreen
 } from '../../screens/expense-center';
-import {theme} from '../../styles';
-import {IconButton} from '../../ui';
-import {useAppDispatch, useAppSelector} from '../../store';
+import { theme } from '../../styles';
+import { IconButton } from '../../ui';
+import { useAppDispatch, useAppSelector } from '../../store';
 import {
 	cleanDeleteList,
 	deleteExpenseCenters
 } from '../../slices/expense-center';
-import {setIsLoading} from '../../slices/navigation';
-import {useDeleteExpenseCenters} from '../../api/expense-center';
-import {showAlert} from '../../utils';
-import type {ExpenseCenterParamList} from '../../types/navigation';
+import { setIsLoading } from '../../slices/navigation';
+import { useDeleteExpenseCenters } from '../../api/expense-center';
+import { showAlert } from '../../utils';
+import type { ExpenseCenterParamList } from '../../types/navigation';
 
 const Stack = createNativeStackNavigator<ExpenseCenterParamList>();
 
@@ -34,12 +34,12 @@ const stackOptions: NativeStackNavigationOptions = {
 };
 
 const ExpenseCenterNavigator: React.FC = () => {
-	const {t} = useTranslation('global');
-	const {selectMode, deleteList} = useAppSelector(
+	const { t } = useTranslation('global');
+	const { selectMode, deleteList } = useAppSelector(
 		(state) => state.expenseCenter
 	);
 	const dispatch = useAppDispatch();
-	const {mutate} = useDeleteExpenseCenters({
+	const { mutate } = useDeleteExpenseCenters({
 		onSuccess: () => {
 			dispatch(deleteExpenseCenters());
 			dispatch(setIsLoading(false));
@@ -63,7 +63,7 @@ const ExpenseCenterNavigator: React.FC = () => {
 			<Stack.Screen
 				name="ExpenseCenter"
 				component={ExpenseCenterScreen}
-				options={({navigation}) => ({
+				options={({ navigation }) => ({
 					headerBackVisible: false,
 					headerStyle: {
 						backgroundColor: !selectMode ? theme.color.primary : 'gray'
@@ -116,13 +116,15 @@ const ExpenseCenterNavigator: React.FC = () => {
 									/>
 								}
 							/>
-						)
+						),
+					animation: 'slide_from_right',
+					animationTypeForReplace: 'push'
 				})}
 			/>
 			<Stack.Screen
 				name="AddExpenseCenter"
 				component={AddExpenseCenterScreen}
-				options={({navigation}) => ({
+				options={({ navigation }) => ({
 					headerTitle: () => (
 						<Text style={styles.headerTitle}>{t("expense-center.add")}</Text>
 					),
@@ -132,13 +134,15 @@ const ExpenseCenterNavigator: React.FC = () => {
 							onPress={navigation.goBack}
 							icon={<AntDesign name="arrowleft" size={24} color="white" />}
 						/>
-					)
+					),
+					animation: 'slide_from_right',
+					animationTypeForReplace: 'push'
 				})}
 			/>
 			<Stack.Screen
 				name="EditExpenseCenter"
 				component={EditExpenseCenterScreen}
-				options={({navigation}) => ({
+				options={({ navigation }) => ({
 					headerTitle: () => (
 						<Text style={styles.headerTitle}>{t("expense-center.edit")}</Text>
 					),
@@ -148,7 +152,9 @@ const ExpenseCenterNavigator: React.FC = () => {
 							onPress={navigation.goBack}
 							icon={<AntDesign name="arrowleft" size={24} color="white" />}
 						/>
-					)
+					),
+					animation: 'slide_from_right',
+					animationTypeForReplace: 'push'
 				})}
 			/>
 		</Stack.Navigator>

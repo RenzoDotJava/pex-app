@@ -4,34 +4,34 @@ import {
 	View,
 	TouchableWithoutFeedback,
 	Keyboard,
-	ActivityIndicator
+	ActivityIndicator,
 } from 'react-native';
-import {SubmitHandler, useForm} from 'react-hook-form';
-import {useTranslation} from 'react-i18next';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import moment from 'moment-timezone';
-import {FormInput, Button, FormDateTimePicker, FormSelect} from '../../ui';
-import {theme} from '../../styles';
-import {useGetExpenseCenters} from '../../api/expense-center';
-import {useGetCategories} from '../../api/category';
-import {useGetPaymentMethods} from '../../api/payment-method';
-import {useGetPlaces} from '../../api/place';
-import {setCategories} from '../../slices/category';
-import {setPaymentMethods} from '../../slices/payment-method';
-import {setPlaces} from '../../slices/place';
-import {setExpenseCenters} from '../../slices/expense-center';
-import {useAppDispatch, useAppSelector} from '../../store';
-import type {ExpenseFormInputs, ExpenseFormProps} from '../../types/components';
+import { FormInput, Button, FormDateTimePicker, FormSelect } from '../../ui';
+import { theme } from '../../styles';
+import { useGetExpenseCenters } from '../../api/expense-center';
+import { useGetCategories } from '../../api/category';
+import { useGetPaymentMethods } from '../../api/payment-method';
+import { useGetPlaces } from '../../api/place';
+import { setCategories } from '../../slices/category';
+import { setPaymentMethods } from '../../slices/payment-method';
+import { setPlaces } from '../../slices/place';
+import { setExpenseCenters } from '../../slices/expense-center';
+import { useAppDispatch, useAppSelector } from '../../store';
+import type { ExpenseFormInputs, ExpenseFormProps } from '../../types/components';
 
 const ExpenseForm: React.FC<ExpenseFormProps> = ({
 	expense,
 	action,
 	isLoading = false
 }) => {
-	const {t} = useTranslation('global');
+	const { t } = useTranslation('global');
 	const {
 		control,
 		handleSubmit,
-		formState: {isValid}
+		formState: { isValid }
 	} = useForm<ExpenseFormInputs>({
 		defaultValues: {
 			...expense,
@@ -42,35 +42,35 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
 			placeId: expense?.place.id,
 		}
 	});
-	const {categories} = useAppSelector(
+	const { categories } = useAppSelector(
 		(state) => state.category
 	);
-	const {expenseCenters} = useAppSelector(
+	const { expenseCenters } = useAppSelector(
 		(state) => state.expenseCenter
 	);
-	const {places} = useAppSelector(
+	const { places } = useAppSelector(
 		(state) => state.place
 	);
-	const {paymentMethods} = useAppSelector(
+	const { paymentMethods } = useAppSelector(
 		(state) => state.paymentMethod
 	);
 	const dispatch = useAppDispatch();
-	const {isLoading: isLoadingCategories} = useGetCategories({
+	const { isLoading: isLoadingCategories } = useGetCategories({
 		onSuccess: (data) => {
 			dispatch(setCategories(data));
 		}
 	});
-	const {isLoading: isLoadingExpenseCenters} = useGetExpenseCenters({
+	const { isLoading: isLoadingExpenseCenters } = useGetExpenseCenters({
 		onSuccess: (data) => {
 			dispatch(setExpenseCenters(data));
 		}
 	});
-	const {isLoading: isLoadingPaymentMethods} = useGetPaymentMethods({
+	const { isLoading: isLoadingPaymentMethods } = useGetPaymentMethods({
 		onSuccess: (data) => {
 			dispatch(setPaymentMethods(data));
 		}
 	});
-	const {isLoading: isLoadingPlaces} = useGetPlaces({
+	const { isLoading: isLoadingPlaces } = useGetPlaces({
 		onSuccess: (data) => {
 			dispatch(setPlaces(data));
 		}
@@ -85,18 +85,14 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
 			{isLoadingCategories || isLoadingExpenseCenters || isLoadingPaymentMethods || isLoadingPlaces ?
 				<View style={styles.loading}>
 					<ActivityIndicator color={'black'} size={60} />
-					<Text style={{color: 'black', marginTop: 10, fontSize: 18}}>
+					<Text style={{ color: 'black', marginTop: 10, fontSize: 18 }}>
 						Cargando
 					</Text>
 				</View> :
 				<View style={styles.container}>
 					<View style={styles.form_group}>
 						<Text>{t("forms.date")}</Text>
-						<FormDateTimePicker
-							name="date"
-							variant="standard"
-							control={control}
-						/>
+						<FormDateTimePicker control={control} name='date' variant='standard' />
 					</View>
 					<View style={styles.form_group}>
 						<Text>{t("forms.amount")}</Text>
@@ -164,7 +160,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
 							}}
 						/>
 					</View>
-					<View style={{marginTop: 15}}>
+					<View style={{ marginTop: 15 }}>
 						<Button
 							text={t("options.save")}
 							onPress={handleSubmit(onSubmit)}
@@ -194,5 +190,66 @@ const styles = StyleSheet.create({
 	},
 	form_group: {
 		marginBottom: 20
-	}
+	},
+	input: {
+		height: 40,
+		backgroundColor: 'transparent',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		flexDirection: 'row',
+		borderColor: theme.color.primary
+	},
+	outlined: {
+		borderWidth: 1,
+		borderRadius: 6,
+		paddingHorizontal: 8
+	},
+	standard: {
+		borderBottomWidth: 1
+	},
+	text: {
+		flex: 1,
+		fontSize: theme.fontSize.md
+	},
+	centeredView: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginTop: 22,
+	},
+	modalView: {
+		margin: 20,
+		backgroundColor: 'white',
+		borderRadius: 20,
+		padding: 35,
+		alignItems: 'center',
+		shadowColor: '#000',
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 4,
+		elevation: 5,
+	},
+	button: {
+		borderRadius: 20,
+		padding: 10,
+		elevation: 2,
+	},
+	buttonOpen: {
+		backgroundColor: '#F194FF',
+	},
+	buttonClose: {
+		backgroundColor: '#2196F3',
+	},
+	textStyle: {
+		color: 'white',
+		fontWeight: 'bold',
+		textAlign: 'center',
+	},
+	modalText: {
+		marginBottom: 15,
+		textAlign: 'center',
+	},
 });

@@ -1,21 +1,21 @@
-import {Alert, StyleSheet, Text} from 'react-native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {NativeStackNavigationOptions} from '@react-navigation/native-stack';
-import {Ionicons, MaterialIcons, AntDesign} from '@expo/vector-icons';
-import {useTranslation} from 'react-i18next';
+import { Alert, StyleSheet, Text } from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
+import { Ionicons, MaterialIcons, AntDesign } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import {
 	AddPlaceScreen,
 	PlaceScreen,
 	EditPlaceScreen
 } from '../../screens/place';
-import {theme} from '../../styles';
-import {IconButton} from '../../ui';
-import {useAppDispatch, useAppSelector} from '../../store';
-import {useDeletePlaces} from '../../api/place';
-import {deletePlaces, cleanDeleteList} from '../../slices/place';
-import {setIsLoading} from '../../slices/navigation';
-import {showAlert} from '../../utils';
-import type {PlaceParamList} from '../../types/navigation';
+import { theme } from '../../styles';
+import { IconButton } from '../../ui';
+import { useAppDispatch, useAppSelector } from '../../store';
+import { useDeletePlaces } from '../../api/place';
+import { deletePlaces, cleanDeleteList } from '../../slices/place';
+import { setIsLoading } from '../../slices/navigation';
+import { showAlert } from '../../utils';
+import type { PlaceParamList } from '../../types/navigation';
 
 const Stack = createNativeStackNavigator<PlaceParamList>();
 
@@ -31,10 +31,10 @@ const stackOptions: NativeStackNavigationOptions = {
 };
 
 const PlaceNavigator: React.FC = () => {
-	const {t} = useTranslation('global');
-	const {selectMode, deleteList} = useAppSelector((state) => state.place);
+	const { t } = useTranslation('global');
+	const { selectMode, deleteList } = useAppSelector((state) => state.place);
 	const dispatch = useAppDispatch();
-	const {mutate} = useDeletePlaces({
+	const { mutate } = useDeletePlaces({
 		onSuccess: () => {
 			dispatch(deletePlaces());
 			dispatch(setIsLoading(false));
@@ -55,7 +55,7 @@ const PlaceNavigator: React.FC = () => {
 			<Stack.Screen
 				name="Place"
 				component={PlaceScreen}
-				options={({navigation}) => ({
+				options={({ navigation }) => ({
 					headerBackVisible: false,
 					headerStyle: {
 						backgroundColor: !selectMode ? theme.color.primary : 'gray'
@@ -106,13 +106,15 @@ const PlaceNavigator: React.FC = () => {
 									/>
 								}
 							/>
-						)
+						),
+					animation: 'slide_from_right',
+					animationTypeForReplace: 'push'
 				})}
 			/>
 			<Stack.Screen
 				name="AddPlace"
 				component={AddPlaceScreen}
-				options={({navigation}) => ({
+				options={({ navigation }) => ({
 					headerTitle: () => (
 						<Text style={styles.headerTitle}>{t("place.add")}</Text>
 					),
@@ -122,13 +124,15 @@ const PlaceNavigator: React.FC = () => {
 							onPress={navigation.goBack}
 							icon={<AntDesign name="arrowleft" size={24} color="white" />}
 						/>
-					)
+					),
+					animation: 'slide_from_right',
+					animationTypeForReplace: 'push'
 				})}
 			/>
 			<Stack.Screen
 				name="EditPlace"
 				component={EditPlaceScreen}
-				options={({navigation}) => ({
+				options={({ navigation }) => ({
 					headerTitle: () => (
 						<Text style={styles.headerTitle}>{t("place.edit")}</Text>
 					),
@@ -138,7 +142,9 @@ const PlaceNavigator: React.FC = () => {
 							onPress={navigation.goBack}
 							icon={<AntDesign name="arrowleft" size={24} color="white" />}
 						/>
-					)
+					),
+					animation: 'slide_from_right',
+					animationTypeForReplace: 'push'
 				})}
 			/>
 		</Stack.Navigator>
