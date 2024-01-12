@@ -1,5 +1,5 @@
-import {StyleProp, ViewStyle, ModalProps as ModalRNProps} from 'react-native';
-import {Control} from 'react-hook-form/dist/types';
+import { StyleProp, ViewStyle, ModalProps as ModalRNProps } from 'react-native';
+import { Control } from 'react-hook-form/dist/types';
 
 type FormControllerProps = {
 	control: Control<any>;
@@ -37,10 +37,18 @@ type ButtonProps = VariantProps & {
 	height?: number;
 	disabled?: boolean;
 	loading?: boolean;
+	flexible?: boolean;
 };
 
 type BadgeProps = {
 	text: string;
+};
+
+type CalendarProps = {
+	isOpen?: boolean;
+	date?: Date | undefined;
+	onCancel?: () => void;
+	onConfirm?: (date: string) => void;
 };
 
 type DateTimePickerProps = VariantProps & {
@@ -84,5 +92,6 @@ export {
 	ModalProps,
 	ItemListProps,
 	FormControllerProps,
-	EmptyListProps
+	EmptyListProps,
+	CalendarProps
 };

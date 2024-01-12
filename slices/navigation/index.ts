@@ -1,7 +1,7 @@
-import {createSlice} from '@reduxjs/toolkit';
-import type {PayloadAction} from '@reduxjs/toolkit';
-import type {AppDispatch, RootState} from '../../store';
-import type {NavigationState} from '../../types/slices';
+import { createSlice } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import type { AppDispatch, RootState } from '../../store';
+import type { NavigationState } from '../../types/slices';
 
 const initialState: NavigationState = {
 	isAuthenticated: false,
@@ -21,6 +21,6 @@ export const navigationSlice = createSlice({
 	}
 });
 
-export const {setIsAuthenticated, setIsLoading} = navigationSlice.actions;
+export const { setIsAuthenticated, setIsLoading } = navigationSlice.actions;
 
 export default navigationSlice.reducer;

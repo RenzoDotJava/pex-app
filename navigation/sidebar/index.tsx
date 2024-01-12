@@ -34,7 +34,6 @@ const Sidebar: React.FC = () => {
 
 	return (
 		<Drawer.Navigator
-			useLegacyImplementation
 			initialRouteName="ExpenseNav"
 			screenOptions={drawerOptions}
 			drawerContent={(props) => <DrawerContent {...props} />}

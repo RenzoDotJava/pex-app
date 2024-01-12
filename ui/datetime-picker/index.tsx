@@ -1,28 +1,27 @@
-import {useRef} from 'react';
-import {StyleSheet, Text, TouchableOpacity, Keyboard} from 'react-native';
-import {AntDesign} from '@expo/vector-icons';
-import {Controller} from 'react-hook-form';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import { useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, Keyboard, View } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+import { Controller } from 'react-hook-form';
 import moment from 'moment-timezone'; //TODO: probar en producción quitando el timezone
-import {useToggle} from '../../hooks';
-import {theme} from '../../styles';
-import {getVariantStyle} from '../../utils';
-import type {DateTimePickerProps, FormControllerProps} from '../../types/ui';
+import { useToggle } from '../../hooks';
+import { theme } from '../../styles';
+import { getVariantStyle } from '../../utils';
+import type { DateTimePickerProps, FormControllerProps } from '../../types/ui';
+import Calendar from '../calendar';
 
 const DateTimePicker: React.FC<DateTimePickerProps> = ({
 	variant = 'outlined',
 	value,
 	onChange
 }) => {
-	const [isOpen, toggler] = useToggle({onClose: () => Keyboard.dismiss()});
-	const date = useRef(value ? new Date(value) : new Date());
+	const [isOpen, toggler] = useToggle({ onClose: () => Keyboard.dismiss() });
+	const [date, setDate] = useState<Date | undefined>(value ? new Date(value) : new Date());
 
-	const onConfirm = (selectedDate?: Date) => {
-		const currentDate = selectedDate!!;
-		date.current = currentDate;
-		onChange && onChange(moment(currentDate).format('YYYY-MM-DD'));
-		toggler();
-	};
+	const onConfirm = (date: string) => {
+		setDate(new Date(date));
+		onChange && onChange(date);
+		toggler()
+	}
 
 	return (
 		<>
@@ -31,33 +30,20 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
 				onPress={toggler}
 			>
 				<Text style={styles.text}>
-					{moment(date.current) /* .tz('America/Lima') */
-						.format('DD/MM/YYYY')}
+					{moment(date).format('DD/MM/YYYY')}
 				</Text>
 				<AntDesign name="calendar" size={20} color={theme.color.primary} />
 			</TouchableOpacity>
-			<DateTimePickerModal
-				isVisible={isOpen}
-				display="inline"
-				mode="date"
-				onConfirm={onConfirm}
-				onCancel={toggler}
-				confirmTextIOS="Confirmar"
-				cancelTextIOS="Cancelar"
-				date={date.current}
-				locale="es-ES"
-			//timeZoneOffsetInMinutes={+5}
-			//locale='es-ES'
-			/>
+			<Calendar isOpen={isOpen} onCancel={toggler} onConfirm={onConfirm} date={date} />
 		</>
 	);
 };
 
 export const FormDateTimePicker: React.FC<
 	FormControllerProps & DateTimePickerProps
-> = ({control, name, variant = 'outlined'}) => {
+> = ({ control, name, variant = 'outlined' }) => {
 	const renderItem = (
-		value: any,
+		value: string,
 		onChange: (name: number | string) => void
 	) => {
 		return (
@@ -69,7 +55,7 @@ export const FormDateTimePicker: React.FC<
 		<Controller
 			control={control}
 			name={name}
-			render={({field: {value, onChange}}) => renderItem(value, onChange)}
+			render={({ field: { value, onChange } }) => renderItem(value, onChange)}
 		/>
 	);
 };

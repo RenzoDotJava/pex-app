@@ -54,19 +54,19 @@ const ConfigScreen = () => {
 			<View style={styles.section}>
 				<Text style={styles.section_title}>{t("config.personal-config")}</Text>
 			</View>
-			<TouchableOpacity
+			{/* <TouchableOpacity
 				style={styles.subsection}
 				onPress={() => navigation.navigate('Currencies')}
 			>
 				<Text style={styles.subsection_title}>{t("config.currency")}</Text>
-			</TouchableOpacity>
+			</TouchableOpacity> */}
 			<TouchableOpacity
 				style={styles.subsection}
 				onPress={() => navigation.navigate('Languages')}
 			>
 				<Text style={styles.subsection_title}>{t("config.language")}</Text>
 			</TouchableOpacity>
-			<View
+			{/* <View
 				style={[
 					styles.subsection,
 					{
@@ -78,7 +78,7 @@ const ConfigScreen = () => {
 			>
 				<Text style={styles.subsection_title}>{t("config.dark-mode")}</Text>
 				<Switch style={{marginVertical: -15}} />
-			</View>
+			</View> */}
 		</ScrollView>
 	);
 };

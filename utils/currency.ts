@@ -9,7 +9,7 @@ export const currencies = [
 		name: 'Nuevo Sol',
 		code: 'PEN'
 	},
-	{
+	/* {
 		id: 3,
 		name: 'Peso Argentino',
 		code: 'ARS'
@@ -33,5 +33,5 @@ export const currencies = [
     id: 7,
     name: 'Peso Mexicano',
     code: 'MXN'
-  }
+  } */
 ];

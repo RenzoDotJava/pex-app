@@ -1,21 +1,22 @@
-import {StyleSheet, Text} from 'react-native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {useTranslation} from 'react-i18next';
+import { StyleSheet, Text } from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useTranslation } from 'react-i18next';
 import {
 	ExpensesScreen,
 	AddExpenseScreen,
-	EditExpenseScreen
+	EditExpenseScreen,
+	ConfigExpenseScreen
 } from '../../screens/expense';
-import {NativeStackNavigationOptions} from '@react-navigation/native-stack';
-import {Ionicons, MaterialIcons, AntDesign} from '@expo/vector-icons';
-import {theme} from '../../styles';
-import {IconButton} from '../../ui';
-import {useAppDispatch, useAppSelector} from '../../store';
-import {cleanDeleteList, deleteExpenses} from '../../slices/expense';
-import {setIsLoading} from '../../slices/navigation';
-import {useDeleteExpenses} from '../../api/expense';
-import {showAlert} from '../../utils';
-import type {ExpenseParamList} from '../../types/navigation';
+import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
+import { Ionicons, MaterialIcons, AntDesign } from '@expo/vector-icons';
+import { theme } from '../../styles';
+import { IconButton } from '../../ui';
+import { useAppDispatch, useAppSelector } from '../../store';
+import { cleanDeleteList, deleteExpenses } from '../../slices/expense';
+import { setIsLoading } from '../../slices/navigation';
+import { useDeleteExpenses } from '../../api/expense';
+import { showAlert } from '../../utils';
+import type { ExpenseParamList } from '../../types/navigation';
 
 const Stack = createNativeStackNavigator<ExpenseParamList>();
 
@@ -31,10 +32,10 @@ const stackOptions: NativeStackNavigationOptions = {
 };
 
 const ExpenseNavigator: React.FC = () => {
-	const {t} = useTranslation('global');
-	const {selectMode, deleteList} = useAppSelector((state) => state.expense);
+	const { t } = useTranslation('global');
+	const { selectMode, deleteList } = useAppSelector((state) => state.expense);
 	const dispatch = useAppDispatch();
-	const {mutate} = useDeleteExpenses({
+	const { mutate } = useDeleteExpenses({
 		onSuccess: () => {
 			dispatch(deleteExpenses());
 			dispatch(setIsLoading(false));
@@ -55,7 +56,7 @@ const ExpenseNavigator: React.FC = () => {
 			<Stack.Screen
 				name="Expenses"
 				component={ExpensesScreen}
-				options={({navigation}) => ({
+				options={({ navigation }) => ({
 					headerStyle: {
 						backgroundColor: !selectMode ? theme.color.primary : 'gray'
 					},
@@ -79,7 +80,7 @@ const ExpenseNavigator: React.FC = () => {
 					headerRight: () => (
 						<IconButton
 							onPress={() =>
-								showAlert(
+								!selectMode ? navigation.navigate('ExpenseNav', { screen: 'ConfigExpense' }) : showAlert(
 									t("options.delete"),
 									t("options.delete-expense") as string,
 									[
@@ -110,13 +111,15 @@ const ExpenseNavigator: React.FC = () => {
 								)
 							}
 						/>
-					)
+					),
+					animation: 'slide_from_right',
+					animationTypeForReplace: 'push'
 				})}
 			/>
 			<Stack.Screen
 				name="AddExpense"
 				component={AddExpenseScreen}
-				options={({navigation}) => ({
+				options={({ navigation }) => ({
 					headerTitle: () => (
 						<Text style={styles.headerTitle}>{t("expense.add")}</Text>
 					),
@@ -126,13 +129,15 @@ const ExpenseNavigator: React.FC = () => {
 							onPress={navigation.goBack}
 							icon={<AntDesign name="arrowleft" size={24} color="white" />}
 						/>
-					)
+					),
+					animation: 'slide_from_right',
+					animationTypeForReplace: 'push'
 				})}
 			/>
 			<Stack.Screen
 				name="EditExpense"
 				component={EditExpenseScreen}
-				options={({navigation}) => ({
+				options={({ navigation }) => ({
 					headerTitle: () => (
 						<Text style={styles.headerTitle}>{t("expense.edit")}</Text>
 					),
@@ -142,7 +147,19 @@ const ExpenseNavigator: React.FC = () => {
 							onPress={navigation.goBack}
 							icon={<AntDesign name="arrowleft" size={24} color="white" />}
 						/>
-					)
+					),
+					animation: 'slide_from_right',
+					animationTypeForReplace: 'push'
+				})}
+			/>
+			<Stack.Screen
+				name="ConfigExpense"
+				component={ConfigExpenseScreen}
+				options={() => ({
+					presentation: 'modal',
+					header: () => null,
+					animation: 'slide_from_bottom',
+					animationTypeForReplace: 'push'
 				})}
 			/>
 		</Stack.Navigator>

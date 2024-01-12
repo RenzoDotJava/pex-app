@@ -1,4 +1,4 @@
-import {NavigatorScreenParams} from '@react-navigation/native';
+import { NavigatorScreenParams } from '@react-navigation/native';
 import type {
 	CategoryProps,
 	ExpenseCenterProps,
@@ -22,6 +22,7 @@ type ExpenseParamList = {
 	Expenses: undefined;
 	AddExpense: undefined;
 	EditExpense: ExpenseProps;
+	ConfigExpense: undefined;
 };
 
 type ExpenseCenterParamList = {

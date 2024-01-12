@@ -1,21 +1,21 @@
-import {Alert, StyleSheet, Text} from 'react-native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {NativeStackNavigationOptions} from '@react-navigation/native-stack';
-import {Ionicons, MaterialIcons, AntDesign} from '@expo/vector-icons';
-import {useTranslation} from 'react-i18next';
+import { Alert, StyleSheet, Text } from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
+import { Ionicons, MaterialIcons, AntDesign } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import {
 	AddCategoryScreen,
 	CategoryScreen,
 	EditCategoryScreen
 } from '../../screens/category';
-import {theme} from '../../styles';
-import {IconButton} from '../../ui';
-import {useAppDispatch, useAppSelector} from '../../store';
-import {cleanDeleteList, deleteCategories} from '../../slices/category';
-import {useDeleteCategories} from '../../api/category';
-import {setIsLoading} from '../../slices/navigation';
-import {showAlert} from '../../utils';
-import type {CategoryParamList} from '../../types/navigation';
+import { theme } from '../../styles';
+import { IconButton } from '../../ui';
+import { useAppDispatch, useAppSelector } from '../../store';
+import { cleanDeleteList, deleteCategories } from '../../slices/category';
+import { useDeleteCategories } from '../../api/category';
+import { setIsLoading } from '../../slices/navigation';
+import { showAlert } from '../../utils';
+import type { CategoryParamList } from '../../types/navigation';
 
 const Stack = createNativeStackNavigator<CategoryParamList>();
 
@@ -31,10 +31,10 @@ const stackOptions: NativeStackNavigationOptions = {
 };
 
 const CategoryNavigator: React.FC = () => {
-	const {t} = useTranslation('global');
-	const {selectMode, deleteList} = useAppSelector((state) => state.category);
+	const { t } = useTranslation('global');
+	const { selectMode, deleteList } = useAppSelector((state) => state.category);
 	const dispatch = useAppDispatch();
-	const {mutate} = useDeleteCategories({
+	const { mutate } = useDeleteCategories({
 		onSuccess: () => {
 			dispatch(deleteCategories());
 			dispatch(setIsLoading(false));
@@ -55,7 +55,7 @@ const CategoryNavigator: React.FC = () => {
 			<Stack.Screen
 				name="Category"
 				component={CategoryScreen}
-				options={({navigation}) => ({
+				options={({ navigation }) => ({
 					headerBackVisible: false,
 					headerStyle: {
 						backgroundColor: !selectMode ? theme.color.primary : 'gray'
@@ -108,13 +108,15 @@ const CategoryNavigator: React.FC = () => {
 									/>
 								}
 							/>
-						)
+						),
+					animation: 'slide_from_right',
+					animationTypeForReplace: 'push'
 				})}
 			/>
 			<Stack.Screen
 				name="AddCategory"
 				component={AddCategoryScreen}
-				options={({navigation}) => ({
+				options={({ navigation }) => ({
 					headerTitle: () => (
 						<Text style={styles.headerTitle}>{t("category.add")}</Text>
 					),
@@ -124,13 +126,15 @@ const CategoryNavigator: React.FC = () => {
 							onPress={navigation.goBack}
 							icon={<AntDesign name="arrowleft" size={24} color="white" />}
 						/>
-					)
+					),
+					animation: 'slide_from_right',
+					animationTypeForReplace: 'push'
 				})}
 			/>
 			<Stack.Screen
 				name="EditCategory"
 				component={EditCategoryScreen}
-				options={({navigation}) => ({
+				options={({ navigation }) => ({
 					headerTitle: () => (
 						<Text style={styles.headerTitle}>{t("category.edit")}</Text>
 					),
@@ -140,7 +144,9 @@ const CategoryNavigator: React.FC = () => {
 							onPress={navigation.goBack}
 							icon={<AntDesign name="arrowleft" size={24} color="white" />}
 						/>
-					)
+					),
+					animation: 'slide_from_right',
+					animationTypeForReplace: 'push'
 				})}
 			/>
 		</Stack.Navigator>
