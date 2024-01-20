@@ -1,4 +1,4 @@
-import {Alert, AlertButton} from 'react-native';
+import { Alert, AlertButton } from 'react-native';
 
 export const getVariantStyle = (
 	variant: 'outlined' | 'standard' | undefined,
@@ -15,8 +15,8 @@ export const getVariantStyle = (
 };
 
 export const areEqual = (prevProps: any, nextProps: any): boolean => {
-	const {extraData} = nextProps;
-	const {extraData: prevExtraData} = prevProps;
+	const { extraData } = nextProps;
+	const { extraData: prevExtraData } = prevProps;
 
 	//TODO: use lodash or some object comparator in order to do a correct comparison
 	const isEqual = JSON.stringify(extraData) === JSON.stringify(prevExtraData);
@@ -45,3 +45,11 @@ export const showAlert = (
 ) => {
 	Alert.alert(title, message, buttons);
 };
+
+export const padNumber = (number: number, size: number) => {
+	let s = String(number);
+	while (s.length < (size || 2)) {
+		s = '0' + s;
+	}
+	return s;
+}

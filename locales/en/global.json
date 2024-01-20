@@ -51,7 +51,15 @@
 		"add": "Add Expense",
 		"edit": "Edit Expense",
 		"selected": "selected",
-		"empty": "No expenses found!"
+		"empty": "No expenses found!",
+		"config": {
+			"day": "Day",
+			"month": "Month",
+			"year": "Year",
+			"daily": "Daily",
+			"monthly": "Monthly",
+			"yearly": "Yearly"
+		}
 	},
 	"expense-center": {
 		"add": "Add Expense Center",

@@ -5,11 +5,11 @@ import {
 	TouchableOpacity,
 	Text
 } from 'react-native';
-import {AntDesign} from '@expo/vector-icons';
-import {Controller, FieldError} from 'react-hook-form';
-import {theme} from '../../styles';
-import {getVariantStyle} from '../../utils';
-import type {FormControllerProps, InputProps} from '../../types/ui';
+import { AntDesign } from '@expo/vector-icons';
+import { Controller, FieldError } from 'react-hook-form';
+import { theme } from '../../styles';
+import { getVariantStyle } from '../../utils';
+import type { FormControllerProps, InputProps } from '../../types/ui';
 
 const Input: React.FC<InputProps> = ({
 	variant = 'outlined',
@@ -18,14 +18,15 @@ const Input: React.FC<InputProps> = ({
 	keyboardType = 'default',
 	onChangeText,
 	value,
-	error = false
+	error = false,
+	flexible = false
 }) => {
 	return (
 		<View
 			style={[
 				styles.input,
 				getVariantStyle(variant, styles),
-				{borderColor: !error ? theme.color.primary : theme.color.error}
+				{ borderColor: !error ? theme.color.primary : theme.color.error, flex: flexible ? 1 : 0 }
 			]}
 		>
 			<TextInput
@@ -78,7 +79,7 @@ export const FormInput: React.FC<FormControllerProps & InputProps> = ({
 			control={control}
 			name={name}
 			rules={rules}
-			render={({field: {value, onChange}, fieldState: {error}}) =>
+			render={({ field: { value, onChange }, fieldState: { error } }) =>
 				renderItem(value, onChange, error)
 			}
 		/>

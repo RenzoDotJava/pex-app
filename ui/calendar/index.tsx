@@ -80,8 +80,4 @@ const styles = StyleSheet.create({
     fontSize: theme.fontSize['xl'],
     fontWeight: '500'
   },
-  /* content: {
-    flex: 1,
-    marginVertical: 5
-  } */
 });
