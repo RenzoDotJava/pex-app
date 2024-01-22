@@ -1,16 +1,23 @@
-import {createSlice} from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import moment from 'moment-timezone';
-import {OnPressType} from '../../enums';
-import {ExpenseProps} from '../../types/components';
-import type {PayloadAction} from '@reduxjs/toolkit';
-import type {AppDispatch, RootState} from '../../store';
-import type {ExpenseState} from '../../types/slices';
+import { OnPressType } from '../../enums';
+import { ExpenseProps } from '../../types/components';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import type { AppDispatch, RootState } from '../../store';
+import type { ExpenseState } from '../../types/slices';
+import { getCurrentDateToString, getDate, padNumber } from '../../utils';
 
 const initialState: ExpenseState = {
 	selectMode: false,
 	deleteList: [],
 	expenses: [],
-	date: moment(new Date()).format('YYYY-MM-DD')
+	date: getCurrentDateToString(),
+	month: new Date().getMonth() + 1,
+	yearMonth: new Date().getFullYear(),
+	year: new Date().getFullYear(),
+	mode: 'daily',
+	startDate: getCurrentDateToString(),
+	endDate: getCurrentDateToString()
 };
 
 export const expenseSlice = createSlice({
@@ -57,10 +64,66 @@ export const expenseSlice = createSlice({
 			state.deleteList = [];
 		},
 		addDate: (state) => {
-			state.date = moment(state.date).add(1, 'days').format('YYYY-MM-DD');
+			if (state.mode === 'daily') {
+				state.date = moment(state.date).add(1, 'days').format('YYYY-MM-DD');
+				state.startDate = state.date;
+				state.endDate = state.date;
+			} else if (state.mode === 'monthly') {
+				let daysInMonth = moment(state.yearMonth + "-" + state.month, "YYYY-MM").daysInMonth()
+				let auxStartDate = `${state.yearMonth}-${padNumber(state.month, 2)}-01`
+				let auxEndDate = `${state.yearMonth}-${padNumber(state.month, 2)}-${daysInMonth}`
+
+				state.startDate = moment(auxStartDate).add(1, 'months').format('YYYY-MM-DD');
+				state.endDate = moment(auxEndDate).add(1, 'months').format('YYYY-MM-DD');
+
+				state.month = moment(state.endDate).month() + 1;
+				state.yearMonth = moment(state.endDate).year();
+			} else if (state.mode === 'yearly') {
+				let auxStartDate = `${state.year}-01-01`
+				let auxEndDate = `${state.year}-12-31`
+
+				state.startDate = moment(auxStartDate).add(1, 'years').format('YYYY-MM-DD');
+				state.endDate = moment(auxEndDate).add(1, 'years').format('YYYY-MM-DD');
+				state.year = moment(state.endDate).year();
+			}
 		},
 		subtractDate: (state) => {
-			state.date = moment(state.date).subtract(1, 'days').format('YYYY-MM-DD');
+			if (state.mode === 'daily') {
+				state.date = moment(state.date).subtract(1, 'days').format('YYYY-MM-DD');
+				state.startDate = state.date;
+				state.endDate = state.date;
+			} else if (state.mode === 'monthly') {
+				let daysInMonth = moment(state.yearMonth + "-" + state.month, "YYYY-MM").daysInMonth()
+				let auxStartDate = `${state.yearMonth}-${padNumber(state.month, 2)}-01`
+				let auxEndDate = `${state.yearMonth}-${padNumber(state.month, 2)}-${daysInMonth}`
+
+				state.startDate = moment(auxStartDate).subtract(1, 'months').format('YYYY-MM-DD');
+				state.endDate = moment(auxEndDate).subtract(1, 'months').format('YYYY-MM-DD');
+				state.month = moment(state.endDate).month() + 1;
+				state.yearMonth = moment(state.endDate).year();
+			} else if (state.mode === 'yearly') {
+				let auxStartDate = `${state.year}-01-01`
+				let auxEndDate = `${state.year}-12-31`
+
+				state.startDate = moment(auxStartDate).subtract(1, 'years').format('YYYY-MM-DD');
+				state.endDate = moment(auxEndDate).subtract(1, 'years').format('YYYY-MM-DD');
+				state.year = moment(state.endDate).year();
+			}
+		},
+		setMode: (state, action: PayloadAction<'daily' | 'monthly' | 'yearly'>) => {
+			state.mode = action.payload;
+		},
+		setMonth: (state, action: PayloadAction<number>) => {
+			state.month = action.payload;
+		},
+		setYearMonth: (state, action: PayloadAction<number>) => {
+			state.yearMonth = action.payload;
+		},
+		setYear: (state, action: PayloadAction<number>) => {
+			state.year = action.payload;
+		},
+		setDate: (state, action: PayloadAction<string>) => {
+			state.date = action.payload;
 		}
 	}
 });
@@ -74,7 +137,12 @@ export const {
 	subtractDate,
 	addExpense,
 	updateExpense,
-	deleteExpenses
+	deleteExpenses,
+	setMode,
+	setMonth,
+	setYear,
+	setDate,
+	setYearMonth
 } = expenseSlice.actions;
 
 export const getTotalDeleteListAmount = (state: RootState): number =>
@@ -98,16 +166,16 @@ export const onPressExpenseRow =
 		type: OnPressType,
 		goExpenseDetail?: () => void
 	) =>
-	(dispatch: AppDispatch) => {
-		if (selectMode) {
-			if (onList) dispatch(deleteFromDeleteList(id));
-			else dispatch(addToDeleteList(id));
-		} else {
-			if (type === OnPressType.Long) dispatch(addToDeleteList(id));
-			else if (type === OnPressType.Normal) {
-				goExpenseDetail && goExpenseDetail();
+		(dispatch: AppDispatch) => {
+			if (selectMode) {
+				if (onList) dispatch(deleteFromDeleteList(id));
+				else dispatch(addToDeleteList(id));
+			} else {
+				if (type === OnPressType.Long) dispatch(addToDeleteList(id));
+				else if (type === OnPressType.Normal) {
+					goExpenseDetail && goExpenseDetail();
+				}
 			}
-		}
-	};
+		};
 
 export default expenseSlice.reducer;

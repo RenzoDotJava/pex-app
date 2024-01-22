@@ -1,11 +1,10 @@
-import {Moment} from 'moment-timezone';
 import type {
 	CategoryProps,
 	ExpenseCenterProps,
 	ExpenseProps,
 	PaymentMethodProps
 } from './components';
-import {PlaceProps} from './components';
+import { PlaceProps } from './components';
 
 type DeleteListProps = {
 	selectMode: boolean;
@@ -14,7 +13,13 @@ type DeleteListProps = {
 
 type ExpenseState = DeleteListProps & {
 	expenses: ExpenseProps[];
+	startDate: string;
+	endDate: string;
 	date: string;
+	month: number;
+	year: number;
+	yearMonth: number;
+	mode: 'daily' | 'monthly' | 'yearly';
 };
 
 type ExpenseCenterState = DeleteListProps & {

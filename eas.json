@@ -1,0 +1,24 @@
+{
+  "cli": {
+    "version": ">= 7.0.0"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_SUPABASE_URL": "https://htefsrvuxfoctobiyzth.supabase.co",
+        "EXPO_PUBLIC_SUPABASE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh0ZWZzcnZ1eGZvY3RvYml5enRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODM2ODE5MTcsImV4cCI6MTk5OTI1NzkxN30.kdRMKbX8Zai5agX5zl9kOqCYVMyg-nQMLoRIj6ZiqYQ"
+      }
+    },
+    "production": {}
+  },
+  "submit": {
+    "production": {}
+  }
+}

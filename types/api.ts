@@ -14,10 +14,20 @@ type MutationProps<T> = {
 };
 
 type QueryProps = {
-	date?: string;
+	startDate?: string;
+	endDate?: string;
 	onSuccess?: (data: any) => void;
 	onError?: (error: any) => void;
 	select?: (data: any) => void;
 };
 
-export {AuthReq, MutationProps, QueryProps, GeneralReq};
+type BetweenDatesQueryProps = {
+	startDate: string;
+	endDate: string;
+	onSuccess?: (data: any) => void;
+	onError?: (error: any) => void;
+	select?: (data: any) => void;
+};
+
+
+export { AuthReq, MutationProps, QueryProps, GeneralReq, BetweenDatesQueryProps };

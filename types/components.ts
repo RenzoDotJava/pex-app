@@ -1,4 +1,4 @@
-import {GeneralReq} from './api';
+import { GeneralReq } from './api';
 
 //TODO: ver si trae id y name o luego hacer un nuevo request para traer los ids
 type RowProps = {
@@ -121,6 +121,13 @@ type ListWrapperProps = {
 	onPressAdd?: () => void;
 };
 
+type RangeDateSelectorProps = {
+	isOpen?: boolean;
+	onCancel?: () => void;
+	onConfirm?: (date: string) => void;
+	date: string;
+};
+
 export {
 	ExpenseProps,
 	ExpenseRowProps,
@@ -141,5 +148,6 @@ export {
 	SignInFormInputs,
 	NavigatorWrapperProps,
 	ListWrapperProps,
-	CurrencyProps
+	CurrencyProps,
+	RangeDateSelectorProps
 };

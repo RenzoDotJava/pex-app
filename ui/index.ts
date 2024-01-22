@@ -8,6 +8,8 @@ import Select, {FormSelect} from './select';
 import Modal from './modal';
 import ItemList from './item-list';
 import EmptyList from './empty-list';
+import RangeDateSelector from './range-date-selector';
+import Calendar from './calendar';
 
 export {
 	DateNavigator,
@@ -22,5 +24,7 @@ export {
 	FormInput,
 	EmptyList,
 	FormSelect,
-	FormDateTimePicker
+	FormDateTimePicker,
+	/* RangeDateSelector, */
+	Calendar
 };

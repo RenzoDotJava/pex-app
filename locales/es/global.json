@@ -15,22 +15,22 @@
 		"login": "Ingresa!",
 		"success": "Su cuenta ha sido creada satisfactoriamente"
 	},
-  "logout": "Cerrar Sesión",
+	"logout": "Cerrar Sesión",
 	"options": {
 		"confirm": "Aceptar",
 		"cancel": "Cancelar",
-    "delete": "Eliminar",
-    "save": "Guardar",
+		"delete": "Eliminar",
+		"save": "Guardar",
 		"search": "Buscar",
 		"create": "Crear",
 		"no-results": "No hay resultados",
-    "delete-expense-center": "¿Está seguro de eliminar los centros de gasto seleccionados?",
+		"delete-expense-center": "¿Está seguro de eliminar los centros de gasto seleccionados?",
 		"delete-category": "¿Está seguro de eliminar las categorías seleccionados?",
 		"delete-payment-method": "¿Está seguro de eliminar los métodos de pago seleccionados?",
 		"delete-place": "¿Está seguro de eliminar los lugares seleccionados?",
 		"delete-expense": "¿Está seguro de eliminar los gastos seleccionados?"
 	},
-  "forms": {
+	"forms": {
 		"name": "Nombre",
 		"date": "Fecha",
 		"amount": "Cantidad",
@@ -42,17 +42,25 @@
 	"validation": {
 		"required": "Campo obligatorio",
 		"email": "Email inválido",
-    "create-password": "La contraseña debe tener al menos 6 caracteres",
-    "equal-passoword": "Las contraseñas deben ser iguales"
+		"create-password": "La contraseña debe tener al menos 6 caracteres",
+		"equal-passoword": "Las contraseñas deben ser iguales"
 	},
-  "expense": {
+	"expense": {
 		"header": "Gastos",
 		"add": "Agregar Gasto",
 		"edit": "Editar Gasto",
 		"selected": "seleccionado(s)",
-		"empty": "¡No hay gastos registrados!"
+		"empty": "¡No hay gastos registrados!",
+		"config": {
+			"day": "Día",
+			"month": "Mes",
+			"year": "Año",
+			"daily": "Diario",
+			"monthly": "Mensual",
+			"yearly": "Anual"
+		}
 	},
-  "expense-center": {
+	"expense-center": {
 		"add": "Agregar Centro de Gasto",
 		"edit": "Editar Centro de Gasto",
 		"empty": "¡No hay centros de gasto registrados!"
@@ -74,7 +82,7 @@
 	},
 	"config": {
 		"header": "Configuración",
-    "expense-info": "Información de gasto",
+		"expense-info": "Información de gasto",
 		"expense-center": "Centros de gasto",
 		"category": "Categorías",
 		"payment-method": "Métodos de pago",

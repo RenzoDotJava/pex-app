@@ -1,26 +1,47 @@
-import {useMutation, useQuery} from '@tanstack/react-query';
-import {supabase} from '../supabase';
-import {MutationProps, QueryProps} from '../types/api';
-import {ExpenseFormInputs} from '../types/components';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { supabase } from '../supabase';
+import { BetweenDatesQueryProps, MutationProps, QueryProps } from '../types/api';
+import { ExpenseFormInputs } from '../types/components';
 
-const getExpenses = async (date?: string) => {
-	const {data} = await supabase.auth.getUser();
+const getExpenses = async (startDate?: string, endDate?: string) => {
+	const { data } = await supabase.auth.getUser();
 
 	if (!data.user) throw new Error('Usuario no encontrado');
 
-	const {data: expenses, error} = await supabase
+	const { data: expenses, error } = await supabase
 		.from('expense')
 		.select(
 			'id, amount, date, expense_center (id, name), category (id, name), payment_method (id, name), place (id, name)'
 		)
-		.eq('date', date)
+		.gte('date', startDate)
+		.lte('date', endDate)
 		.eq('active', true)
-		.order('created_at', {ascending: true});
+		.order('created_at', { ascending: true });
 
 	if (error) throw new Error(error.message); //TODO: parse error
 
 	return expenses;
 };
+
+const getExpensesBetweenDates = async ({ startDate, endDate }: { startDate: string, endDate: string }) => {
+	const { data } = await supabase.auth.getUser();
+
+	if (!data.user) throw new Error('Usuario no encontrado');
+
+	const { data: expenses, error } = await supabase
+		.from('expense')
+		.select(
+			'id, amount, date, expense_center (id, name), category (id, name), payment_method (id, name), place (id, name)'
+		)
+		.gte('date', startDate)
+		.lte('date', endDate)
+		.eq('active', true)
+		.order('created_at', { ascending: true });
+
+	if (error) throw new Error(error.message); //TODO: parse error
+
+	return expenses;
+}
 
 const addExpense = async ({
 	amount,
@@ -30,11 +51,11 @@ const addExpense = async ({
 	placeId,
 	date
 }: ExpenseFormInputs) => {
-	const {data: userData} = await supabase.auth.getUser();
+	const { data: userData } = await supabase.auth.getUser();
 
 	if (!userData.user) throw new Error('Usuario no encontrado');
 
-	const {data: expense, error} = await supabase
+	const { data: expense, error } = await supabase
 		.from('expense')
 		.insert([
 			{
@@ -65,11 +86,11 @@ const updateExpense = async ({
 	placeId,
 	date
 }: ExpenseFormInputs) => {
-	const {data: userData} = await supabase.auth.getUser();
+	const { data: userData } = await supabase.auth.getUser();
 
 	if (!userData.user) throw new Error('Usuario no encontrado');
 
-	const {data: expense, error} = await supabase
+	const { data: expense, error } = await supabase
 		.from('expense')
 		.update({
 			amount,
@@ -90,13 +111,13 @@ const updateExpense = async ({
 };
 
 const deleteExpenses = async (deleteList: number[]) => {
-	const {data: userData} = await supabase.auth.getUser();
+	const { data: userData } = await supabase.auth.getUser();
 
 	if (!userData.user) throw new Error('Usuario no encontrado');
 
-	const {data: expenses, error} = await supabase
+	const { data: expenses, error } = await supabase
 		.from('expense')
-		.update({active: false})
+		.update({ active: false })
 		.in('id', deleteList)
 		.select('id');
 
@@ -106,14 +127,15 @@ const deleteExpenses = async (deleteList: number[]) => {
 };
 
 export const useGetExpenses = ({
-	date,
+	startDate,
+	endDate,
 	onSuccess,
 	onError,
 	select
 }: QueryProps) => {
 	const getExpensesQuery = useQuery({
-		queryKey: ['expense', date],
-		queryFn: () => getExpenses(date),
+		queryKey: ['expense', startDate, endDate],
+		queryFn: () => getExpenses(startDate, endDate),
 		onSuccess,
 		onError,
 		select
@@ -121,6 +143,20 @@ export const useGetExpenses = ({
 
 	return getExpensesQuery;
 };
+
+export const useGetExpensesBetweenDates = ({
+	onSuccess,
+	onError,
+}: MutationProps<{ startDate: string, endDate: string }>) => {
+	const getExpensesQuery = useMutation({
+		mutationKey: ['get_expense_between_dates'],
+		mutationFn: getExpensesBetweenDates,
+		onSuccess,
+		onError
+	});
+
+	return getExpensesQuery;
+}
 
 export const useAddExpense = ({
 	onSuccess,

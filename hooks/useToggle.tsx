@@ -1,12 +1,13 @@
-import {useState} from 'react';
+import { useState } from 'react';
 
 type HookProps = {
+	defaultValue?: boolean;
 	onOpen?: () => void;
 	onClose?: () => void;
 };
 
-const useToggle = ({onOpen, onClose}: HookProps) => {
-	const [isOpen, setIsOpen] = useState(false);
+const useToggle = ({ onOpen, onClose, defaultValue = false }: HookProps) => {
+	const [isOpen, setIsOpen] = useState(defaultValue);
 
 	const toggler = () => {
 		const nextIsOpen = !isOpen;

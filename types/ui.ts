@@ -22,12 +22,15 @@ type InputProps = VariantProps & {
 	keyboardType?: 'default' | 'numeric';
 	value?: string;
 	error?: boolean;
+	flexible?: boolean;
 	onChangeText?: (text: string) => void;
 };
 
 type IconButtonProps = {
 	icon: React.ReactNode;
 	onPress?: () => void;
+	disabled?: boolean;
+	loading?: boolean;
 	style?: StyleProp<ViewStyle>;
 };
 
@@ -46,7 +49,7 @@ type BadgeProps = {
 
 type CalendarProps = {
 	isOpen?: boolean;
-	date?: Date | undefined;
+	date: string;
 	onCancel?: () => void;
 	onConfirm?: (date: string) => void;
 };
