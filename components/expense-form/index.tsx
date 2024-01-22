@@ -21,6 +21,7 @@ import { setPlaces } from '../../slices/place';
 import { setExpenseCenters } from '../../slices/expense-center';
 import { useAppDispatch, useAppSelector } from '../../store';
 import type { ExpenseFormInputs, ExpenseFormProps } from '../../types/components';
+import { getCurrentDateToString } from '../../utils';
 
 const ExpenseForm: React.FC<ExpenseFormProps> = ({
 	expense,
@@ -35,7 +36,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
 	} = useForm<ExpenseFormInputs>({
 		defaultValues: {
 			...expense,
-			date: expense?.date || moment(new Date()).format('YYYY-MM-DD'),
+			date: expense?.date || getCurrentDateToString(),
 			categoryId: expense?.category.id,
 			paymentMethodId: expense?.payment_method.id,
 			expenseCenterId: expense?.expense_center.id,

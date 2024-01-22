@@ -49,7 +49,7 @@ type BadgeProps = {
 
 type CalendarProps = {
 	isOpen?: boolean;
-	date?: Date | undefined;
+	date: string;
 	onCancel?: () => void;
 	onConfirm?: (date: string) => void;
 };

@@ -5,10 +5,11 @@ import {
 	TouchableOpacity,
 	Text
 } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Feather } from '@expo/vector-icons';
 import { Controller, FieldError } from 'react-hook-form';
 import { theme } from '../../styles';
 import { getVariantStyle } from '../../utils';
+import { useToggle } from '../../hooks';
 import type { FormControllerProps, InputProps } from '../../types/ui';
 
 const Input: React.FC<InputProps> = ({
@@ -21,6 +22,8 @@ const Input: React.FC<InputProps> = ({
 	error = false,
 	flexible = false
 }) => {
+	const [isOpen, toggler] = useToggle({ defaultValue: true });
+
 	return (
 		<View
 			style={[
@@ -33,15 +36,18 @@ const Input: React.FC<InputProps> = ({
 				style={styles.text}
 				keyboardType={keyboardType}
 				placeholder={placeholder}
-				secureTextEntry={secureTextEntry}
+				secureTextEntry={secureTextEntry && isOpen}
 				onChangeText={onChangeText}
 				value={value}
 			/>
 			{secureTextEntry && (
-				<TouchableOpacity>
-					<AntDesign name="eye" color={theme.color.primary} size={24} />
-				</TouchableOpacity>
-			)}
+				isOpen ?
+					<TouchableOpacity onPress={toggler}>
+						<Feather name="eye" color={theme.color.primary} size={24} />
+					</TouchableOpacity>
+					: <TouchableOpacity onPress={toggler}>
+						<Feather name="eye-off" color={theme.color.primary} size={24} />
+					</TouchableOpacity>)}
 		</View>
 	);
 };

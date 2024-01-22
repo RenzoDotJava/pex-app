@@ -14,6 +14,7 @@ import * as XLSX from 'xlsx';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { useGetExpensesBetweenDates } from '../../../api/expense';
+import { getCurrentDateToString, getDate } from '../../../utils';
 
 type NavigationProp = DrawerNavigationProp<
   SidebarDrawerParamList,
@@ -99,12 +100,12 @@ const ConfigExpenseScreen = () => {
   }
 
   const setActualDate = () => {
-    if (selectedMode === 'daily') setSelectedDate(moment(new Date()).format('YYYY-MM-DD'))
+    if (selectedMode === 'daily') setSelectedDate(getCurrentDateToString())
     else if (selectedMode === 'monthly') {
-      setSelectedMonth(moment(new Date()).month() + 1)
-      setSelectedYearMonth(moment(new Date()).year())
+      setSelectedMonth(moment(getCurrentDateToString()).month() + 1)
+      setSelectedYearMonth(moment(getCurrentDateToString()).year())
     }
-    else setSelectedYear(moment(new Date()).year())
+    else setSelectedYear(moment(getCurrentDateToString()).year())
   }
 
   const getIsDisabled = () => {
@@ -137,7 +138,7 @@ const ConfigExpenseScreen = () => {
 
   const getExcelName = () => {
     if (selectedMode === 'daily') {
-      return moment(selectedDate).format('DD-MM-YYYY')
+      return moment(getDate(selectedDate)).format('DD-MM-YYYY')
     }
     else if (selectedMode === 'monthly') {
       return `${monthOptions.find((item) => item.id === selectedMonth)?.name}-${selectedYearMonth}`
@@ -152,7 +153,7 @@ const ConfigExpenseScreen = () => {
     let ws = XLSX.utils.aoa_to_sheet([
       ["Fecha", "Centro de gasto", "Categoría", "Método de pago", "Lugar", "Monto"],
       ...expenses.map((expense) => [
-        moment(expense.date).format('DD/MM/YYYY'),
+        moment(getDate(expense.date)).format('DD/MM/YYYY'),
         expense.expense_center.name,
         expense.category.name,
         expense.payment_method.name,

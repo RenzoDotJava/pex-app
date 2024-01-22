@@ -169,5 +169,8 @@ const styles = StyleSheet.create({
 	},
 	list: {
 		flex: 1
+	},
+	test: {
+		fontSize: 25
 	}
 });

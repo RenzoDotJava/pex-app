@@ -5,18 +5,19 @@ import { ExpenseProps } from '../../types/components';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { AppDispatch, RootState } from '../../store';
 import type { ExpenseState } from '../../types/slices';
+import { getCurrentDateToString, getDate, padNumber } from '../../utils';
 
 const initialState: ExpenseState = {
 	selectMode: false,
 	deleteList: [],
 	expenses: [],
-	date: moment(new Date()).format('YYYY-MM-DD'),
+	date: getCurrentDateToString(),
 	month: new Date().getMonth() + 1,
 	yearMonth: new Date().getFullYear(),
 	year: new Date().getFullYear(),
 	mode: 'daily',
-	startDate: moment(new Date()).format('YYYY-MM-DD'),
-	endDate: moment(new Date()).format('YYYY-MM-DD')
+	startDate: getCurrentDateToString(),
+	endDate: getCurrentDateToString()
 };
 
 export const expenseSlice = createSlice({
@@ -69,20 +70,21 @@ export const expenseSlice = createSlice({
 				state.endDate = state.date;
 			} else if (state.mode === 'monthly') {
 				let daysInMonth = moment(state.yearMonth + "-" + state.month, "YYYY-MM").daysInMonth()
-				let auxStartDate = `${state.yearMonth}-${state.month}-01`
-				let auxEndDate = `${state.yearMonth}-${state.month}-${daysInMonth}`
+				let auxStartDate = `${state.yearMonth}-${padNumber(state.month, 2)}-01`
+				let auxEndDate = `${state.yearMonth}-${padNumber(state.month, 2)}-${daysInMonth}`
 
-				state.startDate = moment(new Date(auxStartDate)).add(1, 'months').format('YYYY-MM-DD');
-				state.endDate = moment(new Date(auxEndDate)).add(1, 'months').format('YYYY-MM-DD');
-				state.month = new Date(state.startDate).getMonth() + 1;
-				state.yearMonth = new Date(state.startDate).getFullYear();
+				state.startDate = moment(auxStartDate).add(1, 'months').format('YYYY-MM-DD');
+				state.endDate = moment(auxEndDate).add(1, 'months').format('YYYY-MM-DD');
+
+				state.month = moment(state.endDate).month() + 1;
+				state.yearMonth = moment(state.endDate).year();
 			} else if (state.mode === 'yearly') {
 				let auxStartDate = `${state.year}-01-01`
 				let auxEndDate = `${state.year}-12-31`
 
-				state.startDate = moment(new Date(auxStartDate)).add(1, 'years').format('YYYY-MM-DD');
-				state.endDate = moment(new Date(auxEndDate)).add(1, 'years').format('YYYY-MM-DD');
-				state.year = new Date(state.startDate).getFullYear();
+				state.startDate = moment(auxStartDate).add(1, 'years').format('YYYY-MM-DD');
+				state.endDate = moment(auxEndDate).add(1, 'years').format('YYYY-MM-DD');
+				state.year = moment(state.endDate).year();
 			}
 		},
 		subtractDate: (state) => {
@@ -92,20 +94,20 @@ export const expenseSlice = createSlice({
 				state.endDate = state.date;
 			} else if (state.mode === 'monthly') {
 				let daysInMonth = moment(state.yearMonth + "-" + state.month, "YYYY-MM").daysInMonth()
-				let auxStartDate = `${state.yearMonth}-${state.month}-01`
-				let auxEndDate = `${state.yearMonth}-${state.month}-${daysInMonth}`
+				let auxStartDate = `${state.yearMonth}-${padNumber(state.month, 2)}-01`
+				let auxEndDate = `${state.yearMonth}-${padNumber(state.month, 2)}-${daysInMonth}`
 
-				state.startDate = moment(new Date(auxStartDate)).subtract(1, 'months').format('YYYY-MM-DD');
-				state.endDate = moment(new Date(auxEndDate)).subtract(1, 'months').format('YYYY-MM-DD');
-				state.month = new Date(state.startDate).getMonth() + 1;
-				state.yearMonth = new Date(state.startDate).getFullYear();
+				state.startDate = moment(auxStartDate).subtract(1, 'months').format('YYYY-MM-DD');
+				state.endDate = moment(auxEndDate).subtract(1, 'months').format('YYYY-MM-DD');
+				state.month = moment(state.endDate).month() + 1;
+				state.yearMonth = moment(state.endDate).year();
 			} else if (state.mode === 'yearly') {
 				let auxStartDate = `${state.year}-01-01`
 				let auxEndDate = `${state.year}-12-31`
 
-				state.startDate = moment(new Date(auxStartDate)).subtract(1, 'years').format('YYYY-MM-DD');
-				state.endDate = moment(new Date(auxEndDate)).subtract(1, 'years').format('YYYY-MM-DD');
-				state.year = new Date(state.startDate).getFullYear();
+				state.startDate = moment(auxStartDate).subtract(1, 'years').format('YYYY-MM-DD');
+				state.endDate = moment(auxEndDate).subtract(1, 'years').format('YYYY-MM-DD');
+				state.year = moment(state.endDate).year();
 			}
 		},
 		setMode: (state, action: PayloadAction<'daily' | 'monthly' | 'yearly'>) => {

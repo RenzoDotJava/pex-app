@@ -7,13 +7,13 @@ import { CalendarProps } from '../../types/ui';
 import { theme } from '../../styles';
 import Button from '../button';
 import { calendarLocales } from '../../locales';
-
+import { getDate } from '../../utils';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const Calendar: React.FC<CalendarProps> = ({ isOpen, onCancel, onConfirm, date }) => {
-  const [selected, setSelected] = useState<string>(moment(date).format('YYYY-MM-DD'));
+  const [selected, setSelected] = useState<string>(moment(getDate(date)).format('YYYY-MM-DD'));
   const { t, i18n } = useTranslation('global');
 
   LocaleConfig.locales['en'] = calendarLocales['en'];

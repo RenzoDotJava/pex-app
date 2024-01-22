@@ -1,3 +1,4 @@
+import moment from 'moment-timezone';
 import { Alert, AlertButton } from 'react-native';
 
 export const getVariantStyle = (
@@ -34,7 +35,7 @@ export const parseSupabaseError = (message: string) => {
 		case 'Invalid login credentials':
 			return 'Credenciales inválidas';
 		default:
-			return 'Hubo un error';
+			return message;
 	}
 };
 
@@ -52,4 +53,14 @@ export const padNumber = (number: number, size: number) => {
 		s = '0' + s;
 	}
 	return s;
+}
+
+export const getCurrentDateToString = () => moment(new Date()).format('YYYY-MM-DD')
+
+export const getDate = (date: string) => {
+	//When you are getting the new Date(), is not necessary to add the offset
+	//When you are setting the date using new Date('YYYY-mm-dd'), you need to add the offset
+	const newDate = new Date(date);
+	newDate.setMinutes(newDate.getMinutes() + newDate.getTimezoneOffset())
+	return newDate;
 }

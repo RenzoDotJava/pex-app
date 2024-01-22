@@ -5,20 +5,20 @@ import { Controller } from 'react-hook-form';
 import moment from 'moment-timezone'; //TODO: probar en producción quitando el timezone
 import { useToggle } from '../../hooks';
 import { theme } from '../../styles';
-import { getVariantStyle } from '../../utils';
+import { getDate, getVariantStyle, getCurrentDateToString } from '../../utils';
 import type { DateTimePickerProps, FormControllerProps } from '../../types/ui';
 import Calendar from '../calendar';
-
+//https://es.stackoverflow.com/questions/149033/javascript-me-devuelve-fecha-err%C3%B3nea
 const DateTimePicker: React.FC<DateTimePickerProps> = ({
 	variant = 'outlined',
 	value,
 	onChange
 }) => {
 	const [isOpen, toggler] = useToggle({ onClose: () => Keyboard.dismiss() });
-	const [date, setDate] = useState<Date | undefined>(value ? new Date(value) : new Date());
+	const [date, setDate] = useState<string>(value ? value : getCurrentDateToString());
 
 	const onConfirm = (date: string) => {
-		setDate(new Date(date));
+		setDate(date);
 		onChange && onChange(date);
 		toggler()
 	}
@@ -30,7 +30,7 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
 				onPress={toggler}
 			>
 				<Text style={styles.text}>
-					{moment(date).format('DD/MM/YYYY')}
+					{moment(getDate(date)).format('DD/MM/YYYY')}
 				</Text>
 				<AntDesign name="calendar" size={20} color={theme.color.primary} />
 			</TouchableOpacity>

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "pex-app",
-    "slug": "pex-app",
+    "name": "Pex App",
+    "slug": "PexApp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -18,14 +18,21 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.pex.app",
+      "versionCode": 1,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/adaptive-icon-pexapp.png",
         "backgroundColor": "#ffffff"
       },
       "softwareKeyboardLayoutMode": "pan"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "345b28a0-c6e0-44e1-9aef-a049799b69f6"
+      }
     }
   }
 }
