@@ -24,7 +24,7 @@ type NavigationProp = DrawerNavigationProp<
 const selectorOptions: { value: 'daily' | 'monthly' | 'yearly' }[] = [
   { value: 'daily' },
   { value: 'monthly' },
-  { value: 'yearly' }
+  /* { value: 'yearly' } */
 ]
 
 const ConfigExpenseScreen = () => {
@@ -60,8 +60,8 @@ const ConfigExpenseScreen = () => {
         dispatch(setYearMonth(selectedYearMonth))
       }
       else dispatch(setYear(selectedYear))
-      dispatch(setExpenses(data))
       dispatch(setMode(selectedMode))
+      dispatch(setExpenses(data))
       navigation.goBack()
     },
     onError: (error) => {
@@ -74,7 +74,7 @@ const ConfigExpenseScreen = () => {
     const year = type === "year" ? input : splitDate[0]
     const month = type === "month" ? input : splitDate[1]
     let daysInMonth = moment(year + "-" + month, "YYYY-MM").daysInMonth()
-
+    
     if (type === "year") {
       if (input.length > 4) return
       else if (input.length === 0) setSelectedDate(`-${splitDate[1]}-${splitDate[2]}`)
@@ -181,27 +181,27 @@ const ConfigExpenseScreen = () => {
         }]}>
           <IconButton
             style={styles.back}
-            icon={<AntDesign name="close" size={30} color={theme.color.secondary} />}
+            icon={<AntDesign name="close" size={30} color={theme.color.neutral.lightest} />}
             onPress={() => navigation.goBack()}
           />
         </View>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
           <View style={{ flex: 1 }}>
             <View style={{ flex: 1 }}>
-              <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 20, paddingTop: 20, paddingBottom: 5 }}>
+              <View style={styles.option_nav}>
                 <View style={styles.selector}>
                   {selectorOptions.map((option, index) => (
                     <TouchableOpacity key={index} style={[styles.option, selectedMode === option.value && styles.option_selected]} onPress={() => setSelectedMode(option.value)}>
-                      <Text style={{ fontSize: theme.fontSize["md"], color: selectedMode === option.value ? theme.color.secondary : 'black' }}>{t("expense.config." + option.value)}</Text>
+                      <Text style={{ fontSize: theme.fontSize.md, fontWeight: selectedMode === option.value ? 'normal' : 'bold', color: selectedMode === option.value ? theme.color.neutral.lightest : theme.color.neutral.dark }}>{t("expense.config." + option.value)}</Text>
                     </TouchableOpacity>
                   ))}
                 </View>
-                <TouchableOpacity onPress={setActualDate}>
-                  <Text style={{ fontWeight: 'bold', fontSize: theme.fontSize['md'] }}>Actual</Text>
+                <TouchableOpacity onPress={setActualDate} style={[styles.option, { backgroundColor: theme.color.primary.dark, borderColor: theme.color.primary.dark }]}>
+                  <Text style={{ fontSize: theme.fontSize.md, color: theme.color.neutral.lightest }}>Actual</Text>
                 </TouchableOpacity>
               </View>
               {selectedMode === 'daily' &&
-                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 20, paddingVertical: 20, paddingHorizontal: 20 }}>
+                <View style={styles.date_form}>
                   <View style={{ flex: 1, gap: 10 }}>
                     <Text>{t("expense.config.day")}</Text>
                     <Input keyboardType="numeric" onChangeText={(val) => onChangeDate(val, 'day')} flexible value={selectedDate.split('-')[2]} />
@@ -217,7 +217,7 @@ const ConfigExpenseScreen = () => {
                 </View>
               }
               {selectedMode === 'monthly' &&
-                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 20, paddingVertical: 20, paddingHorizontal: 20 }}>
+                <View style={styles.date_form}>
                   <View style={{ flex: 1, gap: 10 }}>
                     <Text>{t("expense.config.month")}</Text>
                     <Select items={monthOptions} selected={monthOptions.find((item) => item.id === selectedMonth)} onChange={(value) => setSelectedMonth(parseInt(value.toString()))} />
@@ -240,7 +240,7 @@ const ConfigExpenseScreen = () => {
               <Button text={t("options.confirm")} flexible onPress={getExpensesList} disabled={getIsDisabled()} loading={isLoading || isLoadingConfirm} />
               <IconButton
                 style={styles.excel}
-                icon={<FontAwesome name="file-excel-o" size={30} color={theme.color.secondary} />}
+                icon={<FontAwesome name="file-excel-o" size={30} color={theme.color.neutral.lightest} />}
                 disabled={getIsDisabled()}
                 onPress={() => getExpensesList("generate")}
                 loading={isLoading || isLoadingConfirm}
@@ -259,14 +259,14 @@ export default ConfigExpenseScreen;
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    backgroundColor: theme.color.secondary
+    backgroundColor: theme.color.neutral.lightest
   },
   header: {
     display: 'flex',
     alignItems: 'flex-end',
   },
   back: {
-    backgroundColor: theme.color.primary,
+    backgroundColor: theme.color.primary.medium,
     width: 55,
     height: 55,
     borderRadius: 55 / 2,
@@ -274,27 +274,49 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   excel: {
-    backgroundColor: theme.color.primary,
-    /* width: 55,
-    height: 55, */
+    backgroundColor: '#45A05E',
     borderRadius: 6,
     paddingHorizontal: 20,
-    borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center'
   },
   selector: {
     flexDirection: 'row',
     alignItems: 'center',
-    /* justifyContent: 'space-between', */
     gap: 10,
   },
-  option: {
+  option_nav: {
     borderWidth: 1,
-    borderRadius: 16,
-    padding: 8
+    borderColor: theme.color.neutral.light,
+    backgroundColor: '#EDEDED',
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    marginHorizontal: 20,
+    marginTop: 20,
+    marginBottom: 5,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  date_form: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 30
+  },
+  option: {
+    borderRadius: 12,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: theme.color.neutral.light,
+    backgroundColor: theme.color.neutral.lightest,
   },
   option_selected: {
-    backgroundColor: theme.color.primary,
+    backgroundColor: theme.color.primary.dark,
+    borderColor: theme.color.primary.dark,
   }
 });

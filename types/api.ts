@@ -21,13 +21,4 @@ type QueryProps = {
 	select?: (data: any) => void;
 };
 
-type BetweenDatesQueryProps = {
-	startDate: string;
-	endDate: string;
-	onSuccess?: (data: any) => void;
-	onError?: (error: any) => void;
-	select?: (data: any) => void;
-};
-
-
-export { AuthReq, MutationProps, QueryProps, GeneralReq, BetweenDatesQueryProps };
+export { AuthReq, MutationProps, QueryProps, GeneralReq };

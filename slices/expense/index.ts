@@ -7,10 +7,43 @@ import type { AppDispatch, RootState } from '../../store';
 import type { ExpenseState } from '../../types/slices';
 import { getCurrentDateToString, getDate, padNumber } from '../../utils';
 
+type ExpensesByDateAccumulator = { [date: string]: ExpenseProps[] };
+
+const groupExpensesByDate = (expenses: ExpenseProps[]) => {
+	const expensesByDate = expenses.reduce((acc: ExpensesByDateAccumulator, expense) => {
+		const date = expense.date;
+
+		if (date) {
+			if (!acc[date]) acc[date] = [];
+			acc[date].push(expense);
+		}
+
+		return acc;
+	}, {});
+
+	return Object.entries(expensesByDate).map(([date, expenses]) => ({
+		title: date,
+		data: expenses,
+	}));
+}
+
+const addExpenseMonthly = (expense: ExpenseProps, expensesByDateArray: { title: string, data: ExpenseProps[] }[]) => {
+	const index = expensesByDateArray.findIndex(entry => entry.title === expense.date);
+	if (index !== -1) {
+		expensesByDateArray[index].data.push(expense);
+	} else {
+		// Insert new date entry in sorted order
+		let insertIndex = 0;
+		while (insertIndex < expensesByDateArray.length && moment(expensesByDateArray[insertIndex].title).isBefore(expense.date)) insertIndex++;
+		expensesByDateArray.splice(insertIndex, 0, { title: expense.date, data: [expense] });
+	}
+}
+
 const initialState: ExpenseState = {
 	selectMode: false,
 	deleteList: [],
 	expenses: [],
+	expensesMonthly: [],
 	date: getCurrentDateToString(),
 	month: new Date().getMonth() + 1,
 	yearMonth: new Date().getFullYear(),
@@ -40,14 +73,26 @@ export const expenseSlice = createSlice({
 			if (state.selectMode) state.selectMode = false;
 		},
 		setExpenses: (state, action: PayloadAction<ExpenseProps[]>) => {
+			if (state.mode === "daily") {
+				state.expensesMonthly = []
+			} else {
+				state.expensesMonthly = groupExpensesByDate(action.payload)
+			}
+
 			state.expenses = action.payload;
 		},
 		addExpense: (state, action: PayloadAction<ExpenseProps>) => {
-			if (state.date === action.payload.date)
+			let isOnDate = state.mode === 'daily' && state.date === action.payload.date || state.mode === 'monthly' && moment(getDate(action.payload.date)).month() + 1 === state.month && moment(getDate(action.payload.date)).year() === state.yearMonth || state.mode === 'yearly' && moment(getDate(action.payload.date)).year() === state.year
+
+			if (isOnDate) {
 				state.expenses.push(action.payload);
+				if (state.mode === 'monthly') addExpenseMonthly(action.payload, state.expensesMonthly)
+			}
 		},
 		updateExpense: (state, action: PayloadAction<ExpenseProps>) => {
-			if (state.date === action.payload.date)
+			let isOnDate = state.mode === 'daily' && state.date === action.payload.date || state.mode === 'monthly' && moment(getDate(action.payload.date)).month() + 1 === state.month && moment(getDate(action.payload.date)).year() === state.yearMonth || state.mode === 'yearly' && moment(getDate(action.payload.date)).year() === state.year
+			//TODO: Update for monthly
+			if (isOnDate)
 				state.expenses = state.expenses.map((expense) =>
 					expense.id === action.payload.id ? action.payload : expense
 				);
@@ -60,24 +105,30 @@ export const expenseSlice = createSlice({
 			state.expenses = state.expenses.filter(
 				(expense) => !state.deleteList.includes(expense.id)
 			);
+
+			if (state.mode === "monthly") state.expensesMonthly = groupExpensesByDate(state.expenses)
+
 			if (state.selectMode) state.selectMode = false;
 			state.deleteList = [];
 		},
 		addDate: (state) => {
 			if (state.mode === 'daily') {
-				state.date = moment(state.date).add(1, 'days').format('YYYY-MM-DD');
+				state.date = moment(getDate(state.date)).add(1, 'days').format('YYYY-MM-DD');
 				state.startDate = state.date;
 				state.endDate = state.date;
 			} else if (state.mode === 'monthly') {
+				if (state.month === 12) {
+					state.yearMonth = state.yearMonth + 1
+					state.month = 1
+				} else
+					state.month = state.month + 1
+
 				let daysInMonth = moment(state.yearMonth + "-" + state.month, "YYYY-MM").daysInMonth()
 				let auxStartDate = `${state.yearMonth}-${padNumber(state.month, 2)}-01`
 				let auxEndDate = `${state.yearMonth}-${padNumber(state.month, 2)}-${daysInMonth}`
 
-				state.startDate = moment(auxStartDate).add(1, 'months').format('YYYY-MM-DD');
-				state.endDate = moment(auxEndDate).add(1, 'months').format('YYYY-MM-DD');
-
-				state.month = moment(state.endDate).month() + 1;
-				state.yearMonth = moment(state.endDate).year();
+				state.startDate = moment(getDate(auxStartDate)).format('YYYY-MM-DD');
+				state.endDate = moment(getDate(auxEndDate)).format('YYYY-MM-DD');
 			} else if (state.mode === 'yearly') {
 				let auxStartDate = `${state.year}-01-01`
 				let auxEndDate = `${state.year}-12-31`
@@ -93,14 +144,19 @@ export const expenseSlice = createSlice({
 				state.startDate = state.date;
 				state.endDate = state.date;
 			} else if (state.mode === 'monthly') {
+				if (state.month === 1) {
+					state.yearMonth = state.yearMonth - 1
+					state.month = 12
+				} else
+					state.month = state.month - 1
+
 				let daysInMonth = moment(state.yearMonth + "-" + state.month, "YYYY-MM").daysInMonth()
 				let auxStartDate = `${state.yearMonth}-${padNumber(state.month, 2)}-01`
 				let auxEndDate = `${state.yearMonth}-${padNumber(state.month, 2)}-${daysInMonth}`
 
-				state.startDate = moment(auxStartDate).subtract(1, 'months').format('YYYY-MM-DD');
-				state.endDate = moment(auxEndDate).subtract(1, 'months').format('YYYY-MM-DD');
-				state.month = moment(state.endDate).month() + 1;
-				state.yearMonth = moment(state.endDate).year();
+				state.startDate = moment(getDate(auxStartDate)).format('YYYY-MM-DD');
+				state.endDate = moment(getDate(auxEndDate)).format('YYYY-MM-DD');
+
 			} else if (state.mode === 'yearly') {
 				let auxStartDate = `${state.year}-01-01`
 				let auxEndDate = `${state.year}-12-31`

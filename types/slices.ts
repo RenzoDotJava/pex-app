@@ -13,6 +13,7 @@ type DeleteListProps = {
 
 type ExpenseState = DeleteListProps & {
 	expenses: ExpenseProps[];
+	expensesMonthly: {title: string; data: ExpenseProps[]}[];
 	startDate: string;
 	endDate: string;
 	date: string;

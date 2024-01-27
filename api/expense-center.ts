@@ -26,7 +26,7 @@ const addExpenseCenter = async ({name}: GeneralReq) => {
 	const {data: expenseCenters, error: selectError} = await supabase
 		.from('expense_center')
 		.select('id, name')
-		.eq('name', name)
+		.eq('name', name.trim())
 		.eq('active', true);
 
 	if (selectError) throw new Error(selectError.message); //TODO: parse error
@@ -36,7 +36,7 @@ const addExpenseCenter = async ({name}: GeneralReq) => {
 
 	const {data: expenseCenter, error} = await supabase
 		.from('expense_center')
-		.insert([{name, user_id: userData.user.id}])
+		.insert([{name: name.trim(), user_id: userData.user.id}])
 		.select('id, name');
 
 	if (error) throw new Error(error.message);
@@ -51,7 +51,7 @@ const updateExpenseCenter = async ({id, name}: GeneralReq) => {
 
 	const {data: expenseCenter, error} = await supabase
 		.from('expense_center')
-		.update({name})
+		.update({name: name.trim()})
 		.eq('id', id)
 		.select('id, name');
 

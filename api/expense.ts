@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { supabase } from '../supabase';
-import { BetweenDatesQueryProps, MutationProps, QueryProps } from '../types/api';
+import { MutationProps, QueryProps } from '../types/api';
 import { ExpenseFormInputs } from '../types/components';
 
 const getExpenses = async (startDate?: string, endDate?: string) => {
@@ -11,12 +11,12 @@ const getExpenses = async (startDate?: string, endDate?: string) => {
 	const { data: expenses, error } = await supabase
 		.from('expense')
 		.select(
-			'id, amount, date, expense_center (id, name), category (id, name), payment_method (id, name), place (id, name)'
+			'id, amount, date, remark, expense_center (id, name), category (id, name), payment_method (id, name), place (id, name)'
 		)
 		.gte('date', startDate)
 		.lte('date', endDate)
 		.eq('active', true)
-		.order('created_at', { ascending: true });
+		.order('date', { ascending: true });
 
 	if (error) throw new Error(error.message); //TODO: parse error
 
@@ -31,12 +31,12 @@ const getExpensesBetweenDates = async ({ startDate, endDate }: { startDate: stri
 	const { data: expenses, error } = await supabase
 		.from('expense')
 		.select(
-			'id, amount, date, expense_center (id, name), category (id, name), payment_method (id, name), place (id, name)'
+			'id, amount, date, remark, expense_center (id, name), category (id, name), payment_method (id, name), place (id, name)'
 		)
 		.gte('date', startDate)
 		.lte('date', endDate)
 		.eq('active', true)
-		.order('created_at', { ascending: true });
+		.order('date', { ascending: true });
 
 	if (error) throw new Error(error.message); //TODO: parse error
 
@@ -49,7 +49,8 @@ const addExpense = async ({
 	expenseCenterId,
 	paymentMethodId,
 	placeId,
-	date
+	date,
+	remark
 }: ExpenseFormInputs) => {
 	const { data: userData } = await supabase.auth.getUser();
 
@@ -65,11 +66,12 @@ const addExpense = async ({
 				expense_center_id: expenseCenterId,
 				payment_method_id: paymentMethodId,
 				place_id: placeId,
-				user_id: userData.user.id
+				user_id: userData.user.id,
+				remark: remark.trim()
 			}
 		])
 		.select(
-			'id, amount, date, expense_center (id, name), category (id, name), payment_method (id, name), place (id, name)'
+			'id, amount, date, remark, expense_center (id, name), category (id, name), payment_method (id, name), place (id, name)'
 		);
 
 	if (error) throw new Error(error.message);
@@ -84,7 +86,8 @@ const updateExpense = async ({
 	expenseCenterId,
 	paymentMethodId,
 	placeId,
-	date
+	date,
+	remark
 }: ExpenseFormInputs) => {
 	const { data: userData } = await supabase.auth.getUser();
 
@@ -98,11 +101,12 @@ const updateExpense = async ({
 			category_id: categoryId,
 			expense_center_id: expenseCenterId,
 			payment_method_id: paymentMethodId,
-			place_id: placeId
+			place_id: placeId,
+			remark: remark.trim()
 		})
 		.eq('id', id)
 		.select(
-			'id, amount, date, expense_center (id, name), category (id, name), payment_method (id, name), place (id, name)'
+			'id, amount, date, remark, expense_center (id, name), category (id, name), payment_method (id, name), place (id, name)'
 		);
 
 	if (error) throw new Error(error.message);
@@ -138,7 +142,7 @@ export const useGetExpenses = ({
 		queryFn: () => getExpenses(startDate, endDate),
 		onSuccess,
 		onError,
-		select
+		select,
 	});
 
 	return getExpensesQuery;

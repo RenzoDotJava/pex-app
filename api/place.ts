@@ -26,7 +26,7 @@ const addPlace = async ({name}: GeneralReq) => {
 	const {data: places, error: selectError} = await supabase
 		.from('place')
 		.select('id, name')
-		.eq('name', name)
+		.eq('name', name.trim())
 		.eq('active', true);
 
 	if (selectError) throw new Error(selectError.message); //TODO: parse error
@@ -36,7 +36,7 @@ const addPlace = async ({name}: GeneralReq) => {
 
 	const {data: place, error} = await supabase
 		.from('place')
-		.insert([{name, user_id: userData.user.id}])
+		.insert([{name: name.trim(), user_id: userData.user.id}])
 		.select('id, name');
 
 	if (error) throw new Error(error.message);
@@ -51,7 +51,7 @@ const updatePlace = async ({id, name}: GeneralReq) => {
 
 	const {data: place, error} = await supabase
 		.from('place')
-		.update({name})
+		.update({name: name.trim()})
 		.eq('id', id)
 		.select('id, name');
 

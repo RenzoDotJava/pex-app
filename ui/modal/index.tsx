@@ -36,7 +36,7 @@ const Modal: React.FC<ModalProps> = ({
 									<View style={styles.header}>
 										<Text style={styles.title}>{title}</Text>
 										<TouchableOpacity onPress={onRequestClose}>
-											<Ionicons name="close-circle" size={26} color="black" />
+											<Ionicons name="close-circle" size={26} color={theme.color.neutral.dark} />
 										</TouchableOpacity>
 									</View>
 									<View style={styles.content}>{children}</View>
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
 	modal: {
 		width: windowWidth - 32,
 		height: (1.2 * windowHeight) / 2,
-		backgroundColor: 'white',
+		backgroundColor: theme.color.neutral.lightest,
 		borderRadius: 16,
 		padding: 16,
 		position: 'absolute',
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		flex: 1,
-		fontSize: theme.fontSize['xl'],
+		fontSize: theme.fontSize.xl,
 		fontWeight: '500'
 	},
 	content: {

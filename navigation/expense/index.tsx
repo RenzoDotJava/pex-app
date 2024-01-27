@@ -22,10 +22,10 @@ const Stack = createNativeStackNavigator<ExpenseParamList>();
 
 const stackOptions: NativeStackNavigationOptions = {
 	headerStyle: {
-		backgroundColor: theme.color.primary
+		backgroundColor: theme.color.primary.medium
 	},
 	headerTitleStyle: {
-		color: theme.color.secondary
+		color: theme.color.neutral.lightest
 	},
 	headerTitleAlign: 'center',
 	headerShadowVisible: false
@@ -58,7 +58,7 @@ const ExpenseNavigator: React.FC = () => {
 				component={ExpensesScreen}
 				options={({ navigation }) => ({
 					headerStyle: {
-						backgroundColor: !selectMode ? theme.color.primary : 'gray'
+						backgroundColor: !selectMode ? theme.color.primary.medium : theme.color.primary.darkest
 					},
 					headerTitle: () => <Text style={styles.headerTitle}>{t("expense.header")}</Text>,
 					headerLeft: () => (
@@ -72,7 +72,7 @@ const ExpenseNavigator: React.FC = () => {
 								<Ionicons
 									name={!selectMode ? 'menu' : 'close'}
 									size={26}
-									color={theme.color.secondary}
+									color={theme.color.neutral.lightest}
 								/>
 							}
 						/>
@@ -100,13 +100,13 @@ const ExpenseNavigator: React.FC = () => {
 									<Ionicons
 										name="md-options-outline"
 										size={26}
-										color={theme.color.secondary}
+										color={theme.color.neutral.lightest}
 									/>
 								) : (
 									<MaterialIcons
 										name="delete"
 										size={26}
-										color={theme.color.secondary}
+										color={theme.color.neutral.lightest}
 									/>
 								)
 							}
@@ -127,7 +127,7 @@ const ExpenseNavigator: React.FC = () => {
 					headerLeft: () => (
 						<IconButton
 							onPress={navigation.goBack}
-							icon={<AntDesign name="arrowleft" size={24} color="white" />}
+							icon={<AntDesign name="arrowleft" size={24} color={theme.color.neutral.lightest} />}
 						/>
 					),
 					animation: 'slide_from_right',
@@ -145,7 +145,7 @@ const ExpenseNavigator: React.FC = () => {
 					headerLeft: () => (
 						<IconButton
 							onPress={navigation.goBack}
-							icon={<AntDesign name="arrowleft" size={24} color="white" />}
+							icon={<AntDesign name="arrowleft" size={24} color={theme.color.neutral.lightest} />}
 						/>
 					),
 					animation: 'slide_from_right',
@@ -170,7 +170,7 @@ export default ExpenseNavigator;
 
 const styles = StyleSheet.create({
 	headerTitle: {
-		color: theme.color.secondary,
+		color: theme.color.neutral.lightest,
 		fontSize: theme.fontSize.xl,
 		fontWeight: '500'
 	},

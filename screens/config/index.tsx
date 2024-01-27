@@ -87,27 +87,27 @@ export default ConfigScreen;
 
 const styles = StyleSheet.create({
 	section: {
-		backgroundColor: 'gray',
+		backgroundColor: theme.color.primary.dark,
 		height: 45,
 		display: 'flex',
 		justifyContent: 'center',
 		paddingHorizontal: 10
 	},
 	section_title: {
-		fontSize: theme.fontSize.sm,
-		color: theme.color.secondary
+		fontSize: theme.fontSize.md,
+		color: theme.color.neutral.lightest,
+		fontWeight: 'bold'
 	},
 	subsection: {
-		//height: 60,
 		display: 'flex',
 		justifyContent: 'center',
 		borderBottomWidth: 1,
-		borderColor: 'gray',
+		borderColor: theme.color.neutral.medium,
 		paddingVertical: 15,
 		paddingHorizontal: 10,
-		backgroundColor: theme.color.secondary
+		backgroundColor: theme.color.neutral.lightest
 	},
 	subsection_title: {
-		fontSize: theme.fontSize.md
+		fontSize: theme.fontSize.md,
 	}
 });

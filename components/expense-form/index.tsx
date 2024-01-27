@@ -41,6 +41,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
 			paymentMethodId: expense?.payment_method.id,
 			expenseCenterId: expense?.expense_center.id,
 			placeId: expense?.place.id,
+			remark: expense?.remark
 		}
 	});
 	const { categories } = useAppSelector(
@@ -85,8 +86,8 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
 		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
 			{isLoadingCategories || isLoadingExpenseCenters || isLoadingPaymentMethods || isLoadingPlaces ?
 				<View style={styles.loading}>
-					<ActivityIndicator color={'black'} size={60} />
-					<Text style={{ color: 'black', marginTop: 10, fontSize: 18 }}>
+					<ActivityIndicator color={theme.color.primary.dark} size={60} />
+					<Text style={{ color: theme.color.neutral.dark, marginTop: 10, fontSize: theme.fontSize.lg }}>
 						Cargando
 					</Text>
 				</View> :
@@ -161,6 +162,20 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
 							}}
 						/>
 					</View>
+					<View style={styles.form_group}>
+						<Text>{t("forms.remark")}</Text>
+						<FormInput
+							control={control}
+							name="remark"
+							variant="standard"
+							keyboardType="default"
+							rules={{
+								required: t("validation.required"),
+								validate: (value: string) =>
+									value.length < 300 || t("validation.max-length")
+							}}
+						/>
+					</View>
 					<View style={{ marginTop: 15 }}>
 						<Button
 							text={t("options.save")}
@@ -187,7 +202,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		paddingHorizontal: 24,
 		paddingVertical: 20,
-		backgroundColor: theme.color.secondary
+		backgroundColor: theme.color.neutral.lightest
 	},
 	form_group: {
 		marginBottom: 20
@@ -198,7 +213,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		flexDirection: 'row',
-		borderColor: theme.color.primary
+		borderColor: theme.color.primary.medium
 	},
 	outlined: {
 		borderWidth: 1,
@@ -220,7 +235,7 @@ const styles = StyleSheet.create({
 	},
 	modalView: {
 		margin: 20,
-		backgroundColor: 'white',
+		backgroundColor: theme.color.neutral.lightest,
 		borderRadius: 20,
 		padding: 35,
 		alignItems: 'center',
@@ -245,7 +260,7 @@ const styles = StyleSheet.create({
 		backgroundColor: '#2196F3',
 	},
 	textStyle: {
-		color: 'white',
+		color: theme.color.neutral.lightest,
 		fontWeight: 'bold',
 		textAlign: 'center',
 	},

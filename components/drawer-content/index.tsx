@@ -50,11 +50,11 @@ const styles = StyleSheet.create({
 		paddingTop: 20,
 		paddingLeft: 20,
 		paddingBottom: Platform.OS === 'android' ? 20 : 40,
-		backgroundColor: theme.color.primary
+		backgroundColor: theme.color.primary.dark
 	},
 	footerLabel: {
 		fontSize: theme.fontSize.lg,
-		color: theme.color.secondary,
+		color: theme.color.neutral.lightest,
 		fontWeight: '500'
 	}
 });

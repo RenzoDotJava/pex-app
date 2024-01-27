@@ -26,7 +26,7 @@ const addCategory = async ({name}: GeneralReq) => {
 	const {data: categories, error: selectError} = await supabase
 		.from('category')
 		.select('id, name')
-		.eq('name', name)
+		.eq('name', name.trim())
 		.eq('active', true);
 
 	if (selectError) throw new Error(selectError.message); //TODO: parse error
@@ -36,7 +36,7 @@ const addCategory = async ({name}: GeneralReq) => {
 
 	const {data: category, error} = await supabase
 		.from('category')
-		.insert([{name, user_id: userData.user.id}])
+		.insert([{name: name.trim(), user_id: userData.user.id}])
 		.select('id, name');
 
 	if (error) throw new Error(error.message);
@@ -51,7 +51,7 @@ const updateCategory = async ({id, name}: GeneralReq) => {
 
 	const {data: category, error} = await supabase
 		.from('category')
-		.update({name})
+		.update({name: name.trim()})
 		.eq('id', id)
 		.select('id, name');
 

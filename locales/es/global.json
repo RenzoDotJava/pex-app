@@ -37,13 +37,16 @@
 		"expense-center": "Centros de gasto",
 		"category": "Categoría",
 		"payment-method": "Método de pago",
-		"place": "Lugar"
+		"place": "Lugar",
+		"remark": "Observaciones"
 	},
 	"validation": {
 		"required": "Campo obligatorio",
 		"email": "Email inválido",
 		"create-password": "La contraseña debe tener al menos 6 caracteres",
-		"equal-passoword": "Las contraseñas deben ser iguales"
+		"equal-passoword": "Las contraseñas deben ser iguales",
+		"min-num": "El valor debe ser mayor o igual a 0",
+		"max-length": "El valor debe tener un máximo de 300 caracteres"
 	},
 	"expense": {
 		"header": "Gastos",

@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
 		marginTop: 15,
 		fontSize: theme.fontSize.md,
 		fontWeight: '500',
-		lineHeight: 28
+		lineHeight: 28,
+		color: theme.color.neutral.dark
 	}
 });

@@ -7,28 +7,29 @@ import {
 	TouchableOpacity,
 	StyleSheet,
 	Platform,
-	StatusBar
+	StatusBar,
+	Image
 } from 'react-native';
-import {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {SubmitHandler, useForm} from 'react-hook-form';
-import {useTranslation} from 'react-i18next';
-import {Button, FormInput} from '../../ui';
-import {theme} from '../../styles';
-import {useSignUpMutation} from '../../api/auth';
-import {showAlert} from '../../utils';
-import type {RootStackParamList} from '../../types/navigation';
-import type {SignUpFormInputs} from '../../types/components';
+import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { Button, FormInput } from '../../ui';
+import { theme } from '../../styles';
+import { useSignUpMutation } from '../../api/auth';
+import { showAlert } from '../../utils';
+import type { RootStackParamList } from '../../types/navigation';
+import type { SignUpFormInputs } from '../../types/components';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignUp'>;
 
 const SignUpScreen: React.FC = () => {
-	const {t} = useTranslation("global");
+	const { t } = useTranslation("global");
 	const [error, setError] = useState('');
 	const navigation = useNavigation<NavigationProp>();
-	const {control, handleSubmit, watch} = useForm<SignUpFormInputs>();
-	const {mutate, isLoading} = useSignUpMutation({
+	const { control, handleSubmit, watch } = useForm<SignUpFormInputs>();
+	const { mutate, isLoading } = useSignUpMutation({
 		onSuccess: () => {
 			showAlert('Info', t("signup.success"), [
 				{
@@ -45,7 +46,7 @@ const SignUpScreen: React.FC = () => {
 
 	const onSubmit: SubmitHandler<SignUpFormInputs> = async (data) => {
 		Keyboard.dismiss();
-		mutate({email: data.email, password: data.password});
+		mutate({ email: data.email, password: data.password });
 	};
 
 	return (
@@ -54,11 +55,14 @@ const SignUpScreen: React.FC = () => {
 				<View
 					style={{
 						marginTop:
-							Platform.OS === 'android' ? StatusBar.currentHeight! + 100 : 110
+							Platform.OS === 'android' ? StatusBar.currentHeight! + 100 : 130
 					}}
 				>
-					<Text style={styles.title}>Pex</Text>
-					<View style={{marginHorizontal: 48, rowGap: 20, marginTop: 15}}>
+					<Image
+						source={require('../../assets/pex-high-resolution-logo-transparent.png')}
+						style={{ width: 200, height: 100, alignSelf: 'center' }}
+					/>
+					<View style={{ marginHorizontal: 48, rowGap: 20, marginTop: 40 }}>
 						<View>
 							<Text style={styles.label}>{t("signup.email")}</Text>
 							<FormInput
@@ -111,7 +115,7 @@ const SignUpScreen: React.FC = () => {
 							/>
 						</View>
 					</View>
-					<View style={{marginHorizontal: 48, marginTop: 30}}>
+					<View style={{ marginHorizontal: 48, marginTop: 30 }}>
 						<Button
 							text={t("signup.create")}
 							onPress={handleSubmit(onSubmit)}
@@ -132,7 +136,7 @@ const SignUpScreen: React.FC = () => {
 						backgroundColor: '#ffe6e6'
 					}}
 				>
-					<Text style={{textAlign: 'center', color: '#fd3d3d', lineHeight: 22}}>
+					<Text style={{ textAlign: 'center', color: '#fd3d3d', lineHeight: 22 }}>
 						{error}
 					</Text>
 				</View>
@@ -147,9 +151,9 @@ const SignUpScreen: React.FC = () => {
 					flexDirection: 'row'
 				}}
 			>
-				<Text style={{fontSize: 16}}>{t("signup.already-account")} </Text>
+				<Text style={{ fontSize: theme.fontSize.md, color: theme.color.neutral.dark }}>{t("signup.already-account")} </Text>
 				<TouchableOpacity onPress={() => navigation.navigate('Login')}>
-					<Text style={{fontWeight: 'bold', fontSize: 16}}>{t("signup.login")}</Text>
+					<Text style={{ fontWeight: 'bold', fontSize: theme.fontSize.md, color: theme.color.neutral.dark }}>{t("signup.login")}</Text>
 				</TouchableOpacity>
 			</View>
 		</SafeAreaView>
@@ -164,6 +168,7 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		fontSize: theme.fontSize['6xl'],
+		color: theme.color.primary.dark,
 		textAlign: 'center',
 		fontWeight: 'bold',
 		marginBottom: 8
@@ -172,6 +177,7 @@ const styles = StyleSheet.create({
 		fontWeight: '500',
 		fontSize: theme.fontSize.md,
 		lineHeight: 24,
-		marginBottom: 4
+		marginBottom: 4,
+		color: theme.color.neutral.dark
 	}
 });

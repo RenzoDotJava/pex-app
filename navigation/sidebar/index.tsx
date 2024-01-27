@@ -14,7 +14,7 @@ const Drawer = createDrawerNavigator<SidebarDrawerParamList>();
 
 const drawerOptions: DrawerNavigationOptions = {
 	drawerStyle: {
-		backgroundColor: '#fff'
+		backgroundColor: theme.color.neutral.lightest
 	},
 	drawerItemStyle: {
 		borderRadius: 0,
@@ -22,10 +22,9 @@ const drawerOptions: DrawerNavigationOptions = {
 		marginLeft: 0,
 		paddingLeft: 8
 	},
-	drawerActiveBackgroundColor: theme.color.primary,
-	//drawerInactiveBackgroundColor: 'red',
-	drawerActiveTintColor: theme.color.secondary,
-	drawerInactiveTintColor: theme.color.primary,
+	drawerActiveBackgroundColor: theme.color.primary.dark,
+	drawerActiveTintColor: theme.color.neutral.lightest,
+	drawerInactiveTintColor: theme.color.primary.dark,
 	headerShown: false
 };
 
@@ -68,7 +67,7 @@ export default Sidebar;
 
 const styles = StyleSheet.create({
 	headerTitle: {
-		color: theme.color.secondary,
+		color: theme.color.neutral.lightest,
 		fontSize: theme.fontSize.xl,
 		fontWeight: '500'
 	},

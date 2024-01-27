@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   modal: {
     width: windowWidth - 32,
     height: 'auto',
-    backgroundColor: 'white',
+    backgroundColor: theme.color.neutral.lightest,
     borderRadius: 16,
     padding: 16,
     position: 'absolute',
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   },
   title: {
     flex: 1,
-    fontSize: theme.fontSize['xl'],
+    fontSize: theme.fontSize.xl,
     fontWeight: '500'
   },
 });

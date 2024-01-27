@@ -26,7 +26,7 @@ const addPaymentMethod = async ({name}: GeneralReq) => {
 	const {data: paymentMethods, error: selectError} = await supabase
 		.from('payment_method')
 		.select('id, name')
-		.eq('name', name)
+		.eq('name', name.trim())
 		.eq('active', true);
 
 	if (selectError) throw new Error(selectError.message); //TODO: parse error
@@ -35,7 +35,7 @@ const addPaymentMethod = async ({name}: GeneralReq) => {
 
 	const {data: paymentMethod, error} = await supabase
 		.from('payment_method')
-		.insert([{name, user_id: userData.user.id}])
+		.insert([{name: name.trim(), user_id: userData.user.id}])
 		.select('id, name');
 
 	if (error) throw new Error(error.message);
@@ -50,7 +50,7 @@ const updatePaymentMethod = async ({id, name}: GeneralReq) => {
 
 	const {data: paymentMethod, error} = await supabase
 		.from('payment_method')
-		.update({name})
+		.update({name: name.trim()})
 		.eq('id', id)
 		.select('id, name');
 
