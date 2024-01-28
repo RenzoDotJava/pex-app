@@ -19,7 +19,7 @@ const ExpenseRow: React.FC<ExpenseRowProps> = ({
 	onLongPress
 }) => (
 	<TouchableOpacity
-		style={[styles.container]}
+		style={[styles.container, {backgroundColor}]}
 		activeOpacity={0.5}
 		onPress={onPress}
 		onLongPress={onLongPress}

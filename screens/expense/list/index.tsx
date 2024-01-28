@@ -29,7 +29,7 @@ type NavigationProp = DrawerNavigationProp<
 const ExpensesScreen: React.FC = () => {
 	const { t } = useTranslation('global');
 	const dispatch = useAppDispatch();
-	const { selectMode, deleteList, expenses, expensesMonthly, startDate, endDate, mode } = useAppSelector(
+	const { selectMode, deleteList, expenses, expensesMonthly, startDate, endDate, mode, majorExpenseFilter } = useAppSelector(
 		(state) => state.expense
 	);
 	const totalByDate = useAppSelector((state) =>
@@ -41,6 +41,7 @@ const ExpensesScreen: React.FC = () => {
 	const { isLoading, refetch } = useGetExpenses({
 		startDate,
 		endDate,
+		onlyMajor: majorExpenseFilter,
 		onSuccess: (data) => {
 			dispatch(setExpenses(data));
 		}
@@ -66,7 +67,8 @@ const ExpensesScreen: React.FC = () => {
 					payment_method={item.payment_method}
 					amount={item.amount}
 					remark={item.remark}
-					backgroundColor={'transparent'}
+					major={item.major}
+					backgroundColor={item.major ? theme.color.secondary.light : 'transparent'}
 					onList={onList}
 					selectMode={selectMode}
 					onPress={() =>
@@ -151,7 +153,7 @@ const ExpensesScreen: React.FC = () => {
 					keyExtractor={(item) => item.id.toString()}
 					renderItem={({ item }) => renderItem(item)}
 					renderSectionHeader={({ section: { title } }) => (
-						<View style={{ backgroundColor: theme.color.neutral.medium, paddingHorizontal: 16, paddingVertical: 8 }}>
+						<View style={{ backgroundColor: '#ADADAD', paddingHorizontal: 16, paddingVertical: 8 }}>
 							<Text style={{ fontWeight: 'bold', fontSize: theme.fontSize.md, color: theme.color.neutral.lightest }}>{moment(getDate(title)).format('DD/MM/YYYY')}</Text>
 						</View>
 					)}

@@ -38,7 +38,8 @@
 		"category": "Categoría",
 		"payment-method": "Método de pago",
 		"place": "Lugar",
-		"remark": "Observaciones"
+		"remark": "Observaciones",
+		"major": "Gasto mayor"
 	},
 	"validation": {
 		"required": "Campo obligatorio",
@@ -46,7 +47,7 @@
 		"create-password": "La contraseña debe tener al menos 6 caracteres",
 		"equal-passoword": "Las contraseñas deben ser iguales",
 		"min-num": "El valor debe ser mayor o igual a 0",
-		"max-length": "El valor debe tener un máximo de 300 caracteres"
+		"max-length": "El valor debe tener un máximo de 200 caracteres"
 	},
 	"expense": {
 		"header": "Gastos",

@@ -5,11 +5,12 @@ import {
 	TouchableWithoutFeedback,
 	Keyboard,
 	ActivityIndicator,
+	ScrollView,
+	Platform
 } from 'react-native';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import moment from 'moment-timezone';
-import { FormInput, Button, FormDateTimePicker, FormSelect } from '../../ui';
+import { FormInput, Button, FormDateTimePicker, FormSelect, Switch, FormSwitch } from '../../ui';
 import { theme } from '../../styles';
 import { useGetExpenseCenters } from '../../api/expense-center';
 import { useGetCategories } from '../../api/category';
@@ -41,7 +42,8 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
 			paymentMethodId: expense?.payment_method.id,
 			expenseCenterId: expense?.expense_center.id,
 			placeId: expense?.place.id,
-			remark: expense?.remark
+			remark: expense?.remark || '',
+			major: expense?.major || false
 		}
 	});
 	const { categories } = useAppSelector(
@@ -170,13 +172,19 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
 							variant="standard"
 							keyboardType="default"
 							rules={{
-								required: t("validation.required"),
 								validate: (value: string) =>
-									value.length < 300 || t("validation.max-length")
+									value.length < 200 || t("validation.max-length")
 							}}
 						/>
 					</View>
-					<View style={{ marginTop: 15 }}>
+					<View style={[styles.form_group, { display: 'flex', flexDirection: 'row', alignItems: 'center', gap: Platform.OS === "ios" ? 15 : 10 }]}>
+						<FormSwitch
+							control={control}
+							name="major"
+						/>
+						<Text>{t("forms.major")}</Text>
+					</View>
+					<View>
 						<Button
 							text={t("options.save")}
 							onPress={handleSubmit(onSubmit)}
@@ -196,7 +204,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 		display: 'flex',
 		justifyContent: 'center',
-		alignItems: 'center'
+		alignItems: 'center',
+		paddingTop: 20
 	},
 	container: {
 		flex: 1,

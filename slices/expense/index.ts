@@ -39,6 +39,27 @@ const addExpenseMonthly = (expense: ExpenseProps, expensesByDateArray: { title: 
 	}
 }
 
+const replaceExpense = (updatedExpense: ExpenseProps, expensesByDateArray: { title: string, data: ExpenseProps[] }[]) => {
+	const index = expensesByDateArray.findIndex(entry => entry.data.some(expense => expense.id === updatedExpense.id));
+	if (index !== -1) {
+		const expenseIndex = expensesByDateArray[index].data.findIndex(expense => expense.id === updatedExpense.id);
+		const currentDate = expensesByDateArray[index].title;
+		if (expenseIndex !== -1) {
+			if (currentDate === updatedExpense.date) {
+				expensesByDateArray[index].data[expenseIndex] = updatedExpense;
+			} else {
+				// Remove expense from current date's array
+				expensesByDateArray[index].data.splice(expenseIndex, 1);
+				if (expensesByDateArray[index].data.length === 0) {
+					expensesByDateArray.splice(index, 1);
+				}
+				// Add or create new date's array
+				addExpenseMonthly(updatedExpense, expensesByDateArray)
+			}
+		}
+	}
+}
+
 const initialState: ExpenseState = {
 	selectMode: false,
 	deleteList: [],
@@ -50,7 +71,8 @@ const initialState: ExpenseState = {
 	year: new Date().getFullYear(),
 	mode: 'daily',
 	startDate: getCurrentDateToString(),
-	endDate: getCurrentDateToString()
+	endDate: getCurrentDateToString(),
+	majorExpenseFilter: false
 };
 
 export const expenseSlice = createSlice({
@@ -92,10 +114,12 @@ export const expenseSlice = createSlice({
 		updateExpense: (state, action: PayloadAction<ExpenseProps>) => {
 			let isOnDate = state.mode === 'daily' && state.date === action.payload.date || state.mode === 'monthly' && moment(getDate(action.payload.date)).month() + 1 === state.month && moment(getDate(action.payload.date)).year() === state.yearMonth || state.mode === 'yearly' && moment(getDate(action.payload.date)).year() === state.year
 			//TODO: Update for monthly
-			if (isOnDate)
+			if (isOnDate) {
 				state.expenses = state.expenses.map((expense) =>
 					expense.id === action.payload.id ? action.payload : expense
 				);
+				if (state.mode === 'monthly') replaceExpense(action.payload, state.expensesMonthly)
+			}
 			else
 				state.expenses = state.expenses.filter(
 					(expense) => expense.id !== action.payload.id
@@ -168,6 +192,16 @@ export const expenseSlice = createSlice({
 		},
 		setMode: (state, action: PayloadAction<'daily' | 'monthly' | 'yearly'>) => {
 			state.mode = action.payload;
+
+			//set start date and end date
+			if (state.mode === 'monthly') {
+				let daysInMonth = moment(state.yearMonth + "-" + state.month, "YYYY-MM").daysInMonth()
+				let auxStartDate = `${state.yearMonth}-${padNumber(state.month, 2)}-01`
+				let auxEndDate = `${state.yearMonth}-${padNumber(state.month, 2)}-${daysInMonth}`
+
+				state.startDate = moment(getDate(auxStartDate)).format('YYYY-MM-DD');
+				state.endDate = moment(getDate(auxEndDate)).format('YYYY-MM-DD');
+			} //TODO: missing yearly condition
 		},
 		setMonth: (state, action: PayloadAction<number>) => {
 			state.month = action.payload;
@@ -180,6 +214,9 @@ export const expenseSlice = createSlice({
 		},
 		setDate: (state, action: PayloadAction<string>) => {
 			state.date = action.payload;
+		},
+		setMajorExpenseFilter: (state, action: PayloadAction<boolean>) => {
+			state.majorExpenseFilter = action.payload;
 		}
 	}
 });
@@ -198,7 +235,8 @@ export const {
 	setMonth,
 	setYear,
 	setDate,
-	setYearMonth
+	setYearMonth,
+	setMajorExpenseFilter
 } = expenseSlice.actions;
 
 export const getTotalDeleteListAmount = (state: RootState): number =>

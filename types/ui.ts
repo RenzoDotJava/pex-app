@@ -84,6 +84,11 @@ type EmptyListProps = {
 	onPress?: () => void;
 };
 
+type SwitchProps = {
+	value?: boolean;
+	onChange?: (value: boolean) => void;
+}
+
 export {
 	InputProps,
 	IconButtonProps,
@@ -96,5 +101,6 @@ export {
 	ItemListProps,
 	FormControllerProps,
 	EmptyListProps,
-	CalendarProps
+	CalendarProps,
+	SwitchProps
 };

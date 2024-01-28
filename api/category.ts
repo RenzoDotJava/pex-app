@@ -11,7 +11,7 @@ const getCategories = async () => {
 		.from('category')
 		.select('id, name')
 		.eq('active', true)
-		.order('created_at', {ascending: true});
+		.order('name', {ascending: true});
 
 	if (error) throw new Error(error.message); //TODO: parse error
 

@@ -16,6 +16,7 @@ type MutationProps<T> = {
 type QueryProps = {
 	startDate?: string;
 	endDate?: string;
+	onlyMajor?: boolean;
 	onSuccess?: (data: any) => void;
 	onError?: (error: any) => void;
 	select?: (data: any) => void;

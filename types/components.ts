@@ -22,6 +22,7 @@ type ExpenseFormInputs = {
 	amount: number;
 	date: string;
 	remark: string;
+	major: boolean;
 	id?: number;
 };
 
@@ -32,6 +33,7 @@ type ExpenseProps = {
 	payment_method: PaymentMethodProps;
 	amount: number;
 	remark: string;
+	major: boolean;
 	date: string;
 	id: number;
 };

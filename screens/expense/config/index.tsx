@@ -4,11 +4,11 @@ import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment-timezone';
-import { Button, IconButton, Input, Select } from '../../../ui'
+import { Button, IconButton, Input, Select, Switch } from '../../../ui'
 import { SidebarDrawerParamList } from '../../../types/navigation';
 import { theme } from '../../../styles';
 import { useAppDispatch, useAppSelector } from '../../../store';
-import { setMode, setMonth, setYear, setDate, setYearMonth, setExpenses } from '../../../slices/expense';
+import { setMode, setMonth, setYear, setDate, setYearMonth, setExpenses, setMajorExpenseFilter } from '../../../slices/expense';
 import { useTranslation } from 'react-i18next';
 import * as XLSX from 'xlsx';
 import * as FileSystem from 'expo-file-system';
@@ -29,12 +29,13 @@ const selectorOptions: { value: 'daily' | 'monthly' | 'yearly' }[] = [
 
 const ConfigExpenseScreen = () => {
   const navigation = useNavigation<NavigationProp>();
-  const { mode, month, year, date, yearMonth } = useAppSelector((state) => state.expense);
+  const { mode, month, year, date, yearMonth, majorExpenseFilter } = useAppSelector((state) => state.expense);
   const [selectedMode, setSelectedMode] = useState(mode)
   const [selectedDate, setSelectedDate] = useState(date)
   const [selectedMonth, setSelectedMonth] = useState(month)
   const [selectedYearMonth, setSelectedYearMonth] = useState(yearMonth)
   const [selectedYear, setSelectedYear] = useState(year)
+  const [majorFilter, setMajorFilter] = useState(majorExpenseFilter)
   const dispatch = useAppDispatch();
 
   const { t, i18n } = useTranslation('global');
@@ -60,6 +61,7 @@ const ConfigExpenseScreen = () => {
         dispatch(setYearMonth(selectedYearMonth))
       }
       else dispatch(setYear(selectedYear))
+      dispatch(setMajorExpenseFilter(majorFilter))
       dispatch(setMode(selectedMode))
       dispatch(setExpenses(data))
       navigation.goBack()
@@ -74,7 +76,7 @@ const ConfigExpenseScreen = () => {
     const year = type === "year" ? input : splitDate[0]
     const month = type === "month" ? input : splitDate[1]
     let daysInMonth = moment(year + "-" + month, "YYYY-MM").daysInMonth()
-    
+
     if (type === "year") {
       if (input.length > 4) return
       else if (input.length === 0) setSelectedDate(`-${splitDate[1]}-${splitDate[2]}`)
@@ -125,14 +127,14 @@ const ConfigExpenseScreen = () => {
 
   const getExpensesList = (action: "confirm" | "generate" = "confirm") => {
     if (selectedMode === 'daily') {
-      action === "generate" ? mutate({ startDate: selectedDate, endDate: selectedDate }) : onConfirm({ startDate: selectedDate, endDate: selectedDate })
+      action === "generate" ? mutate({ startDate: selectedDate, endDate: selectedDate, onlyMajor: majorFilter }) : onConfirm({ startDate: selectedDate, endDate: selectedDate, onlyMajor: majorFilter })
     }
     else if (selectedMode === 'monthly') {
       let daysInMonth = moment(selectedYearMonth + "-" + selectedMonth, "YYYY-MM").daysInMonth()
-      action === "generate" ? mutate({ startDate: `${selectedYearMonth}-${selectedMonth}-01`, endDate: `${selectedYearMonth}-${selectedMonth}-${daysInMonth.toString()}` }) : onConfirm({ startDate: `${selectedYearMonth}-${selectedMonth}-01`, endDate: `${selectedYearMonth}-${selectedMonth}-${daysInMonth.toString()}` })
+      action === "generate" ? mutate({ startDate: `${selectedYearMonth}-${selectedMonth}-01`, endDate: `${selectedYearMonth}-${selectedMonth}-${daysInMonth.toString()}`, onlyMajor: majorFilter }) : onConfirm({ startDate: `${selectedYearMonth}-${selectedMonth}-01`, endDate: `${selectedYearMonth}-${selectedMonth}-${daysInMonth.toString()}`, onlyMajor: majorFilter })
     }
     else if (selectedMode === 'yearly') {
-      action === "generate" ? mutate({ startDate: `${selectedYear}-01-01`, endDate: `${selectedYear}-12-31` }) : onConfirm({ startDate: `${selectedYear}-01-01`, endDate: `${selectedYear}-12-31` })
+      action === "generate" ? mutate({ startDate: `${selectedYear}-01-01`, endDate: `${selectedYear}-12-31`, onlyMajor: majorFilter }) : onConfirm({ startDate: `${selectedYear}-01-01`, endDate: `${selectedYear}-12-31`, onlyMajor: majorFilter })
     }
   }
 
@@ -234,6 +236,15 @@ const ConfigExpenseScreen = () => {
                   <Input keyboardType="numeric" onChangeText={onChangeYear} value={selectedYear.toString()} />
                 </View>
               }
+              <View style={{ gap: Platform.OS === 'android' ? 5 : 20 }}>
+                <View style={styles.option_nav}>
+                  <Text style={{ fontSize: theme.fontSize.md, fontWeight: 'bold', color: theme.color.neutral.dark }}>Filtros</Text>
+                </View>
+                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 15, gap: Platform.OS === 'android' ? 10 : 15 }}>
+                  <Switch value={majorFilter} onChange={setMajorFilter} />
+                  <Text>Solo gastos mayores</Text>
+                </View>
+              </View>
             </View>
             <View style={{ display: 'flex', flexDirection: 'row', marginTop: 20, gap: 10, paddingHorizontal: 20, paddingBottom: 50 }}>
               <Button text={t("options.cancel")} variant='outlined' flexible onPress={() => navigation.goBack()} />
@@ -289,10 +300,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: theme.color.neutral.light,
     backgroundColor: '#EDEDED',
-    borderRadius: 12,
-    paddingHorizontal: 10,
+    /* borderRadius: 12, */
+    paddingHorizontal: 15,
     paddingVertical: 8,
-    marginHorizontal: 20,
+    /* marginHorizontal: 20, */
     marginTop: 20,
     marginBottom: 5,
     display: 'flex',
@@ -306,7 +317,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 20,
     paddingVertical: 10,
-    paddingHorizontal: 30
+    paddingHorizontal: 20
   },
   option: {
     borderRadius: 12,

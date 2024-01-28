@@ -1,30 +1,12 @@
-import DateNavigator from './date-navigator';
-import Badge from './badge';
-import Button from './button';
-import IconButton from './icon-button';
-import Input, {FormInput} from './input';
-import DateTimePicker, {FormDateTimePicker} from './datetime-picker';
-import Select, {FormSelect} from './select';
-import Modal from './modal';
-import ItemList from './item-list';
-import EmptyList from './empty-list';
-import RangeDateSelector from './range-date-selector';
-import Calendar from './calendar';
-
-export {
-	DateNavigator,
-	Badge,
-	Button,
-	IconButton,
-	Input,
-	DateTimePicker,
-	Select,
-	Modal,
-	ItemList,
-	FormInput,
-	EmptyList,
-	FormSelect,
-	FormDateTimePicker,
-	/* RangeDateSelector, */
-	Calendar
-};
+export { default as DateNavigator } from './date-navigator';
+export { default as Badge } from './badge';
+export { default as Button } from './button';
+export { default as IconButton } from './icon-button';
+export { default as Input, FormInput } from './input';
+export { default as DateTimePicker, FormDateTimePicker } from './datetime-picker';
+export { default as Select, FormSelect } from './select';
+export { default as Modal } from './modal';
+export { default as ItemList } from './item-list';
+export { default as EmptyList } from './empty-list';
+export { default as Calendar } from './calendar';
+export { default as Switch, FormSwitch } from './switch';

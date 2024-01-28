@@ -20,7 +20,6 @@ import { theme } from '../../styles';
 import { useSignInMutation } from '../../api/auth';
 import { setIsAuthenticated } from '../../slices/navigation';
 import { useAppDispatch } from '../../store';
-/* import logo from '../../assets/pex-high-resolution-logo-transparent.png'; */
 import type { RootStackParamList } from '../../types/navigation';
 import type { SignInFormInputs } from '../../types/components';
 
@@ -49,6 +48,7 @@ const LoginScreen: React.FC = () => {
 	};
 
 	return (
+
 		<SafeAreaView style={styles.container}>
 			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 				<View
@@ -135,6 +135,7 @@ const LoginScreen: React.FC = () => {
 				</TouchableOpacity>
 			</View>
 		</SafeAreaView>
+
 	);
 };
 
