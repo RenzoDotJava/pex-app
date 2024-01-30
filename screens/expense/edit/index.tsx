@@ -1,11 +1,13 @@
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
-import {DrawerNavigationProp} from '@react-navigation/drawer';
-import {ExpenseForm} from '../../../components';
-import {useAppDispatch} from '../../../store';
-import {useUpdateExpense} from '../../../api/expense';
-import {updateExpense} from '../../../slices/expense';
-import type {ExpenseParamList, SidebarDrawerParamList} from '../../../types/navigation';
-import type {ExpenseFormInputs} from '../../../types/components';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { ExpenseForm } from '../../../components';
+import { useAppDispatch } from '../../../store';
+import { useUpdateExpense } from '../../../api/expense';
+import { updateExpense } from '../../../slices/expense';
+import type { ExpenseParamList, SidebarDrawerParamList } from '../../../types/navigation';
+import type { ExpenseFormInputs } from '../../../types/components';
+import { ScrollView } from 'react-native';
+import { theme } from '../../../styles';
 
 type EditExpenseScreenRouteProp = RouteProp<ExpenseParamList, 'EditExpense'>;
 
@@ -16,10 +18,10 @@ const EditExpenseScreen: React.FC = () => {
 	const route = useRoute<EditExpenseScreenRouteProp>();
 	const expense = route.params;
 	const dispatch = useAppDispatch();
-	const {mutate, isLoading} = useUpdateExpense({
+	const { mutate, isLoading } = useUpdateExpense({
 		onSuccess: (data) => {
 			if (data) dispatch(updateExpense(data));
-			navigation.navigate('ExpenseNav', {screen: 'Expenses'});
+			navigation.navigate('ExpenseNav', { screen: 'Expenses' });
 		},
 		onError: (error) => {
 			console.log(error.message);

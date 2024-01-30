@@ -1,9 +1,10 @@
-import {memo} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import {Badge} from '../../ui';
-import {theme} from '../../styles';
-import {areEqual} from '../../utils';
-import type {ExpenseRowProps} from '../../types/components';
+import { memo } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+import { Badge } from '../../ui';
+import { theme } from '../../styles';
+import { areEqual } from '../../utils';
+import type { ExpenseRowProps } from '../../types/components';
 
 const ExpenseRow: React.FC<ExpenseRowProps> = ({
 	expense_center,
@@ -12,6 +13,8 @@ const ExpenseRow: React.FC<ExpenseRowProps> = ({
 	payment_method,
 	amount,
 	backgroundColor,
+	onList,
+	selectMode,
 	onPress,
 	onLongPress
 }) => (
@@ -22,6 +25,11 @@ const ExpenseRow: React.FC<ExpenseRowProps> = ({
 		onLongPress={onLongPress}
 		delayLongPress={400}
 	>
+		{selectMode && (<View style={{ justifyContent: 'center', marginRight: 12 }}>
+			<View style={styles.check}>
+				{onList && <AntDesign name="check" size={18} color={theme.color.primary.dark} />}
+			</View>
+		</View>)}
 		<View style={styles.container_left}>
 			<Text style={styles.expense_center}>{expense_center.name}</Text>
 			<Text style={styles.info}>
@@ -43,14 +51,14 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		paddingHorizontal: 16,
 		paddingVertical: 10,
-		borderBottomColor: 'gray',
+		borderBottomColor: theme.color.neutral.medium,
 		borderBottomWidth: 1
 	},
 	container_left: {
 		flex: 1,
 		display: 'flex',
 		justifyContent: 'center',
-		gap: 1
+		gap: 4
 	},
 	container_right: {
 		justifyContent: 'center',
@@ -59,13 +67,25 @@ const styles = StyleSheet.create({
 	},
 	expense_center: {
 		fontSize: theme.fontSize.lg,
-		fontWeight: '500'
+		fontWeight: '500',
+		color: theme.color.neutral.dark
 	},
 	info: {
-		fontSize: theme.fontSize.sm
+		fontSize: theme.fontSize.sm,
+		color: theme.color.neutral.dark
 	},
 	amount: {
 		fontSize: theme.fontSize['xl'],
-		fontWeight: '600'
+		fontWeight: '600',
+		color: theme.color.neutral.dark
+	},
+	check: {
+		width: 28,
+		height: 28,
+		borderRadius: 29 / 2,
+		borderWidth: 2,
+		borderColor: theme.color.primary.dark,
+		alignItems: 'center',
+		justifyContent: 'center',
 	}
 });

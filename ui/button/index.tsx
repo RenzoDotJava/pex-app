@@ -39,7 +39,7 @@ const Button: React.FC<ButtonProps> = ({
 					{text}
 				</Text>
 			) : (
-				<ActivityIndicator color={'white'} />
+				<ActivityIndicator color={theme.color.neutral.lightest} />
 			)}
 		</TouchableOpacity>
 	);
@@ -55,19 +55,19 @@ const styles = StyleSheet.create({
 	},
 	button_outlined: {
 		borderWidth: 1,
-		borderColor: theme.color.primary
+		borderColor: theme.color.primary.dark
 	},
 	button_standard: {
-		backgroundColor: theme.color.primary
+		backgroundColor: theme.color.primary.dark
 	},
 	text: {
 		textAlign: 'center',
 		fontSize: theme.fontSize.md
 	},
 	text_outlined: {
-		color: theme.color.primary
+		color: theme.color.primary.dark
 	},
 	text_standard: {
-		color: theme.color.secondary
+		color: theme.color.neutral.lightest
 	}
 });

@@ -1,6 +1,7 @@
 import {StyleSheet, Text, View, ActivityIndicator} from 'react-native';
 import {useAppSelector} from '../../store';
 import type {NavigatorWrapperProps} from '../../types/components';
+import { theme } from '../../styles';
 
 const NavigatorWrapper: React.FC<NavigatorWrapperProps> = ({
 	children,
@@ -12,8 +13,8 @@ const NavigatorWrapper: React.FC<NavigatorWrapperProps> = ({
 		<View style={{flex: 1, position: 'relative'}} onLayout={onLayout}>
 			{isLoading && (
 				<View style={styles.container}>
-					<ActivityIndicator color={'white'} size={60} />
-					<Text style={{color: 'white', marginTop: 10, fontSize: 18}}>
+					<ActivityIndicator color={theme.color.neutral.lightest} size={60} />
+					<Text style={{color: theme.color.neutral.lightest, marginTop: 10, fontSize: theme.fontSize.lg}}>
 						Cargando
 					</Text>
 				</View>

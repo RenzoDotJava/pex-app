@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		paddingHorizontal: 24,
 		paddingVertical: 20,
-		backgroundColor: theme.color.secondary
+		backgroundColor: theme.color.neutral.lightest
 	},
 	form_group: {
 		marginBottom: 20

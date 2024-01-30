@@ -15,8 +15,33 @@ export const theme = {
     "9xl": 128,
   },
   color: {
-    "primary": "black",
-    "secondary": "white",
-    "error": "red"
+    primary: {
+      darkest: "#25436E",
+      dark: "#325993",
+      medium: '#3E70B8',
+      light: '#658CC6',
+      lightest: '#8BA9D4',
+    },
+    secondary: {
+      darkest: "#907653",
+      dark: "#C09D6E",
+      medium: '#F0C48A',
+      light: '#F3D0A1',
+      lightest: '#F6DCB9',
+    },
+    error: {
+      darkest: "#801E22",
+      dark: "#AB292D",
+      medium: '#D63339',
+      light: '#DE5C60',
+      lightest: '#E68488',
+    },
+    neutral: {
+      darkest: "#000000",
+      dark: "#545454",
+      medium: '#CBCBCB',
+      light: '#EDEDED',
+      lightest: '#ffffff',
+    }
   }
 }

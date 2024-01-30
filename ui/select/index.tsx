@@ -61,12 +61,12 @@ const Select: React.FC<SelectProps> = ({
 				style={[
 					styles.select,
 					getVariantStyle(variant, styles),
-					{borderColor: !error ? theme.color.primary : theme.color.error}
+					{borderColor: !error ? theme.color.neutral.dark : theme.color.error.medium}
 				]}
 				onPress={toggler}
 			>
 				<Text style={styles.text}>{selected?.name}</Text>
-				<AntDesign name="down" size={20} color={theme.color.primary} />
+				<AntDesign name="down" size={20} color={theme.color.neutral.dark} />
 			</TouchableOpacity>
 			<Modal visible={isOpen} onRequestClose={toggler} title={title}>
 				<Input
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
 		fontWeight: '500'
 	},
 	text_error: {
-		color: theme.color.error,
+		color: theme.color.error.medium,
 		marginTop: 5
 	}
 });

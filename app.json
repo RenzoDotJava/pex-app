@@ -26,6 +26,10 @@
       },
       "softwareKeyboardLayoutMode": "pan"
     },
+    "androidStatusBar": {
+      "translucent": false,
+      "backgroundColor": "#CBCBCB"
+    },
     "web": {
       "favicon": "./assets/favicon.png"
     },

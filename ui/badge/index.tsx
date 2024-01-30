@@ -17,12 +17,13 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		borderWidth: 1,
 		borderRadius: 10,
-		backgroundColor: theme.color.primary,
+		backgroundColor: theme.color.primary.medium,
+		borderColor: theme.color.primary.medium,
 		paddingVertical: 2,
 		paddingHorizontal: 10
 	},
 	text: {
-		color: theme.color.secondary,
+		color: theme.color.neutral.lightest,
 		fontSize: theme.fontSize.sm
 	}
 });

@@ -1,42 +1,54 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { supabase } from '../supabase';
-import { BetweenDatesQueryProps, MutationProps, QueryProps } from '../types/api';
+import { MutationProps, QueryProps } from '../types/api';
 import { ExpenseFormInputs } from '../types/components';
 
-const getExpenses = async (startDate?: string, endDate?: string) => {
+const getExpenses = async (startDate?: string, endDate?: string, onlyMajor: boolean = false) => {
 	const { data } = await supabase.auth.getUser();
 
 	if (!data.user) throw new Error('Usuario no encontrado');
 
+	let majorArray = []; //TODO: change this way to filter major expense ASAP UWU
+
+	if (onlyMajor) majorArray = [true]
+	else majorArray = [true, false]
+
 	const { data: expenses, error } = await supabase
 		.from('expense')
 		.select(
-			'id, amount, date, expense_center (id, name), category (id, name), payment_method (id, name), place (id, name)'
+			'id, amount, date, remark, major, expense_center (id, name), category (id, name), payment_method (id, name), place (id, name)'
 		)
+		.in('major', majorArray)
 		.gte('date', startDate)
 		.lte('date', endDate)
 		.eq('active', true)
-		.order('created_at', { ascending: true });
+		.order('date', { ascending: true });
 
 	if (error) throw new Error(error.message); //TODO: parse error
 
 	return expenses;
 };
 
-const getExpensesBetweenDates = async ({ startDate, endDate }: { startDate: string, endDate: string }) => {
+const getExpensesBetweenDates = async ({ startDate, endDate, onlyMajor = false }: { startDate: string, endDate: string, onlyMajor: boolean }) => {
 	const { data } = await supabase.auth.getUser();
 
 	if (!data.user) throw new Error('Usuario no encontrado');
 
+	let majorArray = []; //TODO: change this way to filter major expense ASAP UWU
+
+	if (onlyMajor) majorArray = [true]
+	else majorArray = [true, false]
+
 	const { data: expenses, error } = await supabase
 		.from('expense')
 		.select(
-			'id, amount, date, expense_center (id, name), category (id, name), payment_method (id, name), place (id, name)'
+			'id, amount, date, remark, major, expense_center (id, name), category (id, name), payment_method (id, name), place (id, name)'
 		)
+		.in('major', majorArray)
 		.gte('date', startDate)
 		.lte('date', endDate)
 		.eq('active', true)
-		.order('created_at', { ascending: true });
+		.order('date', { ascending: true });
 
 	if (error) throw new Error(error.message); //TODO: parse error
 
@@ -49,7 +61,9 @@ const addExpense = async ({
 	expenseCenterId,
 	paymentMethodId,
 	placeId,
-	date
+	date,
+	remark,
+	major
 }: ExpenseFormInputs) => {
 	const { data: userData } = await supabase.auth.getUser();
 
@@ -65,11 +79,13 @@ const addExpense = async ({
 				expense_center_id: expenseCenterId,
 				payment_method_id: paymentMethodId,
 				place_id: placeId,
-				user_id: userData.user.id
+				user_id: userData.user.id,
+				remark: remark.trim(),
+				major
 			}
 		])
 		.select(
-			'id, amount, date, expense_center (id, name), category (id, name), payment_method (id, name), place (id, name)'
+			'id, amount, date, remark, major, expense_center (id, name), category (id, name), payment_method (id, name), place (id, name)'
 		);
 
 	if (error) throw new Error(error.message);
@@ -84,7 +100,9 @@ const updateExpense = async ({
 	expenseCenterId,
 	paymentMethodId,
 	placeId,
-	date
+	date,
+	remark,
+	major
 }: ExpenseFormInputs) => {
 	const { data: userData } = await supabase.auth.getUser();
 
@@ -95,14 +113,16 @@ const updateExpense = async ({
 		.update({
 			amount,
 			date,
+			major,
 			category_id: categoryId,
 			expense_center_id: expenseCenterId,
 			payment_method_id: paymentMethodId,
-			place_id: placeId
+			place_id: placeId,
+			remark: remark.trim()
 		})
 		.eq('id', id)
 		.select(
-			'id, amount, date, expense_center (id, name), category (id, name), payment_method (id, name), place (id, name)'
+			'id, amount, date, remark, major, expense_center (id, name), category (id, name), payment_method (id, name), place (id, name)'
 		);
 
 	if (error) throw new Error(error.message);
@@ -129,16 +149,17 @@ const deleteExpenses = async (deleteList: number[]) => {
 export const useGetExpenses = ({
 	startDate,
 	endDate,
+	onlyMajor,
 	onSuccess,
 	onError,
 	select
 }: QueryProps) => {
 	const getExpensesQuery = useQuery({
-		queryKey: ['expense', startDate, endDate],
-		queryFn: () => getExpenses(startDate, endDate),
+		queryKey: ['expense', startDate, endDate, onlyMajor],
+		queryFn: () => getExpenses(startDate, endDate, onlyMajor),
 		onSuccess,
 		onError,
-		select
+		select,
 	});
 
 	return getExpensesQuery;

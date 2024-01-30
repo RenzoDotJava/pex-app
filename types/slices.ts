@@ -13,6 +13,7 @@ type DeleteListProps = {
 
 type ExpenseState = DeleteListProps & {
 	expenses: ExpenseProps[];
+	expensesMonthly: {title: string; data: ExpenseProps[]}[];
 	startDate: string;
 	endDate: string;
 	date: string;
@@ -20,6 +21,7 @@ type ExpenseState = DeleteListProps & {
 	year: number;
 	yearMonth: number;
 	mode: 'daily' | 'monthly' | 'yearly';
+	majorExpenseFilter: boolean;
 };
 
 type ExpenseCenterState = DeleteListProps & {

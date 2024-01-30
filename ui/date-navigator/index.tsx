@@ -34,14 +34,14 @@ const DateNavigator: React.FC = () => {
 		<>
 			<View style={styles.container}>
 				<IconButton
-					icon={<AntDesign name="left" size={26} color={theme.color.secondary} onPress={() => dispatch(subtractDate())} />}
+					icon={<AntDesign name="left" size={26} color={theme.color.neutral.lightest} onPress={() => dispatch(subtractDate())} />}
 				/>
 				<TouchableOpacity style={{ flex: 1, alignItems: 'center', display: 'flex' }} /* onPress={toggler} */>
 					<Text style={styles.label}>{getDateText()}</Text>
 				</TouchableOpacity>
 				<IconButton
 					icon={
-						<AntDesign name="right" size={26} color={theme.color.secondary} onPress={() => dispatch(addDate())} />
+						<AntDesign name="right" size={26} color={theme.color.neutral.lightest} onPress={() => dispatch(addDate())} />
 					}
 				/>
 			</View>
@@ -54,7 +54,7 @@ export default DateNavigator;
 const styles = StyleSheet.create({
 	container: {
 		height: 45,
-		backgroundColor: theme.color.primary,
+		backgroundColor: theme.color.primary.medium,
 		display: 'flex',
 		flexDirection: 'row',
 		alignItems: 'center',
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 12
 	},
 	label: {
-		color: theme.color.secondary,
+		color: theme.color.neutral.lightest,
 		fontSize: theme.fontSize.md
 	}
 });

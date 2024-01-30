@@ -29,7 +29,7 @@ const Input: React.FC<InputProps> = ({
 			style={[
 				styles.input,
 				getVariantStyle(variant, styles),
-				{ borderColor: !error ? theme.color.primary : theme.color.error, flex: flexible ? 1 : 0 }
+				{ borderColor: !error ? theme.color.neutral.dark : theme.color.error.medium, flex: flexible ? 1 : 0 }
 			]}
 		>
 			<TextInput
@@ -43,10 +43,10 @@ const Input: React.FC<InputProps> = ({
 			{secureTextEntry && (
 				isOpen ?
 					<TouchableOpacity onPress={toggler}>
-						<Feather name="eye" color={theme.color.primary} size={24} />
+						<Feather name="eye" color={theme.color.neutral.dark} size={24} />
 					</TouchableOpacity>
 					: <TouchableOpacity onPress={toggler}>
-						<Feather name="eye-off" color={theme.color.primary} size={24} />
+						<Feather name="eye-off" color={theme.color.neutral.dark} size={24} />
 					</TouchableOpacity>)}
 		</View>
 	);
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
 		fontSize: theme.fontSize.md
 	},
 	text_error: {
-		color: theme.color.error,
+		color: theme.color.error.medium,
 		marginTop: 5
 	}
 });

@@ -57,10 +57,10 @@ export const padNumber = (number: number, size: number) => {
 
 export const getCurrentDateToString = () => moment(new Date()).format('YYYY-MM-DD')
 
-export const getDate = (date: string) => {
+export const getDate = (date: string | undefined) => {
 	//When you are getting the new Date(), is not necessary to add the offset
 	//When you are setting the date using new Date('YYYY-mm-dd'), you need to add the offset
-	const newDate = new Date(date);
+	const newDate = new Date(date!!);
 	newDate.setMinutes(newDate.getMinutes() + newDate.getTimezoneOffset())
 	return newDate;
 }

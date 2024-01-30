@@ -32,7 +32,7 @@ const DateTimePicker: React.FC<DateTimePickerProps> = ({
 				<Text style={styles.text}>
 					{moment(getDate(date)).format('DD/MM/YYYY')}
 				</Text>
-				<AntDesign name="calendar" size={20} color={theme.color.primary} />
+				<AntDesign name="calendar" size={20} color={theme.color.neutral.dark} />
 			</TouchableOpacity>
 			<Calendar isOpen={isOpen} onCancel={toggler} onConfirm={onConfirm} date={date} />
 		</>
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		flexDirection: 'row',
-		borderColor: theme.color.primary
+		borderColor: theme.color.neutral.dark
 	},
 	outlined: {
 		borderWidth: 1,

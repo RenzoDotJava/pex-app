@@ -16,10 +16,10 @@ const Stack = createNativeStackNavigator<ConfigParamList>();
 
 const stackOptions: NativeStackNavigationOptions = {
 	headerStyle: {
-		backgroundColor: theme.color.primary
+		backgroundColor: theme.color.primary.medium
 	},
 	headerTitleStyle: {
-		color: theme.color.secondary
+		color: theme.color.neutral.lightest
 	},
 	headerTitleAlign: 'center',
 	headerShadowVisible: false
@@ -35,7 +35,7 @@ const ConfigNavigator: React.FC = () => {
 				component={ConfigScreen}
 				options={({ navigation }) => ({
 					headerStyle: {
-						backgroundColor: theme.color.primary
+						backgroundColor: theme.color.primary.medium
 					},
 					headerTitle: () => (
 						<Text style={styles.headerTitle}>{t("config.header")}</Text>
@@ -47,7 +47,7 @@ const ConfigNavigator: React.FC = () => {
 								<Ionicons
 									name={'menu'}
 									size={26}
-									color={theme.color.secondary}
+									color={theme.color.neutral.lightest}
 								/>
 							}
 						/>
@@ -101,7 +101,7 @@ const ConfigNavigator: React.FC = () => {
 					headerLeft: () => (
 						<IconButton
 							onPress={navigation.goBack}
-							icon={<AntDesign name="arrowleft" size={24} color="white" />}
+							icon={<AntDesign name="arrowleft" size={24} color={theme.color.neutral.lightest} />}
 						/>
 					),
 					animation: 'slide_from_right',
@@ -117,7 +117,7 @@ const ConfigNavigator: React.FC = () => {
 					headerLeft: () => (
 						<IconButton
 							onPress={navigation.goBack}
-							icon={<AntDesign name="arrowleft" size={24} color="white" />}
+							icon={<AntDesign name="arrowleft" size={24} color={theme.color.neutral.lightest} />}
 						/>
 					),
 					animation: 'slide_from_right',
@@ -132,7 +132,7 @@ export default ConfigNavigator;
 
 const styles = StyleSheet.create({
 	headerTitle: {
-		color: theme.color.secondary,
+		color: theme.color.neutral.lightest,
 		fontSize: theme.fontSize.xl,
 		fontWeight: '500'
 	},

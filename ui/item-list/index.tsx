@@ -9,7 +9,7 @@ const ItemList: React.FC<ItemListProps> = ({name, onPress, isSelected}) => {
 	return (
 		<TouchableOpacity style={styles.item} onPress={onPress}>
 			<Text style={styles.text}>{name}</Text>
-			{isSelected && <AntDesign name="check" size={24} color="black" />}
+			{isSelected && <AntDesign name="check" size={24} color={theme.color.neutral.dark} />}
 		</TouchableOpacity>
 	)
 };
@@ -19,7 +19,8 @@ export default memo(ItemList, areEqual);
 const styles = StyleSheet.create({
 	text: {
 		flex: 1,
-		fontSize: theme.fontSize.md
+		fontSize: theme.fontSize.md,
+		color: theme.color.neutral.darkest
 	},
 	item: {
 		paddingVertical: 14,

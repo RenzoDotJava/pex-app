@@ -6,31 +6,32 @@ import {
 	Keyboard,
 	TouchableOpacity,
 	Platform,
-	StatusBar
+	StatusBar,
+	Image
 } from 'react-native';
-import {useState} from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {SubmitHandler, useForm} from 'react-hook-form';
-import {useTranslation} from 'react-i18next';
-import {Button, FormInput} from '../../ui';
-import {theme} from '../../styles';
-import {useSignInMutation} from '../../api/auth';
-import {setIsAuthenticated} from '../../slices/navigation';
-import {useAppDispatch} from '../../store';
-import type {RootStackParamList} from '../../types/navigation';
-import type {SignInFormInputs} from '../../types/components';
+import { useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { Button, FormInput } from '../../ui';
+import { theme } from '../../styles';
+import { useSignInMutation } from '../../api/auth';
+import { setIsAuthenticated } from '../../slices/navigation';
+import { useAppDispatch } from '../../store';
+import type { RootStackParamList } from '../../types/navigation';
+import type { SignInFormInputs } from '../../types/components';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 const LoginScreen: React.FC = () => {
-	const {t} = useTranslation("global");
+	const { t } = useTranslation("global");
 	const dispatch = useAppDispatch();
 	const [error, setError] = useState('');
 	const navigation = useNavigation<NavigationProp>();
 
-	const {mutate, isLoading} = useSignInMutation({
+	const { mutate, isLoading } = useSignInMutation({
 		onSuccess: () => {
 			dispatch(setIsAuthenticated(true));
 		},
@@ -39,24 +40,28 @@ const LoginScreen: React.FC = () => {
 		}
 	});
 
-	const {control, handleSubmit} = useForm<SignInFormInputs>();
+	const { control, handleSubmit } = useForm<SignInFormInputs>();
 
 	const onSubmit: SubmitHandler<SignInFormInputs> = async (data) => {
 		Keyboard.dismiss();
-		mutate({email: data.email, password: data.password});
+		mutate({ email: data.email, password: data.password });
 	};
 
 	return (
+
 		<SafeAreaView style={styles.container}>
 			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 				<View
 					style={{
 						marginTop:
-							Platform.OS === 'android' ? StatusBar.currentHeight! + 90 : 140
+							Platform.OS === 'android' ? StatusBar.currentHeight! + 100 : 130
 					}}
 				>
-					<Text style={styles.title}>Pex</Text>
-					<View style={{marginHorizontal: 48, rowGap: 20, marginTop: 20}}>
+					<Image
+						source={require('../../assets/pex-high-resolution-logo-transparent.png')}
+						style={{ width: 200, height: 100, alignSelf: 'center' }}
+					/>
+					<View style={{ marginHorizontal: 48, rowGap: 20, marginTop: 40 }}>
 						<View>
 							<Text style={styles.label}>{t("login.email")}</Text>
 							<FormInput
@@ -88,7 +93,7 @@ const LoginScreen: React.FC = () => {
 							/>
 						</View>
 					</View>
-					<View style={{marginHorizontal: 48, marginTop: 30}}>
+					<View style={{ marginHorizontal: 48, marginTop: 30 }}>
 						<Button
 							text={t("login.login")}
 							onPress={handleSubmit(onSubmit)}
@@ -109,7 +114,7 @@ const LoginScreen: React.FC = () => {
 						backgroundColor: '#ffe6e6'
 					}}
 				>
-					<Text style={{textAlign: 'center', color: '#fd3d3d', lineHeight: 22}}>
+					<Text style={{ textAlign: 'center', color: '#fd3d3d', lineHeight: 22 }}>
 						{error}
 					</Text>
 				</View>
@@ -124,12 +129,13 @@ const LoginScreen: React.FC = () => {
 					flexDirection: 'row'
 				}}
 			>
-				<Text style={{fontSize: 16}}>{t("login.no-account")} </Text>
+				<Text style={{ fontSize: theme.fontSize.md, color: theme.color.neutral.dark }}>{t("login.no-account")} </Text>
 				<TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-					<Text style={{fontWeight: 'bold', fontSize: 16}}>{t("login.signup")}</Text>
+					<Text style={{ fontWeight: 'bold', fontSize: theme.fontSize.md, color: theme.color.neutral.dark }}>{t("login.signup")}</Text>
 				</TouchableOpacity>
 			</View>
 		</SafeAreaView>
+
 	);
 };
 
@@ -138,10 +144,10 @@ export default LoginScreen;
 const styles = StyleSheet.create({
 	container: {
 		flex: 1
-		//paddingTop: 128
 	},
 	title: {
 		fontSize: theme.fontSize['6xl'],
+		color: theme.color.primary.dark,
 		textAlign: 'center',
 		fontWeight: 'bold',
 		marginBottom: 8
@@ -150,6 +156,7 @@ const styles = StyleSheet.create({
 		fontWeight: '500',
 		fontSize: theme.fontSize.md,
 		lineHeight: 24,
-		marginBottom: 4
+		marginBottom: 4,
+		color: theme.color.neutral.dark
 	}
 });

@@ -3,7 +3,9 @@ import { GeneralReq } from './api';
 //TODO: ver si trae id y name o luego hacer un nuevo request para traer los ids
 type RowProps = {
 	extraData?: Object;
-	backgroundColor: string;
+	backgroundColor?: string;
+	onList?: boolean;
+	selectMode?: boolean;
 	onPress?: () => void;
 	onLongPress?: () => void;
 };
@@ -19,6 +21,8 @@ type ExpenseFormInputs = {
 	paymentMethodId: number;
 	amount: number;
 	date: string;
+	remark: string;
+	major: boolean;
 	id?: number;
 };
 
@@ -28,7 +32,9 @@ type ExpenseProps = {
 	place: PlaceProps;
 	payment_method: PaymentMethodProps;
 	amount: number;
-	date?: string;
+	remark: string;
+	major: boolean;
+	date: string;
 	id: number;
 };
 
