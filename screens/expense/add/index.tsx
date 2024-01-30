@@ -22,11 +22,7 @@ const AddExpenseScreen: React.FC = () => {
 			console.log(error.message);
 		}
 	});
-	return (
-		<ScrollView style={{flex: 1, backgroundColor: theme.color.neutral.lightest}}>
-			<ExpenseForm action={mutate} isLoading={isLoading} />
-		</ScrollView>
-	)
+	return <ExpenseForm action={mutate} isLoading={isLoading} />
 };
 
 export default AddExpenseScreen;

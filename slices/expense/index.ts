@@ -106,24 +106,26 @@ export const expenseSlice = createSlice({
 		addExpense: (state, action: PayloadAction<ExpenseProps>) => {
 			let isOnDate = state.mode === 'daily' && state.date === action.payload.date || state.mode === 'monthly' && moment(getDate(action.payload.date)).month() + 1 === state.month && moment(getDate(action.payload.date)).year() === state.yearMonth || state.mode === 'yearly' && moment(getDate(action.payload.date)).year() === state.year
 
-			if (isOnDate) {
+			if (isOnDate && (!state.majorExpenseFilter || (state.majorExpenseFilter && action.payload.major))) {
 				state.expenses.push(action.payload);
 				if (state.mode === 'monthly') addExpenseMonthly(action.payload, state.expensesMonthly)
 			}
 		},
 		updateExpense: (state, action: PayloadAction<ExpenseProps>) => {
 			let isOnDate = state.mode === 'daily' && state.date === action.payload.date || state.mode === 'monthly' && moment(getDate(action.payload.date)).month() + 1 === state.month && moment(getDate(action.payload.date)).year() === state.yearMonth || state.mode === 'yearly' && moment(getDate(action.payload.date)).year() === state.year
-			//TODO: Update for monthly
-			if (isOnDate) {
+
+			if (isOnDate && (!state.majorExpenseFilter || (state.majorExpenseFilter && action.payload.major))) {
 				state.expenses = state.expenses.map((expense) =>
 					expense.id === action.payload.id ? action.payload : expense
 				);
 				if (state.mode === 'monthly') replaceExpense(action.payload, state.expensesMonthly)
 			}
-			else
+			else {
 				state.expenses = state.expenses.filter(
 					(expense) => expense.id !== action.payload.id
 				);
+				if (state.mode === "monthly") state.expensesMonthly = groupExpensesByDate(state.expenses)
+			}
 		},
 		deleteExpenses: (state) => {
 			state.expenses = state.expenses.filter(

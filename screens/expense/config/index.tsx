@@ -178,7 +178,7 @@ const ConfigExpenseScreen = () => {
       <>
         <View style={[styles.header, {
           marginTop:
-            Platform.OS === 'android' ? StatusBar.currentHeight! + 25 : 25,
+            Platform.OS === 'android' ? StatusBar.currentHeight! : 25,
           paddingHorizontal: 15
         }]}>
           <IconButton

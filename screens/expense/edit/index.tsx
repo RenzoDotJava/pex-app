@@ -32,11 +32,7 @@ const EditExpenseScreen: React.FC = () => {
 		mutate(data);
 	};
 
-	return (
-		<ScrollView style={{ flex: 1, backgroundColor: theme.color.neutral.lightest }}>
-			<ExpenseForm expense={expense} action={action} isLoading={isLoading} />
-		</ScrollView>
-	)
+	return <ExpenseForm expense={expense} action={action} isLoading={isLoading} />;
 };
 
 export default EditExpenseScreen;

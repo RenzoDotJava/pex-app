@@ -6,7 +6,8 @@ import {
 	Keyboard,
 	ActivityIndicator,
 	ScrollView,
-	Platform
+	Platform,
+	KeyboardAvoidingView
 } from 'react-native';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -85,7 +86,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
 	};
 
 	return (
-		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+		<>
 			{isLoadingCategories || isLoadingExpenseCenters || isLoadingPaymentMethods || isLoadingPlaces ?
 				<View style={styles.loading}>
 					<ActivityIndicator color={theme.color.primary.dark} size={60} />
@@ -93,107 +94,117 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
 						Cargando
 					</Text>
 				</View> :
-				<View style={styles.container}>
-					<View style={styles.form_group}>
-						<Text>{t("forms.date")}</Text>
-						<FormDateTimePicker control={control} name='date' variant='standard' />
-					</View>
-					<View style={styles.form_group}>
-						<Text>{t("forms.amount")}</Text>
-						<FormInput
-							control={control}
-							name="amount"
-							variant="standard"
-							keyboardType="numeric"
-							rules={{
-								required: t("validation.required"),
-								validate: (value: number) =>
-									value > 0 || t("validation.min-num")
-							}}
-						/>
-					</View>
-					<View style={styles.form_group}>
-						<Text>{t("forms.expense-center")}</Text>
-						<FormSelect
-							control={control}
-							name="expenseCenterId"
-							variant="standard"
-							title={t("forms.expense-center") as string}
-							items={expenseCenters}
-							rules={{
-								required: t("validation.required")
-							}}
-						/>
-					</View>
-					<View style={styles.form_group}>
-						<Text>{t("forms.category")}</Text>
-						<FormSelect
-							control={control}
-							name="categoryId"
-							variant="standard"
-							title={t("forms.category") as string}
-							items={categories}
-							rules={{
-								required: t("validation.required")
-							}}
-						/>
-					</View>
-					<View style={styles.form_group}>
-						<Text>{t("forms.payment-method")}</Text>
-						<FormSelect
-							control={control}
-							name="paymentMethodId"
-							variant="standard"
-							title={t("forms.payment-method") as string}
-							items={paymentMethods}
-							rules={{
-								required: t("validation.required")
-							}}
-						/>
-					</View>
-					<View style={styles.form_group}>
-						<Text>{t("forms.place")}</Text>
-						<FormSelect
-							control={control}
-							name="placeId"
-							variant="standard"
-							title={t("forms.place") as string}
-							items={places}
-							rules={{
-								required: t("validation.required")
-							}}
-						/>
-					</View>
-					<View style={styles.form_group}>
-						<Text>{t("forms.remark")}</Text>
-						<FormInput
-							control={control}
-							name="remark"
-							variant="standard"
-							keyboardType="default"
-							rules={{
-								validate: (value: string) =>
-									value.length < 200 || t("validation.max-length")
-							}}
-						/>
-					</View>
-					<View style={[styles.form_group, { display: 'flex', flexDirection: 'row', alignItems: 'center', gap: Platform.OS === "ios" ? 15 : 10 }]}>
-						<FormSwitch
-							control={control}
-							name="major"
-						/>
-						<Text>{t("forms.major")}</Text>
-					</View>
-					<View>
-						<Button
-							text={t("options.save")}
-							onPress={handleSubmit(onSubmit)}
-							disabled={!isValid}
-							loading={isLoading}
-						/>
-					</View>
-				</View>}
-		</TouchableWithoutFeedback>
+				<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+					<KeyboardAvoidingView style={{ flex: 1 }}
+						behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+					>
+						<ScrollView style={{ flex: 1, backgroundColor: theme.color.neutral.lightest }}>
+							<View style={styles.container}>
+								<View style={styles.form_group}>
+									<Text>{t("forms.date")}</Text>
+									<FormDateTimePicker control={control} name='date' variant='standard' />
+								</View>
+								<View style={styles.form_group}>
+									<Text>{t("forms.amount")}</Text>
+									<FormInput
+										control={control}
+										name="amount"
+										variant="standard"
+										keyboardType="numeric"
+										rules={{
+											required: t("validation.required"),
+											validate: (value: number) =>
+												value > 0 || t("validation.min-num")
+										}}
+									/>
+								</View>
+								<View style={styles.form_group}>
+									<Text>{t("forms.remark")}</Text>
+									<FormInput
+										control={control}
+										name="remark"
+										variant="standard"
+										keyboardType="default"
+										rules={{
+											validate: (value: string) =>
+												value.length < 200 || t("validation.max-length")
+										}}
+									/>
+								</View>
+								<View style={styles.form_group}>
+									<Text>{t("forms.expense-center")}</Text>
+									<FormSelect
+										control={control}
+										name="expenseCenterId"
+										variant="standard"
+										title={t("forms.expense-center") as string}
+										items={expenseCenters}
+										rules={{
+											required: t("validation.required")
+										}}
+									/>
+								</View>
+								<View style={styles.form_group}>
+									<Text>{t("forms.category")}</Text>
+									<FormSelect
+										control={control}
+										name="categoryId"
+										variant="standard"
+										title={t("forms.category") as string}
+										items={categories}
+										rules={{
+											required: t("validation.required")
+										}}
+									/>
+								</View>
+								<View style={styles.form_group}>
+									<Text>{t("forms.payment-method")}</Text>
+									<FormSelect
+										control={control}
+										name="paymentMethodId"
+										variant="standard"
+										title={t("forms.payment-method") as string}
+										items={paymentMethods}
+										rules={{
+											required: t("validation.required")
+										}}
+									/>
+								</View>
+								<View style={styles.form_group}>
+									<Text>{t("forms.place")}</Text>
+									<FormSelect
+										control={control}
+										name="placeId"
+										variant="standard"
+										title={t("forms.place") as string}
+										items={places}
+										rules={{
+											required: t("validation.required")
+										}}
+									/>
+								</View>
+								<View style={[styles.form_group, { display: 'flex', flexDirection: 'row', alignItems: 'center', gap: Platform.OS === "ios" ? 15 : 10 }]}>
+									<FormSwitch
+										control={control}
+										name="major"
+									/>
+									<Text>{t("forms.major")}</Text>
+								</View>
+								<View>
+									<Button
+										text={t("options.save")}
+										onPress={handleSubmit(onSubmit)}
+										disabled={!isValid}
+										loading={isLoading}
+									/>
+								</View>
+							</View>
+						</ScrollView>
+					</KeyboardAvoidingView>
+				</TouchableWithoutFeedback>
+
+			}
+		</>
 	);
 };
 
@@ -205,7 +216,7 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
-		paddingTop: 20
+		paddingTop: Platform.OS === 'android' ? 20 : 0
 	},
 	container: {
 		flex: 1,
