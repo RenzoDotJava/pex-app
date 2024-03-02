@@ -1,29 +1,29 @@
-import {useMutation, useQuery} from '@tanstack/react-query';
-import {supabase} from '../supabase';
-import type {MutationProps, QueryProps, GeneralReq} from '../types/api';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { supabase } from '../supabase';
+import type { MutationProps, QueryProps, GeneralReq } from '../types/api';
 
 const getExpenseCenters = async () => {
-	const {data} = await supabase.auth.getUser();
+	const { data } = await supabase.auth.getUser();
 
 	if (!data.user) throw new Error('Usuario no encontrado');
 
-	const {data: expenseCenters, error} = await supabase
+	const { data: expenseCenters, error } = await supabase
 		.from('expense_center')
 		.select('id, name')
 		.eq('active', true)
-		.order('name', {ascending: true});
+		.order('name', { ascending: true });
 
 	if (error) throw new Error(error.message); //TODO: parse error
 
 	return expenseCenters;
 };
 
-const addExpenseCenter = async ({name}: GeneralReq) => {
-	const {data: userData} = await supabase.auth.getUser();
+const addExpenseCenter = async ({ name }: GeneralReq) => {
+	const { data: userData } = await supabase.auth.getUser();
 
 	if (!userData.user) throw new Error('Usuario no encontrado');
 
-	const {data: expenseCenters, error: selectError} = await supabase
+	const { data: expenseCenters, error: selectError } = await supabase
 		.from('expense_center')
 		.select('id, name')
 		.eq('name', name.trim())
@@ -34,9 +34,9 @@ const addExpenseCenter = async ({name}: GeneralReq) => {
 	if (expenseCenters.length > 0)
 		throw new Error('El centro de gasto ya existe');
 
-	const {data: expenseCenter, error} = await supabase
+	const { data: expenseCenter, error } = await supabase
 		.from('expense_center')
-		.insert([{name: name.trim(), user_id: userData.user.id}])
+		.insert([{ name: name.trim(), user_id: userData.user.id }])
 		.select('id, name');
 
 	if (error) throw new Error(error.message);
@@ -44,14 +44,27 @@ const addExpenseCenter = async ({name}: GeneralReq) => {
 	return expenseCenter[0];
 };
 
-const updateExpenseCenter = async ({id, name}: GeneralReq) => {
-	const {data: userData} = await supabase.auth.getUser();
+const updateExpenseCenter = async ({ id, name }: GeneralReq) => {
+	const { data: userData } = await supabase.auth.getUser();
 
 	if (!userData.user) throw new Error('Usuario no encontrado');
 
-	const {data: expenseCenter, error} = await supabase
+	const { data: expenseCenters, error: selectError } = await supabase
 		.from('expense_center')
-		.update({name: name.trim()})
+		.select('id, name')
+		.eq('name', name.trim())
+		.eq('active', true);
+
+	if (selectError) throw new Error(selectError.message); //TODO: parse error
+
+	if (expenseCenters.length > 0 && expenseCenters[0].id !== id)
+		throw new Error('El centro de gasto ya existe');
+
+	if (expenseCenters[0].id === id) return expenseCenters[0];
+
+	const { data: expenseCenter, error } = await supabase
+		.from('expense_center')
+		.update({ name: name.trim() })
 		.eq('id', id)
 		.select('id, name');
 
@@ -61,13 +74,13 @@ const updateExpenseCenter = async ({id, name}: GeneralReq) => {
 };
 
 const deleteExpenseCenters = async (deleteList: number[]) => {
-	const {data: userData} = await supabase.auth.getUser();
+	const { data: userData } = await supabase.auth.getUser();
 
 	if (!userData.user) throw new Error('Usuario no encontrado');
 
-	const {data: expenseCenter, error} = await supabase
+	const { data: expenseCenter, error } = await supabase
 		.from('expense_center')
-		.update({active: false})
+		.update({ active: false })
 		.in('id', deleteList)
 		.select('id, name');
 

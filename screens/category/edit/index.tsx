@@ -1,11 +1,12 @@
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
-import {DrawerNavigationProp} from '@react-navigation/drawer';
-import {CategoryForm} from '../../../components';
-import {useAppDispatch} from '../../../store';
-import {useUpdateCategory} from '../../../api/category';
-import {updateCategory} from '../../../slices/category';
-import type {CategoryParamList, ConfigParamList} from '../../../types/navigation';
-import type {GeneralReq} from '../../../types/api';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { CategoryForm } from '../../../components';
+import { useAppDispatch } from '../../../store';
+import { useUpdateCategory } from '../../../api/category';
+import { updateCategory } from '../../../slices/category';
+import type { CategoryParamList, ConfigParamList } from '../../../types/navigation';
+import type { GeneralReq } from '../../../types/api';
+import { showToast } from '../../../utils';
 
 type EditCategoryScreenRouteProp = RouteProp<CategoryParamList, 'EditCategory'>;
 
@@ -16,13 +17,13 @@ const EditCategoryScreen: React.FC = () => {
 	const route = useRoute<EditCategoryScreenRouteProp>();
 	const category = route.params;
 	const dispatch = useAppDispatch();
-	const {mutate, isLoading} = useUpdateCategory({
+	const { mutate, isLoading } = useUpdateCategory({
 		onSuccess: (data) => {
 			if (data) dispatch(updateCategory(data));
-			navigation.navigate('CategoryNav', {screen: 'Category'});
+			navigation.navigate('CategoryNav', { screen: 'Category' });
 		},
 		onError: (error) => {
-			console.log(error.message);
+			showToast(error.message, 'long', 'error');
 		}
 	});
 
@@ -30,7 +31,7 @@ const EditCategoryScreen: React.FC = () => {
 		if (data.name !== category.name) {
 			mutate(data);
 		} else {
-			navigation.navigate('CategoryNav', {screen: 'Category'});
+			navigation.navigate('CategoryNav', { screen: 'Category' });
 		}
 	};
 

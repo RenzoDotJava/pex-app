@@ -1,5 +1,5 @@
-import {useState, useRef} from 'react';
-import {SelectItemProps} from '../types/ui';
+import { useState, useRef } from 'react';
+import { SelectItemProps } from '../types/ui';
 
 const useSearch = (initialList: SelectItemProps[]) => {
 	const [filteredItems, setFilteredItems] = useState(initialList);
@@ -14,11 +14,16 @@ const useSearch = (initialList: SelectItemProps[]) => {
 			});
 			setFilteredItems(filteredList);
 		}
-		
+
 		query.current = text;
 	};
 
-	return [query.current, handleSearch, filteredItems] as const;
+	const clear = () => {
+		setFilteredItems(initialList);
+		query.current = '';
+	}
+
+	return [query.current, handleSearch, filteredItems, clear] as const;
 };
 
 export default useSearch;

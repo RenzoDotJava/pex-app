@@ -1,40 +1,73 @@
-import { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, Keyboard, View } from 'react-native';
+import { useCallback, useRef, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, Platform } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Controller } from 'react-hook-form';
-import moment from 'moment-timezone'; //TODO: probar en producción quitando el timezone
-import { useToggle } from '../../hooks';
+import moment from 'moment-timezone';
+import { BottomSheetModal, BottomSheetScrollView, BottomSheetView, useBottomSheetModal } from '@gorhom/bottom-sheet';
+import { useTranslation } from 'react-i18next';
+import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { theme } from '../../styles';
+import BottomSheet from '../bottom-sheet';
 import { getDate, getVariantStyle, getCurrentDateToString } from '../../utils';
+import { calendarLocales } from '../../locales';
 import type { DateTimePickerProps, FormControllerProps } from '../../types/ui';
-import Calendar from '../calendar';
+
 //https://es.stackoverflow.com/questions/149033/javascript-me-devuelve-fecha-err%C3%B3nea
 const DateTimePicker: React.FC<DateTimePickerProps> = ({
 	variant = 'outlined',
 	value,
 	onChange
 }) => {
-	const [isOpen, toggler] = useToggle({ onClose: () => Keyboard.dismiss() });
+	const { dismiss } = useBottomSheetModal();
+	const { i18n } = useTranslation('global');
+	const ref = useRef<BottomSheetModal>(null);
 	const [date, setDate] = useState<string>(value ? value : getCurrentDateToString());
+
+	LocaleConfig.locales['en'] = calendarLocales['en'];
+	LocaleConfig.locales['es'] = calendarLocales['es'];
+
+	LocaleConfig.defaultLocale = i18n.language;
+
+	const handleSnapPress = useCallback(() => {
+		ref.current?.present();
+	}, []);
 
 	const onConfirm = (date: string) => {
 		setDate(date);
 		onChange && onChange(date);
-		toggler()
+		dismiss()
 	}
 
 	return (
 		<>
 			<TouchableOpacity
 				style={[styles.input, getVariantStyle(variant, styles)]}
-				onPress={toggler}
+				onPress={handleSnapPress}
 			>
 				<Text style={styles.text}>
 					{moment(getDate(date)).format('DD/MM/YYYY')}
 				</Text>
 				<AntDesign name="calendar" size={20} color={theme.color.neutral.dark} />
 			</TouchableOpacity>
-			<Calendar isOpen={isOpen} onCancel={toggler} onConfirm={onConfirm} date={date} />
+			<BottomSheet
+				ref={ref}
+				enableDynamicSizing
+				enablePanDownToClose
+			>
+				<BottomSheetScrollView>
+					<Calendar
+						onDayPress={day => { onConfirm(day.dateString) }}
+						markedDates={{
+							[value!!]: { selected: true, disableTouchEvent: true, selectedColor: theme.color.primary.medium }
+						}}
+						theme={{
+							arrowColor: theme.color.primary.medium,
+							todayTextColor: theme.color.primary.medium,
+						}}
+						style={{ paddingBottom: Platform.OS === 'ios' ? 45 : 20 }}
+					/>
+				</BottomSheetScrollView>
+			</BottomSheet>
 		</>
 	);
 };

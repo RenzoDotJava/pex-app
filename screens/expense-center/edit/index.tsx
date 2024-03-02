@@ -1,14 +1,15 @@
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
-import {DrawerNavigationProp} from '@react-navigation/drawer';
-import {ExpenseCenterForm} from '../../../components';
-import {useAppDispatch} from '../../../store';
-import {useUpdateExpenseCenter} from '../../../api/expense-center';
-import {updateExpenseCenter} from '../../../slices/expense-center';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+import { ExpenseCenterForm } from '../../../components';
+import { useAppDispatch } from '../../../store';
+import { useUpdateExpenseCenter } from '../../../api/expense-center';
+import { updateExpenseCenter } from '../../../slices/expense-center';
 import type {
 	ConfigParamList,
 	ExpenseCenterParamList
 } from '../../../types/navigation';
-import type {GeneralReq} from '../../../types/api';
+import type { GeneralReq } from '../../../types/api';
+import { showToast } from '../../../utils';
 
 type EditExpenseCenterScreenRouteProp = RouteProp<
 	ExpenseCenterParamList,
@@ -22,13 +23,13 @@ const EditExpenseCenterScreen: React.FC = () => {
 	const route = useRoute<EditExpenseCenterScreenRouteProp>();
 	const expenseCenter = route.params;
 	const dispatch = useAppDispatch();
-	const {mutate, isLoading} = useUpdateExpenseCenter({
+	const { mutate, isLoading } = useUpdateExpenseCenter({
 		onSuccess: (data) => {
 			if (data) dispatch(updateExpenseCenter(data));
-			navigation.navigate('ExpenseCenterNav', {screen: 'ExpenseCenter'});
+			navigation.navigate('ExpenseCenterNav', { screen: 'ExpenseCenter' });
 		},
 		onError: (error) => {
-			console.log(error.message);
+			showToast(error.message, 'long', 'error');
 		}
 	});
 
@@ -36,8 +37,7 @@ const EditExpenseCenterScreen: React.FC = () => {
 		if (data.name !== expenseCenter.name) {
 			mutate(data);
 		} else {
-			console.log("xd")
-			navigation.navigate('ExpenseCenterNav', {screen: 'ExpenseCenter'});
+			navigation.navigate('ExpenseCenterNav', { screen: 'ExpenseCenter' });
 		}
 	};
 

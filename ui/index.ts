@@ -10,3 +10,4 @@ export { default as ItemList } from './item-list';
 export { default as EmptyList } from './empty-list';
 export { default as Calendar } from './calendar';
 export { default as Switch, FormSwitch } from './switch';
+export { default as BottomSheet } from './bottom-sheet';

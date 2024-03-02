@@ -1,29 +1,29 @@
-import {useMutation, useQuery} from '@tanstack/react-query';
-import {supabase} from '../supabase';
-import type {MutationProps, QueryProps, GeneralReq} from '../types/api';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { supabase } from '../supabase';
+import type { MutationProps, QueryProps, GeneralReq } from '../types/api';
 
 const getCategories = async () => {
-	const {data} = await supabase.auth.getUser();
+	const { data } = await supabase.auth.getUser();
 
 	if (!data.user) throw new Error('Usuario no encontrado');
 
-	const {data: categories, error} = await supabase
+	const { data: categories, error } = await supabase
 		.from('category')
 		.select('id, name')
 		.eq('active', true)
-		.order('name', {ascending: true});
+		.order('name', { ascending: true });
 
 	if (error) throw new Error(error.message); //TODO: parse error
 
 	return categories;
 };
 
-const addCategory = async ({name}: GeneralReq) => {
-	const {data: userData} = await supabase.auth.getUser();
+const addCategory = async ({ name }: GeneralReq) => {
+	const { data: userData } = await supabase.auth.getUser();
 
 	if (!userData.user) throw new Error('Usuario no encontrado');
 
-	const {data: categories, error: selectError} = await supabase
+	const { data: categories, error: selectError } = await supabase
 		.from('category')
 		.select('id, name')
 		.eq('name', name.trim())
@@ -34,9 +34,9 @@ const addCategory = async ({name}: GeneralReq) => {
 	if (categories.length > 0)
 		throw new Error('La categoría ya existe');
 
-	const {data: category, error} = await supabase
+	const { data: category, error } = await supabase
 		.from('category')
-		.insert([{name: name.trim(), user_id: userData.user.id}])
+		.insert([{ name: name.trim(), user_id: userData.user.id }])
 		.select('id, name');
 
 	if (error) throw new Error(error.message);
@@ -44,14 +44,27 @@ const addCategory = async ({name}: GeneralReq) => {
 	return category[0];
 };
 
-const updateCategory = async ({id, name}: GeneralReq) => {
-	const {data: userData} = await supabase.auth.getUser();
+const updateCategory = async ({ id, name }: GeneralReq) => {
+	const { data: userData } = await supabase.auth.getUser();
 
 	if (!userData.user) throw new Error('Usuario no encontrado');
 
-	const {data: category, error} = await supabase
+	const { data: categories, error: selectError } = await supabase
 		.from('category')
-		.update({name: name.trim()})
+		.select('id, name')
+		.eq('name', name.trim())
+		.eq('active', true);
+
+	if (selectError) throw new Error(selectError.message); //TODO: parse error
+
+	if (categories.length > 0 && categories[0].id !== id)
+		throw new Error('La categoría ya existe');
+
+	if (categories[0].id === id) return categories[0];
+
+	const { data: category, error } = await supabase
+		.from('category')
+		.update({ name: name.trim() })
 		.eq('id', id)
 		.select('id, name');
 
@@ -61,13 +74,13 @@ const updateCategory = async ({id, name}: GeneralReq) => {
 };
 
 const deleteCategories = async (deleteList: number[]) => {
-	const {data: userData} = await supabase.auth.getUser();
+	const { data: userData } = await supabase.auth.getUser();
 
 	if (!userData.user) throw new Error('Usuario no encontrado');
 
-	const {data: categories, error} = await supabase
+	const { data: categories, error } = await supabase
 		.from('category')
-		.update({active: false})
+		.update({ active: false })
 		.in('id', deleteList)
 		.select('id, name');
 

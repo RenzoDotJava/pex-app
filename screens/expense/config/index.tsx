@@ -8,13 +8,14 @@ import { Button, IconButton, Input, Select, Switch } from '../../../ui'
 import { SidebarDrawerParamList } from '../../../types/navigation';
 import { theme } from '../../../styles';
 import { useAppDispatch, useAppSelector } from '../../../store';
-import { setMode, setMonth, setYear, setDate, setYearMonth, setExpenses, setMajorExpenseFilter } from '../../../slices/expense';
+import { setMode, setMonth, setYear, setDate, setYearMonth, setExpenses, setOnlyMajor } from '../../../slices/expense';
 import { useTranslation } from 'react-i18next';
 import * as XLSX from 'xlsx';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { useGetExpensesBetweenDates } from '../../../api/expense';
 import { getCurrentDateToString, getDate } from '../../../utils';
+import { ExpenseProps } from '../../../types/components';
 
 type NavigationProp = DrawerNavigationProp<
   SidebarDrawerParamList,
@@ -29,13 +30,13 @@ const selectorOptions: { value: 'daily' | 'monthly' | 'yearly' }[] = [
 
 const ConfigExpenseScreen = () => {
   const navigation = useNavigation<NavigationProp>();
-  const { mode, month, year, date, yearMonth, majorExpenseFilter } = useAppSelector((state) => state.expense);
+  const { mode, month, year, date, yearMonth, onlyMajor } = useAppSelector((state) => state.expense);
   const [selectedMode, setSelectedMode] = useState(mode)
   const [selectedDate, setSelectedDate] = useState(date)
   const [selectedMonth, setSelectedMonth] = useState(month)
   const [selectedYearMonth, setSelectedYearMonth] = useState(yearMonth)
   const [selectedYear, setSelectedYear] = useState(year)
-  const [majorFilter, setMajorFilter] = useState(majorExpenseFilter)
+  const [majorFilter, setMajorFilter] = useState(onlyMajor)
   const dispatch = useAppDispatch();
 
   const { t, i18n } = useTranslation('global');
@@ -45,7 +46,7 @@ const ConfigExpenseScreen = () => {
   const monthOptions = moment.months().map((month, index) => ({ name: month, id: index + 1 }))
 
   const { mutate, isLoading } = useGetExpensesBetweenDates({
-    onSuccess: (data) => {
+    onSuccess: (data: ExpenseProps[]) => {
       generateExcel(data)
     },
     onError: (error) => {
@@ -61,15 +62,18 @@ const ConfigExpenseScreen = () => {
         dispatch(setYearMonth(selectedYearMonth))
       }
       else dispatch(setYear(selectedYear))
-      dispatch(setMajorExpenseFilter(majorFilter))
+
+      dispatch(setOnlyMajor(majorFilter))
       dispatch(setMode(selectedMode))
       dispatch(setExpenses(data))
+
       navigation.goBack()
     },
     onError: (error) => {
       console.log(error.message);
     }
   });
+
 
   const onChangeDate = (input: string, type: "day" | "month" | "year") => {
     const splitDate = selectedDate.split('-')
@@ -150,17 +154,18 @@ const ConfigExpenseScreen = () => {
     }
   }
 
-  const generateExcel = (expenses: any[]) => {
+  const generateExcel = (expenses: ExpenseProps[]) => {
     let wb = XLSX.utils.book_new();
     let ws = XLSX.utils.aoa_to_sheet([
-      ["Fecha", "Centro de gasto", "Categoría", "Método de pago", "Lugar", "Monto"],
+      ["Fecha", "Centro de gasto", "Categoría", "Método de pago", "Lugar", "Monto", "Observación"],
       ...expenses.map((expense) => [
         moment(getDate(expense.date)).format('DD/MM/YYYY'),
         expense.expense_center.name,
         expense.category.name,
         expense.payment_method.name,
         expense.place.name,
-        expense.amount
+        expense.amount,
+        expense.remark
       ])
     ])
 
