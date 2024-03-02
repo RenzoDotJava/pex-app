@@ -12,6 +12,9 @@ import { getDate } from '../../utils';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
+/**
+ * @deprecated This components should not be used
+ */
 const Calendar: React.FC<CalendarProps> = ({ isOpen, onCancel, onConfirm, date }) => {
   const [selected, setSelected] = useState<string>(moment(getDate(date)).format('YYYY-MM-DD'));
   const { t, i18n } = useTranslation('global');
@@ -36,7 +39,10 @@ const Calendar: React.FC<CalendarProps> = ({ isOpen, onCancel, onConfirm, date }
                 <CalendarRN
                   onDayPress={day => { setSelected(day.dateString) }}
                   markedDates={{
-                    [selected]: { selected: true, disableTouchEvent: true }
+                    [selected]: { selected: true, disableTouchEvent: true, selectedColor: theme.color.primary.medium}
+                  }}
+                  theme={{
+                    arrowColor: theme.color.primary.medium,
                   }}
                 />
                 <View style={{ display: 'flex', flexDirection: 'row', marginTop: 20, flex: 1, gap: 10 }}>
@@ -66,7 +72,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 16,
     position: 'absolute',
-    top: windowHeight / 4,
+    top: windowHeight / 5,
     left: 16,
     flex: 1,
     marginVertical: 5

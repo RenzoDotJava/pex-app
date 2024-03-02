@@ -1,5 +1,6 @@
 import { StyleProp, ViewStyle, ModalProps as ModalRNProps } from 'react-native';
 import { Control } from 'react-hook-form/dist/types';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
 
 type FormControllerProps = {
 	control: Control<any>;
@@ -60,11 +61,11 @@ type DateTimePickerProps = VariantProps & {
 };
 
 type SelectProps = VariantProps & {
-	title?: string;
 	items: SelectItemProps[];
 	selected?: SelectItemProps;
 	error?: boolean;
 	onChange?: (name: number | string) => void;
+	onAdd?: (query?: string) => void;
 };
 
 type ModalProps = ModalRNProps & {
@@ -89,6 +90,15 @@ type SwitchProps = {
 	onChange?: (value: boolean) => void;
 }
 
+type BottomSheetProps = {
+	snapPoints?: string[];
+	enablePanDownToClose?: boolean;
+	enableDynamicSizing?: boolean;
+	children?: React.ReactNode;
+	onOpen?: () => void;
+	onClose?: () => void;
+}
+
 export {
 	InputProps,
 	IconButtonProps,
@@ -102,5 +112,6 @@ export {
 	FormControllerProps,
 	EmptyListProps,
 	CalendarProps,
-	SwitchProps
+	SwitchProps,
+	BottomSheetProps
 };

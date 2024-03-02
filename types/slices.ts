@@ -21,7 +21,7 @@ type ExpenseState = DeleteListProps & {
 	year: number;
 	yearMonth: number;
 	mode: 'daily' | 'monthly' | 'yearly';
-	majorExpenseFilter: boolean;
+	onlyMajor: boolean;
 };
 
 type ExpenseCenterState = DeleteListProps & {

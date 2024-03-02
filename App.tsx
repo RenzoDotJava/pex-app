@@ -1,14 +1,16 @@
-import 'intl-pluralrules';
 import 'react-native-gesture-handler';
-import {LogBox} from 'react-native';
-import {Provider} from 'react-redux';
+import 'intl-pluralrules';
+import { LogBox } from 'react-native';
+import { Provider } from 'react-redux';
 import * as SplashScreen from 'expo-splash-screen';
-import {QueryClientProvider, QueryClient} from '@tanstack/react-query';
-import {I18nextProvider} from 'react-i18next';
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { I18nextProvider } from 'react-i18next';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import i18next from 'i18next';
 import Navigator from './navigation';
-import {store} from './store';
-import {en, es} from './locales';
+import { store } from './store';
+import { en, es } from './locales';
 
 LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 LogBox.ignoreAllLogs();
@@ -19,7 +21,7 @@ const queryClient = new QueryClient();
 SplashScreen.preventAutoHideAsync();
 
 i18next.init({
-	interpolation: {escapeValue: false}, // React already does escaping
+	interpolation: { escapeValue: false }, // React already does escaping
 	lng: 'en',
 	resources: {
 		en: {
@@ -34,12 +36,16 @@ i18next.init({
 export default function App() {
 
 	return (
-		<I18nextProvider i18n={i18next}>
-			<QueryClientProvider client={queryClient}>
-				<Provider store={store}>
-					<Navigator />
-				</Provider>
-			</QueryClientProvider>
-		</I18nextProvider>
+		<GestureHandlerRootView style={{ flex: 1 }}>
+			<I18nextProvider i18n={i18next}>
+				<BottomSheetModalProvider>
+					<QueryClientProvider client={queryClient}>
+						<Provider store={store}>
+							<Navigator />
+						</Provider>
+					</QueryClientProvider>
+				</BottomSheetModalProvider>
+			</I18nextProvider>
+		</GestureHandlerRootView>
 	);
 }

@@ -11,29 +11,32 @@ import {
 } from 'react-native';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { FormInput, Button, FormDateTimePicker, FormSelect, Switch, FormSwitch } from '../../ui';
+import { FormInput, Button, FormDateTimePicker, FormSelect, FormSwitch } from '../../ui';
 import { theme } from '../../styles';
-import { useGetExpenseCenters } from '../../api/expense-center';
-import { useGetCategories } from '../../api/category';
-import { useGetPaymentMethods } from '../../api/payment-method';
-import { useGetPlaces } from '../../api/place';
+import { useGetExpenseCenters, useAddExpenseCenter } from '../../api/expense-center';
+import { useAddCategory, useGetCategories } from '../../api/category';
+import { useAddPaymentMethod, useGetPaymentMethods } from '../../api/payment-method';
+import { useAddPlace, useGetPlaces } from '../../api/place';
 import { setCategories } from '../../slices/category';
 import { setPaymentMethods } from '../../slices/payment-method';
 import { setPlaces } from '../../slices/place';
 import { setExpenseCenters } from '../../slices/expense-center';
 import { useAppDispatch, useAppSelector } from '../../store';
-import type { ExpenseFormInputs, ExpenseFormProps } from '../../types/components';
 import { getCurrentDateToString } from '../../utils';
+import type { ExpenseFormInputs, ExpenseFormProps } from '../../types/components';
+import { useBottomSheetModal } from '@gorhom/bottom-sheet';
 
 const ExpenseForm: React.FC<ExpenseFormProps> = ({
 	expense,
 	action,
 	isLoading = false
 }) => {
+	const { dismiss } = useBottomSheetModal();
 	const { t } = useTranslation('global');
 	const {
 		control,
 		handleSubmit,
+		setValue,
 		formState: { isValid }
 	} = useForm<ExpenseFormInputs>({
 		defaultValues: {
@@ -65,7 +68,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
 			dispatch(setCategories(data));
 		}
 	});
-	const { isLoading: isLoadingExpenseCenters } = useGetExpenseCenters({
+	const { isLoading: isLoadingExpenseCenters, refetch } = useGetExpenseCenters({
 		onSuccess: (data) => {
 			dispatch(setExpenseCenters(data));
 		}
@@ -84,6 +87,41 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
 	const onSubmit: SubmitHandler<ExpenseFormInputs> = (data) => {
 		action && action(data);
 	};
+
+	/* const onSuccessAdd = (key: "expenseCenterId" | "categoryId" | "placeId" | "paymentMethodId", id: number) => {
+		console.log(id)
+		setValue(key, id)
+		refetch()
+		dismiss()
+	}
+
+	const { mutate: mutateExpenseCenter, isLoading: isLoadingAddExpenseCenter } = useAddExpenseCenter({
+		onSuccess: (data) => onSuccessAdd('expenseCenterId', data.id),
+		onError: (error) => {
+			console.log(error.message);
+		}
+	});
+
+	const { mutate: mutateCategory, isLoading: isLoadingAddCategory } = useAddCategory({
+		onSuccess: (data) => onSuccessAdd('categoryId', data.id),
+		onError: (error) => {
+			console.log(error.message);
+		}
+	});
+
+	const { mutate: mutatePaymentMethod, isLoading: isLoadingPaymentMethod } = useAddPaymentMethod({
+		onSuccess: (data) => onSuccessAdd('paymentMethodId', data.id),
+		onError: (error) => {
+			console.log(error.message);
+		}
+	});
+
+	const { mutate: mutatePlace, isLoading: isLoadingAddPlace } = useAddPlace({
+		onSuccess: (data) => onSuccessAdd('placeId', data.id),
+		onError: (error) => {
+			console.log(error.message);
+		}
+	}); */
 
 	return (
 		<>
@@ -137,8 +175,9 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
 										control={control}
 										name="expenseCenterId"
 										variant="standard"
-										title={t("forms.expense-center") as string}
 										items={expenseCenters}
+										/* onAdd={(q) => mutateExpenseCenter({ name: q!! })}
+										addButtonIsDisabled={isLoadingAddExpenseCenter} */
 										rules={{
 											required: t("validation.required")
 										}}
@@ -150,8 +189,9 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
 										control={control}
 										name="categoryId"
 										variant="standard"
-										title={t("forms.category") as string}
 										items={categories}
+										/* onAdd={(q) => mutateCategory({ name: q!! })}
+										addButtonIsDisabled={isLoadingAddCategory} */
 										rules={{
 											required: t("validation.required")
 										}}
@@ -163,8 +203,9 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
 										control={control}
 										name="paymentMethodId"
 										variant="standard"
-										title={t("forms.payment-method") as string}
 										items={paymentMethods}
+										/* onAdd={(q) => mutatePaymentMethod({ name: q!! })}
+										addButtonIsDisabled={isLoadingPaymentMethod} */
 										rules={{
 											required: t("validation.required")
 										}}
@@ -176,8 +217,9 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
 										control={control}
 										name="placeId"
 										variant="standard"
-										title={t("forms.place") as string}
 										items={places}
+										/* onAdd={(q) => mutatePlace({ name: q!! })}
+										addButtonIsDisabled={isLoadingAddPlace} */
 										rules={{
 											required: t("validation.required")
 										}}
@@ -202,7 +244,6 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
 						</ScrollView>
 					</KeyboardAvoidingView>
 				</TouchableWithoutFeedback>
-
 			}
 		</>
 	);

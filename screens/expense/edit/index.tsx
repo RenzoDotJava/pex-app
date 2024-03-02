@@ -6,8 +6,6 @@ import { useUpdateExpense } from '../../../api/expense';
 import { updateExpense } from '../../../slices/expense';
 import type { ExpenseParamList, SidebarDrawerParamList } from '../../../types/navigation';
 import type { ExpenseFormInputs } from '../../../types/components';
-import { ScrollView } from 'react-native';
-import { theme } from '../../../styles';
 
 type EditExpenseScreenRouteProp = RouteProp<ExpenseParamList, 'EditExpense'>;
 

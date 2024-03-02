@@ -1,29 +1,29 @@
-import {useMutation, useQuery} from '@tanstack/react-query';
-import {supabase} from '../supabase';
-import type {MutationProps, QueryProps, GeneralReq} from '../types/api';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { supabase } from '../supabase';
+import type { MutationProps, QueryProps, GeneralReq } from '../types/api';
 
 const getPaymentMethods = async () => {
-	const {data} = await supabase.auth.getUser();
+	const { data } = await supabase.auth.getUser();
 
 	if (!data.user) throw new Error('Usuario no encontrado');
 
-	const {data: paymentMethods, error} = await supabase
+	const { data: paymentMethods, error } = await supabase
 		.from('payment_method')
 		.select('id, name')
 		.eq('active', true)
-		.order('name', {ascending: true});
+		.order('name', { ascending: true });
 
 	if (error) throw new Error(error.message); //TODO: parse error
 
 	return paymentMethods;
 };
 
-const addPaymentMethod = async ({name}: GeneralReq) => {
-	const {data: userData} = await supabase.auth.getUser();
+const addPaymentMethod = async ({ name }: GeneralReq) => {
+	const { data: userData } = await supabase.auth.getUser();
 
 	if (!userData.user) throw new Error('Usuario no encontrado');
 
-	const {data: paymentMethods, error: selectError} = await supabase
+	const { data: paymentMethods, error: selectError } = await supabase
 		.from('payment_method')
 		.select('id, name')
 		.eq('name', name.trim())
@@ -31,11 +31,11 @@ const addPaymentMethod = async ({name}: GeneralReq) => {
 
 	if (selectError) throw new Error(selectError.message); //TODO: parse error
 
-	if (paymentMethods.length > 0) throw new Error('El lugar ya existe');
+	if (paymentMethods.length > 0) throw new Error('El método de pago ya existe');
 
-	const {data: paymentMethod, error} = await supabase
+	const { data: paymentMethod, error } = await supabase
 		.from('payment_method')
-		.insert([{name: name.trim(), user_id: userData.user.id}])
+		.insert([{ name: name.trim(), user_id: userData.user.id }])
 		.select('id, name');
 
 	if (error) throw new Error(error.message);
@@ -43,14 +43,26 @@ const addPaymentMethod = async ({name}: GeneralReq) => {
 	return paymentMethod[0];
 };
 
-const updatePaymentMethod = async ({id, name}: GeneralReq) => {
-	const {data: userData} = await supabase.auth.getUser();
+const updatePaymentMethod = async ({ id, name }: GeneralReq) => {
+	const { data: userData } = await supabase.auth.getUser();
 
 	if (!userData.user) throw new Error('Usuario no encontrado');
 
-	const {data: paymentMethod, error} = await supabase
+	const { data: paymentMethods, error: selectError } = await supabase
 		.from('payment_method')
-		.update({name: name.trim()})
+		.select('id, name')
+		.eq('name', name.trim())
+		.eq('active', true);
+
+	if (selectError) throw new Error(selectError.message); //TODO: parse error
+
+	if (paymentMethods.length > 0 && paymentMethods[0].id !== id) throw new Error('El método de pago ya existe');
+
+	if (paymentMethods[0].id === id) return paymentMethods[0];
+
+	const { data: paymentMethod, error } = await supabase
+		.from('payment_method')
+		.update({ name: name.trim() })
 		.eq('id', id)
 		.select('id, name');
 
@@ -60,13 +72,13 @@ const updatePaymentMethod = async ({id, name}: GeneralReq) => {
 };
 
 const deletePaymentMethods = async (deleteList: number[]) => {
-	const {data: userData} = await supabase.auth.getUser();
+	const { data: userData } = await supabase.auth.getUser();
 
 	if (!userData.user) throw new Error('Usuario no encontrado');
 
-	const {data: paymentMethods, error} = await supabase
+	const { data: paymentMethods, error } = await supabase
 		.from('payment_method')
-		.update({active: false})
+		.update({ active: false })
 		.in('id', deleteList)
 		.select('id, name');
 

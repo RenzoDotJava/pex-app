@@ -1,43 +1,50 @@
-import {useCallback} from 'react';
+import { useCallback, useRef } from 'react';
 import {
-	Keyboard,
 	StyleSheet,
 	Text,
 	TouchableOpacity,
-	FlatList
+	Platform,
 } from 'react-native';
-import {AntDesign} from '@expo/vector-icons';
-import {Controller, FieldError} from 'react-hook-form';
-import {useTranslation} from 'react-i18next';
-import {useToggle, useSearch} from '../../hooks';
-import {getVariantStyle} from '../../utils';
-import {theme} from '../../styles';
-import Modal from '../modal';
-import Input from '../input';
+import { AntDesign, Entypo } from '@expo/vector-icons';
+import { Controller, FieldError } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useSearch } from '../../hooks';
+import { getVariantStyle } from '../../utils';
+import { theme } from '../../styles';
 import ItemList from '../item-list';
-import EmptyList from '../empty-list';
+import BottomSheet from '../bottom-sheet';
 import type {
 	SelectProps,
 	SelectItemProps,
 	FormControllerProps
 } from '../../types/ui';
+import { BottomSheetFlatList, BottomSheetModal, BottomSheetTextInput, useBottomSheetModal } from '@gorhom/bottom-sheet';
+import EmptyList from '../empty-list';
+
 
 const Select: React.FC<SelectProps> = ({
 	variant = 'outlined',
-	title,
 	items,
 	selected,
 	error,
-	onChange
+	onChange,
+	onAdd
 }) => {
-	const {t} = useTranslation('global');
-	const [query, handleSearch, filteredItems] = useSearch(items);
-	const [isOpen, toggler] = useToggle({onClose: () => Keyboard.dismiss()});
+	const { dismiss } = useBottomSheetModal();
+	const { t } = useTranslation('global');
+	const [query, handleSearch, filteredItems, clear] = useSearch(items);
+	const ref = useRef<BottomSheetModal>(null);
+
+	const snapPoints = ['60%']
+
+	const handleSnapPress = useCallback(() => {
+		ref.current?.present();
+	}, []);
 
 	//TODO: Find a way to get rid of this function
 	const onPressItem = (id: number | string) => {
 		onChange && onChange(id);
-		toggler();
+		dismiss();
 	};
 
 	const renderItem = useCallback(
@@ -48,11 +55,11 @@ const Select: React.FC<SelectProps> = ({
 					onPress={() => onPressItem(item.id)}
 					name={item.name}
 					isSelected={isSelected}
-					extraData={{isOpen, selected}}
+					extraData={{ selected }}
 				/>
 			);
 		},
-		[isOpen, selected]
+		[selected]
 	);
 
 	return (
@@ -61,28 +68,30 @@ const Select: React.FC<SelectProps> = ({
 				style={[
 					styles.select,
 					getVariantStyle(variant, styles),
-					{borderColor: !error ? theme.color.neutral.dark : theme.color.error.medium}
+					{ borderColor: !error ? theme.color.neutral.dark : theme.color.error.medium }
 				]}
-				onPress={toggler}
+				onPress={handleSnapPress}
 			>
 				<Text style={styles.text}>{selected?.name}</Text>
 				<AntDesign name="down" size={20} color={theme.color.neutral.dark} />
 			</TouchableOpacity>
-			<Modal visible={isOpen} onRequestClose={toggler} title={title}>
-				<Input
-					placeholder={t("options.search") as string}
-					variant="standard"
-					onChangeText={handleSearch}
-					value={query}
-				/>
-				<FlatList
-					style={{marginTop: 8}}
+			<BottomSheet
+				ref={ref}
+				snapPoints={snapPoints}
+				enablePanDownToClose={true}
+				onClose={clear}
+			>
+				{Platform.OS === 'ios' && <Text style={styles.input_label}>{t("options.search")}</Text>}
+				<BottomSheetTextInput placeholder={t("options.search") as string} style={styles.input} onChangeText={handleSearch} value={query} onSubmitEditing={() => ref.current?.snapToIndex(0)} />
+				<BottomSheetFlatList
 					data={filteredItems}
 					keyExtractor={(item) => item.id.toString()}
-					renderItem={({item}) => renderItem(item)}
-					ListEmptyComponent={<EmptyList text={t("options.no-results") as string} />}
+					renderItem={({ item }) => renderItem(item)}
+					contentContainerStyle={{ marginHorizontal: 10, marginTop: 5 }}
+					ListEmptyComponent={() => <EmptyList text={t("options.no-results")} onPress={() => console.log('xd')}/>}
+				/* showsVerticalScrollIndicator={false} */
 				/>
-			</Modal>
+			</BottomSheet>
 		</>
 	);
 };
@@ -92,8 +101,8 @@ export const FormSelect: React.FC<FormControllerProps & SelectProps> = ({
 	name,
 	rules,
 	variant = 'outlined',
-	title,
-	items
+	items,
+	...props
 }) => {
 	const renderItem = (
 		value: any,
@@ -106,11 +115,11 @@ export const FormSelect: React.FC<FormControllerProps & SelectProps> = ({
 			<>
 				<Select
 					variant={variant}
-					title={title}
 					items={items}
 					selected={selected}
 					onChange={onChange}
 					error={!!error}
+					{...props}
 				/>
 				{error && <Text style={styles.text_error}>{error.message}</Text>}
 			</>
@@ -122,7 +131,7 @@ export const FormSelect: React.FC<FormControllerProps & SelectProps> = ({
 			control={control}
 			name={name}
 			rules={rules}
-			render={({field: {value, onChange}, fieldState: {error}}) =>
+			render={({ field: { value, onChange }, fieldState: { error } }) =>
 				renderItem(value, onChange, error)
 			}
 		/>
@@ -162,5 +171,27 @@ const styles = StyleSheet.create({
 	text_error: {
 		color: theme.color.error.medium,
 		marginTop: 5
-	}
+	},
+	input_label: {
+		fontSize: theme.fontSize.sm,
+		marginBottom: 5,
+		marginHorizontal: 10,
+		fontWeight: '500'
+	},
+	input: {
+		height: 40,
+		backgroundColor: 'transparent',
+		alignItems: 'center',
+		flexDirection: 'row',
+		borderBottomWidth: 1,
+		marginHorizontal: 10
+	},
+	plus: {
+		backgroundColor: theme.color.primary.dark,
+		width: 40,
+		height: 40,
+		borderRadius: 40 / 2,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
 });

@@ -1,5 +1,7 @@
 import moment from 'moment-timezone';
 import { Alert, AlertButton } from 'react-native';
+import Toast from 'react-native-root-toast';
+import { theme } from '../styles';
 
 export const getVariantStyle = (
 	variant: 'outlined' | 'standard' | undefined,
@@ -63,4 +65,29 @@ export const getDate = (date: string | undefined) => {
 	const newDate = new Date(date!!);
 	newDate.setMinutes(newDate.getMinutes() + newDate.getTimezoneOffset())
 	return newDate;
+}
+
+export const showToast = (message: string = '', toastDuration: 'short' | 'long' = 'long', variant: 'default' | 'error') => {
+
+	let backgroundColor = '';
+
+	switch (variant) {
+		case 'error':
+			backgroundColor = theme.color.error.medium;
+			break;
+		default:
+			backgroundColor = theme.color.neutral.darkest;
+			break;
+	}
+
+	Toast.show(message, {
+		duration: toastDuration === 'long' ? Toast.durations.LONG : Toast.durations.SHORT,
+		position: Toast.positions.TOP,
+		backgroundColor: backgroundColor,
+		shadowColor: backgroundColor,
+		shadow: true,
+		animation: true,
+		hideOnPress: true,
+		delay: 0,
+	});
 }

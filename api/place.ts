@@ -1,29 +1,29 @@
-import {useMutation, useQuery} from '@tanstack/react-query';
-import {supabase} from '../supabase';
-import type {MutationProps, QueryProps, GeneralReq} from '../types/api';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { supabase } from '../supabase';
+import type { MutationProps, QueryProps, GeneralReq } from '../types/api';
 
 const getPlaces = async () => {
-	const {data} = await supabase.auth.getUser();
+	const { data } = await supabase.auth.getUser();
 
 	if (!data.user) throw new Error('Usuario no encontrado');
 
-	const {data: places, error} = await supabase
+	const { data: places, error } = await supabase
 		.from('place')
 		.select('id, name')
 		.eq('active', true)
-		.order('name', {ascending: true});
+		.order('name', { ascending: true });
 
 	if (error) throw new Error(error.message); //TODO: parse error
 
 	return places;
 };
 
-const addPlace = async ({name}: GeneralReq) => {
-	const {data: userData} = await supabase.auth.getUser();
+const addPlace = async ({ name }: GeneralReq) => {
+	const { data: userData } = await supabase.auth.getUser();
 
 	if (!userData.user) throw new Error('Usuario no encontrado');
 
-	const {data: places, error: selectError} = await supabase
+	const { data: places, error: selectError } = await supabase
 		.from('place')
 		.select('id, name')
 		.eq('name', name.trim())
@@ -34,9 +34,9 @@ const addPlace = async ({name}: GeneralReq) => {
 	if (places.length > 0)
 		throw new Error('El lugar ya existe');
 
-	const {data: place, error} = await supabase
+	const { data: place, error } = await supabase
 		.from('place')
-		.insert([{name: name.trim(), user_id: userData.user.id}])
+		.insert([{ name: name.trim(), user_id: userData.user.id }])
 		.select('id, name');
 
 	if (error) throw new Error(error.message);
@@ -44,14 +44,27 @@ const addPlace = async ({name}: GeneralReq) => {
 	return place[0];
 };
 
-const updatePlace = async ({id, name}: GeneralReq) => {
-	const {data: userData} = await supabase.auth.getUser();
+const updatePlace = async ({ id, name }: GeneralReq) => {
+	const { data: userData } = await supabase.auth.getUser();
 
 	if (!userData.user) throw new Error('Usuario no encontrado');
 
-	const {data: place, error} = await supabase
+	const { data: places, error: selectError } = await supabase
 		.from('place')
-		.update({name: name.trim()})
+		.select('id, name')
+		.eq('name', name.trim())
+		.eq('active', true);
+
+	if (selectError) throw new Error(selectError.message); //TODO: parse error
+
+	if (places.length > 0 && places[0].id !== id)
+		throw new Error('El lugar ya existe');
+
+	if (places[0].id === id) return places[0];
+
+	const { data: place, error } = await supabase
+		.from('place')
+		.update({ name: name.trim() })
 		.eq('id', id)
 		.select('id, name');
 
@@ -61,13 +74,13 @@ const updatePlace = async ({id, name}: GeneralReq) => {
 };
 
 const deletePlaces = async (deleteList: number[]) => {
-	const {data: userData} = await supabase.auth.getUser();
+	const { data: userData } = await supabase.auth.getUser();
 
 	if (!userData.user) throw new Error('Usuario no encontrado');
 
-	const {data: places, error} = await supabase
+	const { data: places, error } = await supabase
 		.from('place')
-		.update({active: false})
+		.update({ active: false })
 		.in('id', deleteList)
 		.select('id, name');
 

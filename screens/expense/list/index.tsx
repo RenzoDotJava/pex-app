@@ -1,9 +1,10 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { StyleSheet, View, Text, FlatList, RefreshControl, SectionList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { Entypo } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
+import Toast from 'react-native-root-toast';
 import { ExpenseRow } from '../../../components';
 import { DateNavigator, EmptyList, IconButton } from '../../../ui';
 import {
@@ -21,6 +22,7 @@ import type { ExpenseProps } from '../../../types/components';
 import moment from 'moment-timezone';
 import { getDate } from '../../../utils';
 
+
 type NavigationProp = DrawerNavigationProp<
 	SidebarDrawerParamList,
 	'ExpenseNav'
@@ -29,7 +31,7 @@ type NavigationProp = DrawerNavigationProp<
 const ExpensesScreen: React.FC = () => {
 	const { t } = useTranslation('global');
 	const dispatch = useAppDispatch();
-	const { selectMode, deleteList, expenses, expensesMonthly, startDate, endDate, mode, majorExpenseFilter } = useAppSelector(
+	const { selectMode, deleteList, expenses, expensesMonthly, startDate, endDate, mode, onlyMajor } = useAppSelector(
 		(state) => state.expense
 	);
 	const totalByDate = useAppSelector((state) =>
@@ -41,7 +43,7 @@ const ExpensesScreen: React.FC = () => {
 	const { isLoading, refetch } = useGetExpenses({
 		startDate,
 		endDate,
-		onlyMajor: majorExpenseFilter,
+		onlyMajor,
 		onSuccess: (data) => {
 			dispatch(setExpenses(data));
 		}
