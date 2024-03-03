@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
 	Keyboard,
 	StyleSheet,
@@ -5,28 +6,35 @@ import {
 	TouchableWithoutFeedback,
 	View
 } from 'react-native';
-import {SubmitHandler, useForm} from 'react-hook-form';
-import {useTranslation} from 'react-i18next';
-import {Button, FormInput} from '../../ui';
-import {theme} from '../../styles';
-import type {PaymentMethodFormProps, FormInputs} from '../../types/components';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { Button, FormInput, ColorPicker } from '../../ui';
+import { theme } from '../../styles';
+import type { PaymentMethodFormProps, FormInputs } from '../../types/components';
 
 const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({
-	paymentMethod, 
+	paymentMethod,
 	action,
 	isLoading = false
 }) => {
-	const {t} = useTranslation('global');
+	const { t } = useTranslation('global');
 	const {
 		control,
 		handleSubmit,
-		formState: {isValid}
+		formState: { isValid }
 	} = useForm<FormInputs>({
 		defaultValues: paymentMethod
 	});
 
 	const onSubmit: SubmitHandler<FormInputs> = (data) => {
 		action && action(data);
+	};
+
+	const [color, setColor] = useState('');
+
+	const onColorChange = (color: string) => {
+		console.log(color)
+		setColor(color);
 	};
 
 	return (
@@ -43,7 +51,8 @@ const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({
 						}}
 					/>
 				</View>
-				<View style={{marginTop: 15}}>
+				<ColorPicker />
+				<View style={{ marginTop: 15 }}>
 					<Button
 						text={t("options.save")}
 						onPress={handleSubmit(onSubmit)}
