@@ -1,31 +1,34 @@
 import React, { useCallback, useRef, useState } from 'react'
-import { Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import ColorPicker from 'react-native-wheel-color-picker';
 import { BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import BottomSheet from '../bottom-sheet';
-import Button from '../button';
+import { theme } from '../../styles';
+import { getVariantStyle } from '../../utils';
+import { FormControllerProps, type ColorPickerProps } from '../../types/ui';
+import { Controller } from 'react-hook-form';
 
-const ColorPickerRN = () => {
+const ColorPickerRN: React.FC<ColorPickerProps> = ({ variant, value, onChange }) => {
   const ref = useRef<BottomSheetModal>(null);
-  const [color, setColor] = useState('#fff');
+  /* const [color, setColor] = useState(theme.color.primary.medium.toLocaleLowerCase()); */
 
   const handleSnapPress = useCallback(() => {
     ref.current?.present();
   }, []);
 
-  const onColorChange = (color: string) => {
-    console.log(color)
-    setColor(color);
-  };
+  const onColorChange = (color: string) => onChange && onChange(color);
 
   return (
     <>
       <TouchableOpacity
-        style={{ height: 50, width: 50, backgroundColor: color }}
+        style={[
+          styles.input,
+          getVariantStyle(variant, styles)
+        ]}
         onPress={handleSnapPress}
       >
-        <Text>Hola</Text>
-        {/* <AntDesign name="down" size={20} color={theme.color.neutral.dark} /> */}
+        <View style={[styles.color_circle, { backgroundColor: value }]}></View>
+        <Text style={styles.color_text}>{value}</Text>
       </TouchableOpacity>
       <BottomSheet
         ref={ref}
@@ -35,7 +38,7 @@ const ColorPickerRN = () => {
         <BottomSheetScrollView style={{ paddingHorizontal: 20 }}>
           <View style={{ marginBottom: 30 }}>
             <ColorPicker
-              color={color}
+              color={value}
               onColorChangeComplete={(color) => onColorChange(color)}
               thumbSize={30}
               sliderSize={30}
@@ -43,15 +46,73 @@ const ColorPickerRN = () => {
               row={false}
             />
           </View>
-          {/* <View style={{ paddingBottom: 20 }}>
-            <Button
-              text='Guardar'
-            />
-          </View> */}
         </BottomSheetScrollView>
       </BottomSheet>
     </>
   )
 }
 
+export const FormColorPicker: React.FC<FormControllerProps & ColorPickerProps> = ({
+  control,
+  name,
+  rules,
+  variant = 'outlined'
+}) => {
+  const renderItem = (
+    value: any,
+    onChange: (...event: any[]) => void
+  ) => (
+    <>
+      <ColorPickerRN
+        variant={variant}
+        value={value?.toString()}
+        onChange={onChange}
+      />
+    </>
+  );
+
+  return (
+    <Controller
+      control={control}
+      name={name}
+      rules={rules}
+      render={({ field: { value, onChange } }) =>
+        renderItem(value, onChange)
+      }
+    />
+  );
+};
+
 export default ColorPickerRN
+
+const styles = StyleSheet.create({
+  label: {
+    fontWeight: '500',
+    fontSize: theme.fontSize.md,
+    marginBottom: 4
+  },
+  input: {
+    justifyContent: 'space-between',
+    height: 40,
+    backgroundColor: 'transparent',
+    alignItems: 'center',
+    flexDirection: 'row'
+  },
+  outlined: {
+    borderWidth: 1,
+    borderRadius: 6,
+    paddingHorizontal: 8
+  },
+  standard: {
+    borderBottomWidth: 1
+  },
+  color_circle: {
+    height: 30,
+    width: 30,
+    borderRadius: 30,
+    borderWidth: 1
+  },
+  color_text: {
+    fontSize: theme.fontSize.md,
+  }
+});

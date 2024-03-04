@@ -1,12 +1,12 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { PaymentMethodForm } from '../../../components';
-import type { ConfigParamList, PaymentMethodParamList } from '../../../types/navigation';
 import { useAppDispatch } from '../../../store';
 import { useUpdatePaymentMethod } from '../../../api/payment-method';
 import { updatePaymentMethod } from '../../../slices/payment-method';
-import type { GeneralReq } from '../../../types/api';
 import { showToast } from '../../../utils';
+import type { PaymentMethodReq } from '../../../types/api';
+import type { ConfigParamList, PaymentMethodParamList } from '../../../types/navigation';
 
 type EditPaymentMethodScreenRouteProp = RouteProp<
 	PaymentMethodParamList,
@@ -30,9 +30,12 @@ const EditPaymentMethodScreen: React.FC = () => {
 		}
 	});
 
-	const action = (data: GeneralReq) => {
-		if (data.name !== paymentMethod.name) {
-			mutate(data);
+	const action = (data: PaymentMethodReq) => {
+		if (data.name.trim() !== paymentMethod.name.trim() || data.color !== paymentMethod.color) {
+			mutate({
+				id: paymentMethod.id,
+				...data
+			});
 		} else {
 			navigation.navigate('PaymentMethodNav', { screen: 'PaymentMethod' });
 		}

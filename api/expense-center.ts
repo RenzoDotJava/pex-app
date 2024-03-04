@@ -27,6 +27,7 @@ const addExpenseCenter = async ({ name }: GeneralReq) => {
 		.from('expense_center')
 		.select('id, name')
 		.eq('name', name.trim())
+		.eq('user_id', userData.user.id)
 		.eq('active', true);
 
 	if (selectError) throw new Error(selectError.message); //TODO: parse error
@@ -53,14 +54,15 @@ const updateExpenseCenter = async ({ id, name }: GeneralReq) => {
 		.from('expense_center')
 		.select('id, name')
 		.eq('name', name.trim())
+		.eq('user_id', userData.user.id)
 		.eq('active', true);
 
 	if (selectError) throw new Error(selectError.message); //TODO: parse error
 
-	if (expenseCenters.length > 0 && expenseCenters[0].id !== id)
-		throw new Error('El centro de gasto ya existe');
-
-	if (expenseCenters[0].id === id) return expenseCenters[0];
+	if (expenseCenters.length > 0) {
+		if (expenseCenters[0].id === id) return expenseCenters[0];
+		else throw new Error('El centro de gasto ya existe');
+	}
 
 	const { data: expenseCenter, error } = await supabase
 		.from('expense_center')

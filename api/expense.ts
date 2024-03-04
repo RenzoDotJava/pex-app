@@ -42,7 +42,7 @@ const getExpensesBetweenDates = async ({ startDate, endDate, onlyMajor = false }
 	const { data: expenses, error } = await supabase
 		.from('expense')
 		.select(
-			'id, amount, date, remark, major, expense_center (id, name), category (id, name), payment_method (id, name), place (id, name)'
+			'id, amount, date, remark, major, expense_center (id, name), category (id, name), payment_method (id, name, color), place (id, name)'
 		)
 		.in('major', majorArray)
 		.gte('date', startDate)

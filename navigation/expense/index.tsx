@@ -156,10 +156,10 @@ const ExpenseNavigator: React.FC = () => {
 				name="ConfigExpense"
 				component={ConfigExpenseScreen}
 				options={() => ({
-					presentation: 'modal',
+					/* presentation: 'modal', */
 					header: () => null,
-					animation: 'slide_from_bottom',
-					animationTypeForReplace: 'push'
+					/* animation: 'slide_from_bottom',
+					animationTypeForReplace: 'push' */
 				})}
 			/>
 		</Stack.Navigator>

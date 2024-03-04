@@ -29,7 +29,10 @@ const EditCategoryScreen: React.FC = () => {
 
 	const action = (data: GeneralReq) => {
 		if (data.name !== category.name) {
-			mutate(data);
+			mutate({
+				id: category.id,
+				...data
+			});
 		} else {
 			navigation.navigate('CategoryNav', { screen: 'Category' });
 		}

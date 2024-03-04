@@ -8,6 +8,10 @@ type GeneralReq = {
 	name: string;
 };
 
+type PaymentMethodReq = GeneralReq & {
+	color: string;
+}
+
 type MutationProps<T> = {
 	onSuccess?: (data: any, variables: T) => void;
 	onError?: (error: any, variables: T) => void;
@@ -22,4 +26,4 @@ type QueryProps = {
 	select?: (data: any) => void;
 };
 
-export { AuthReq, MutationProps, QueryProps, GeneralReq };
+export { AuthReq, MutationProps, QueryProps, GeneralReq, PaymentMethodReq };

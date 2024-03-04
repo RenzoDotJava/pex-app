@@ -27,6 +27,7 @@ const addCategory = async ({ name }: GeneralReq) => {
 		.from('category')
 		.select('id, name')
 		.eq('name', name.trim())
+		.eq('user_id', userData.user.id)
 		.eq('active', true);
 
 	if (selectError) throw new Error(selectError.message); //TODO: parse error
@@ -53,14 +54,15 @@ const updateCategory = async ({ id, name }: GeneralReq) => {
 		.from('category')
 		.select('id, name')
 		.eq('name', name.trim())
+		.eq('user_id', userData.user.id)
 		.eq('active', true);
 
 	if (selectError) throw new Error(selectError.message); //TODO: parse error
 
-	if (categories.length > 0 && categories[0].id !== id)
-		throw new Error('La categoría ya existe');
-
-	if (categories[0].id === id) return categories[0];
+	if (categories.length > 0) {
+		if (categories[0].id === id) return categories[0];
+		else throw new Error('La categoría ya existe');
+	}
 
 	const { data: category, error } = await supabase
 		.from('category')

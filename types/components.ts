@@ -1,4 +1,4 @@
-import { GeneralReq } from './api';
+import { GeneralReq, PaymentMethodReq } from './api';
 
 //TODO: ver si trae id y name o luego hacer un nuevo request para traer los ids
 type RowProps = {
@@ -13,6 +13,10 @@ type RowProps = {
 type FormInputs = {
 	name: string;
 };
+
+type PaymentMethodFormInputs = FormInputs & {
+	color: string
+}
 
 type ExpenseFormInputs = {
 	expenseCenterId: number;
@@ -57,6 +61,7 @@ type CategoryProps = {
 type PaymentMethodProps = {
 	id: number;
 	name: string;
+	color: string;
 };
 
 type PlaceProps = {
@@ -90,7 +95,7 @@ type CategoryFormProps = {
 
 type PaymentMethodFormProps = {
 	paymentMethod?: PaymentMethodProps;
-	action?: (req: GeneralReq) => void;
+	action?: (req: PaymentMethodReq) => void;
 	isLoading?: boolean;
 };
 
@@ -155,5 +160,6 @@ export {
 	NavigatorWrapperProps,
 	ListWrapperProps,
 	CurrencyProps,
-	RangeDateSelectorProps
+	RangeDateSelectorProps,
+	PaymentMethodFormInputs
 };

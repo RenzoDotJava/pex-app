@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { supabase } from '../supabase';
-import type { MutationProps, QueryProps, GeneralReq } from '../types/api';
+import type { MutationProps, QueryProps, PaymentMethodReq } from '../types/api';
 
 const getPaymentMethods = async () => {
 	const { data } = await supabase.auth.getUser();
@@ -9,7 +9,7 @@ const getPaymentMethods = async () => {
 
 	const { data: paymentMethods, error } = await supabase
 		.from('payment_method')
-		.select('id, name')
+		.select('id, name, color')
 		.eq('active', true)
 		.order('name', { ascending: true });
 
@@ -18,15 +18,16 @@ const getPaymentMethods = async () => {
 	return paymentMethods;
 };
 
-const addPaymentMethod = async ({ name }: GeneralReq) => {
+const addPaymentMethod = async ({ name, color }: PaymentMethodReq) => {
 	const { data: userData } = await supabase.auth.getUser();
 
 	if (!userData.user) throw new Error('Usuario no encontrado');
 
 	const { data: paymentMethods, error: selectError } = await supabase
 		.from('payment_method')
-		.select('id, name')
+		.select('id, name, color')
 		.eq('name', name.trim())
+		.eq('user_id', userData.user.id)
 		.eq('active', true);
 
 	if (selectError) throw new Error(selectError.message); //TODO: parse error
@@ -35,15 +36,15 @@ const addPaymentMethod = async ({ name }: GeneralReq) => {
 
 	const { data: paymentMethod, error } = await supabase
 		.from('payment_method')
-		.insert([{ name: name.trim(), user_id: userData.user.id }])
-		.select('id, name');
+		.insert([{ name: name.trim(), user_id: userData.user.id, color: color }])
+		.select('id, name, color');
 
 	if (error) throw new Error(error.message);
 
 	return paymentMethod[0];
 };
 
-const updatePaymentMethod = async ({ id, name }: GeneralReq) => {
+const updatePaymentMethod = async ({ id, name, color }: PaymentMethodReq) => {
 	const { data: userData } = await supabase.auth.getUser();
 
 	if (!userData.user) throw new Error('Usuario no encontrado');
@@ -52,19 +53,18 @@ const updatePaymentMethod = async ({ id, name }: GeneralReq) => {
 		.from('payment_method')
 		.select('id, name')
 		.eq('name', name.trim())
+		.eq('user_id', userData.user.id)
 		.eq('active', true);
 
 	if (selectError) throw new Error(selectError.message); //TODO: parse error
 
 	if (paymentMethods.length > 0 && paymentMethods[0].id !== id) throw new Error('El método de pago ya existe');
 
-	if (paymentMethods[0].id === id) return paymentMethods[0];
-
 	const { data: paymentMethod, error } = await supabase
 		.from('payment_method')
-		.update({ name: name.trim() })
+		.update({ name: name.trim(), color: color })
 		.eq('id', id)
-		.select('id, name');
+		.select('id, name, color');
 
 	if (error) throw new Error(error.message);
 
@@ -106,7 +106,7 @@ export const useGetPaymentMethods = ({
 export const useAddPaymentMethod = ({
 	onSuccess,
 	onError
-}: MutationProps<GeneralReq>) => {
+}: MutationProps<PaymentMethodReq>) => {
 	const addPaymentMethodQuery = useMutation({
 		mutationKey: ['add_payment_method'],
 		mutationFn: addPaymentMethod,
@@ -120,7 +120,7 @@ export const useAddPaymentMethod = ({
 export const useUpdatePaymentMethod = ({
 	onSuccess,
 	onError
-}: MutationProps<GeneralReq>) => {
+}: MutationProps<PaymentMethodReq>) => {
 	const updatePaymentMethodQuery = useMutation({
 		mutationKey: ['update_payment_method'],
 		mutationFn: updatePaymentMethod,

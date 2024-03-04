@@ -29,7 +29,10 @@ const EditPlaceScreen: React.FC = () => {
 
 	const action = (data: GeneralReq) => {
 		if (data.name !== place.name) {
-			mutate(data);
+			mutate({
+				id: place.id,
+				...data
+			});
 		} else {
 			navigation.navigate('PlaceNav', { screen: 'Place' });
 		}

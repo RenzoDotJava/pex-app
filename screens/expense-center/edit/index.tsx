@@ -35,7 +35,10 @@ const EditExpenseCenterScreen: React.FC = () => {
 
 	const action = (data: GeneralReq) => {
 		if (data.name !== expenseCenter.name) {
-			mutate(data);
+			mutate({
+				id: expenseCenter.id,
+				...data
+			});
 		} else {
 			navigation.navigate('ExpenseCenterNav', { screen: 'ExpenseCenter' });
 		}

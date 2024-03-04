@@ -27,6 +27,7 @@ const addPlace = async ({ name }: GeneralReq) => {
 		.from('place')
 		.select('id, name')
 		.eq('name', name.trim())
+		.eq('user_id', userData.user.id)
 		.eq('active', true);
 
 	if (selectError) throw new Error(selectError.message); //TODO: parse error
@@ -53,14 +54,15 @@ const updatePlace = async ({ id, name }: GeneralReq) => {
 		.from('place')
 		.select('id, name')
 		.eq('name', name.trim())
+		.eq('user_id', userData.user.id)
 		.eq('active', true);
 
 	if (selectError) throw new Error(selectError.message); //TODO: parse error
 
-	if (places.length > 0 && places[0].id !== id)
-		throw new Error('El lugar ya existe');
-
-	if (places[0].id === id) return places[0];
+	if (places.length > 0) {
+		if (places[0].id === id) return places[0];
+		else throw new Error('El lugar ya existe');
+	}
 
 	const { data: place, error } = await supabase
 		.from('place')

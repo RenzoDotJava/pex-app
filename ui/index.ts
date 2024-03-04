@@ -11,4 +11,4 @@ export { default as EmptyList } from './empty-list';
 export { default as Calendar } from './calendar';
 export { default as Switch, FormSwitch } from './switch';
 export { default as BottomSheet } from './bottom-sheet';
-export { default as ColorPicker } from './color-picker';
+export { default as ColorPicker, FormColorPicker } from './color-picker';

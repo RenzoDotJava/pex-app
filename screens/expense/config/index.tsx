@@ -10,7 +10,7 @@ import { theme } from '../../../styles';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { setMode, setMonth, setYear, setDate, setYearMonth, setExpenses, setOnlyMajor } from '../../../slices/expense';
 import { useTranslation } from 'react-i18next';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { useGetExpensesBetweenDates } from '../../../api/expense';
@@ -162,10 +162,10 @@ const ConfigExpenseScreen = () => {
         moment(getDate(expense.date)).format('DD/MM/YYYY'),
         expense.expense_center.name,
         expense.category.name,
-        expense.payment_method.name,
+        { v: expense.payment_method.name, s: { fill: { fgColor: { rgb: expense.payment_method.color.replace('#', '') } } } },
         expense.place.name,
         expense.amount,
-        expense.remark
+        expense.remark,
       ])
     ])
 
@@ -183,7 +183,7 @@ const ConfigExpenseScreen = () => {
       <>
         <View style={[styles.header, {
           marginTop:
-            Platform.OS === 'android' ? StatusBar.currentHeight! : 25,
+            Platform.OS === 'android' ? StatusBar.currentHeight! : 45,
           paddingHorizontal: 15
         }]}>
           <IconButton

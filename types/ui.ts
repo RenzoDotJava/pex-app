@@ -99,6 +99,11 @@ type BottomSheetProps = {
 	onClose?: () => void;
 }
 
+type ColorPickerProps = VariantProps & {
+	value?: string;
+	onChange?: (name: number | string) => void;
+}
+
 export {
 	InputProps,
 	IconButtonProps,
@@ -113,5 +118,6 @@ export {
 	EmptyListProps,
 	CalendarProps,
 	SwitchProps,
-	BottomSheetProps
+	BottomSheetProps,
+	ColorPickerProps
 };
