@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
 	Keyboard,
 	StyleSheet,
@@ -10,7 +9,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Button, FormInput, FormColorPicker } from '../../ui';
 import { theme } from '../../styles';
-import type { PaymentMethodFormProps, FormInputs, PaymentMethodFormInputs } from '../../types/components';
+import type { PaymentMethodFormProps, PaymentMethodFormInputs } from '../../types/components';
 
 const PaymentMethodForm: React.FC<PaymentMethodFormProps> = ({
 	paymentMethod,

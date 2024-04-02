@@ -31,7 +31,7 @@ type NavigationProp = DrawerNavigationProp<
 const ExpensesScreen: React.FC = () => {
 	const { t } = useTranslation('global');
 	const dispatch = useAppDispatch();
-	const { selectMode, deleteList, expenses, expensesMonthly, startDate, endDate, mode, onlyMajor } = useAppSelector(
+	const { selectMode, deleteList, expenses, expensesMonthly, startDate, endDate, mode, expenseType } = useAppSelector(
 		(state) => state.expense
 	);
 	const totalByDate = useAppSelector((state) =>
@@ -43,7 +43,7 @@ const ExpensesScreen: React.FC = () => {
 	const { isLoading, refetch } = useGetExpenses({
 		startDate,
 		endDate,
-		onlyMajor,
+		expenseType,
 		onSuccess: (data) => {
 			dispatch(setExpenses(data));
 		}

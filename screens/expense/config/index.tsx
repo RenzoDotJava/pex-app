@@ -4,11 +4,11 @@ import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment-timezone';
-import { Button, IconButton, Input, Select, Switch } from '../../../ui'
+import { Button, IconButton, Input, Select } from '../../../ui'
 import { SidebarDrawerParamList } from '../../../types/navigation';
 import { theme } from '../../../styles';
 import { useAppDispatch, useAppSelector } from '../../../store';
-import { setMode, setMonth, setYear, setDate, setYearMonth, setExpenses, setOnlyMajor } from '../../../slices/expense';
+import { setMode, setMonth, setYear, setDate, setYearMonth, setExpenses, setExpenseType } from '../../../slices/expense';
 import { useTranslation } from 'react-i18next';
 import * as XLSX from 'xlsx-js-style';
 import * as FileSystem from 'expo-file-system';
@@ -30,13 +30,13 @@ const selectorOptions: { value: 'daily' | 'monthly' | 'yearly' }[] = [
 
 const ConfigExpenseScreen = () => {
   const navigation = useNavigation<NavigationProp>();
-  const { mode, month, year, date, yearMonth, onlyMajor } = useAppSelector((state) => state.expense);
+  const { mode, month, year, date, yearMonth, onlyMajor, expenseType } = useAppSelector((state) => state.expense);
   const [selectedMode, setSelectedMode] = useState(mode)
   const [selectedDate, setSelectedDate] = useState(date)
   const [selectedMonth, setSelectedMonth] = useState(month)
   const [selectedYearMonth, setSelectedYearMonth] = useState(yearMonth)
   const [selectedYear, setSelectedYear] = useState(year)
-  const [majorFilter, setMajorFilter] = useState(onlyMajor)
+  const [expenseTypeFilter, setExpenseTypeFilter] = useState(expenseType)
   const dispatch = useAppDispatch();
 
   const { t, i18n } = useTranslation('global');
@@ -63,7 +63,7 @@ const ConfigExpenseScreen = () => {
       }
       else dispatch(setYear(selectedYear))
 
-      dispatch(setOnlyMajor(majorFilter))
+      dispatch(setExpenseType(expenseTypeFilter))
       dispatch(setMode(selectedMode))
       dispatch(setExpenses(data))
 
@@ -131,14 +131,14 @@ const ConfigExpenseScreen = () => {
 
   const getExpensesList = (action: "confirm" | "generate" = "confirm") => {
     if (selectedMode === 'daily') {
-      action === "generate" ? mutate({ startDate: selectedDate, endDate: selectedDate, onlyMajor: majorFilter }) : onConfirm({ startDate: selectedDate, endDate: selectedDate, onlyMajor: majorFilter })
+      action === "generate" ? mutate({ startDate: selectedDate, endDate: selectedDate, expenseType: expenseTypeFilter }) : onConfirm({ startDate: selectedDate, endDate: selectedDate, expenseType: expenseTypeFilter })
     }
     else if (selectedMode === 'monthly') {
       let daysInMonth = moment(selectedYearMonth + "-" + selectedMonth, "YYYY-MM").daysInMonth()
-      action === "generate" ? mutate({ startDate: `${selectedYearMonth}-${selectedMonth}-01`, endDate: `${selectedYearMonth}-${selectedMonth}-${daysInMonth.toString()}`, onlyMajor: majorFilter }) : onConfirm({ startDate: `${selectedYearMonth}-${selectedMonth}-01`, endDate: `${selectedYearMonth}-${selectedMonth}-${daysInMonth.toString()}`, onlyMajor: majorFilter })
+      action === "generate" ? mutate({ startDate: `${selectedYearMonth}-${selectedMonth}-01`, endDate: `${selectedYearMonth}-${selectedMonth}-${daysInMonth.toString()}`, expenseType: expenseTypeFilter }) : onConfirm({ startDate: `${selectedYearMonth}-${selectedMonth}-01`, endDate: `${selectedYearMonth}-${selectedMonth}-${daysInMonth.toString()}`, expenseType: expenseTypeFilter })
     }
     else if (selectedMode === 'yearly') {
-      action === "generate" ? mutate({ startDate: `${selectedYear}-01-01`, endDate: `${selectedYear}-12-31`, onlyMajor: majorFilter }) : onConfirm({ startDate: `${selectedYear}-01-01`, endDate: `${selectedYear}-12-31`, onlyMajor: majorFilter })
+      action === "generate" ? mutate({ startDate: `${selectedYear}-01-01`, endDate: `${selectedYear}-12-31`, expenseType: expenseTypeFilter }) : onConfirm({ startDate: `${selectedYear}-01-01`, endDate: `${selectedYear}-12-31`, expenseType: expenseTypeFilter })
     }
   }
 
@@ -195,11 +195,11 @@ const ConfigExpenseScreen = () => {
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
           <View style={{ flex: 1 }}>
             <View style={{ flex: 1 }}>
-              <View style={styles.option_nav}>
+              <View style={[styles.option_nav, { marginBottom: 5 }]}>
                 <View style={styles.selector}>
                   {selectorOptions.map((option, index) => (
                     <TouchableOpacity key={index} style={[styles.option, selectedMode === option.value && styles.option_selected]} onPress={() => setSelectedMode(option.value)}>
-                      <Text style={{ fontSize: theme.fontSize.md, fontWeight: selectedMode === option.value ? 'normal' : 'bold', color: selectedMode === option.value ? theme.color.neutral.lightest : theme.color.neutral.dark }}>{t("expense.config." + option.value)}</Text>
+                      <Text style={{ fontSize: theme.fontSize.md, fontWeight: selectedMode === option.value ? 'normal' : '500', color: selectedMode === option.value ? theme.color.neutral.lightest : theme.color.neutral.dark }}>{t("expense.config." + option.value)}</Text>
                     </TouchableOpacity>
                   ))}
                 </View>
@@ -241,13 +241,34 @@ const ConfigExpenseScreen = () => {
                   <Input keyboardType="numeric" onChangeText={onChangeYear} value={selectedYear.toString()} />
                 </View>
               }
-              <View style={{ gap: Platform.OS === 'android' ? 5 : 20 }}>
-                <View style={styles.option_nav}>
-                  <Text style={{ fontSize: theme.fontSize.md, fontWeight: 'bold', color: theme.color.neutral.dark }}>Filtros</Text>
+              <View>
+                <View style={[styles.option_nav, { marginBottom: 16 }]}>
+                  <Text style={{ fontSize: theme.fontSize.lg, fontWeight: 'bold', color: theme.color.neutral.dark }}>Filtros</Text>
                 </View>
-                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 15, gap: Platform.OS === 'android' ? 10 : 15 }}>
-                  <Switch value={majorFilter} onChange={setMajorFilter} />
-                  <Text>Solo gastos mayores</Text>
+                <View style={{ flexDirection: 'row', gap: 10, paddingHorizontal: 15, justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Text style={{ fontSize: theme.fontSize.md, color: theme.color.neutral.dark, fontWeight: '500' }}>Tipo de gasto</Text>
+                  <View>
+                    <View style={styles.expense_type_container}>
+                      <TouchableOpacity
+                        style={[styles.expense_type_option, expenseTypeFilter === 'both' && styles.expense_type_selected]}
+                        onPress={() => setExpenseTypeFilter('both')}
+                      >
+                        <Text style={[styles.expense_type_text, expenseTypeFilter === 'both' && styles.expense_type_selected_text]}>Ambos</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={[styles.expense_type_option, expenseTypeFilter === 'minor' && styles.expense_type_selected]}
+                        onPress={() => setExpenseTypeFilter('minor')}
+                      >
+                        <Text style={[styles.expense_type_text, expenseTypeFilter === 'minor' && styles.expense_type_selected_text]}>Menor</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={[styles.expense_type_option, expenseTypeFilter === 'major' && styles.expense_type_selected]}
+                        onPress={() => setExpenseTypeFilter('major')}
+                      >
+                        <Text style={[styles.expense_type_text, expenseTypeFilter === 'major' && styles.expense_type_selected_text]}>Mayor</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
                 </View>
               </View>
             </View>
@@ -265,7 +286,7 @@ const ConfigExpenseScreen = () => {
           </View>
         </TouchableWithoutFeedback>
       </>
-    </View>
+    </View >
   )
 }
 
@@ -291,7 +312,7 @@ const styles = StyleSheet.create({
   },
   excel: {
     backgroundColor: '#45A05E',
-    borderRadius: 6,
+    borderRadius: 8,
     paddingHorizontal: 20,
     alignItems: 'center',
     justifyContent: 'center'
@@ -305,12 +326,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: theme.color.neutral.light,
     backgroundColor: '#EDEDED',
-    /* borderRadius: 12, */
     paddingHorizontal: 15,
     paddingVertical: 8,
-    /* marginHorizontal: 20, */
     marginTop: 20,
-    marginBottom: 5,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -321,7 +339,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 20,
-    paddingVertical: 10,
+    paddingVertical: 6,
     paddingHorizontal: 20
   },
   option: {
@@ -334,5 +352,30 @@ const styles = StyleSheet.create({
   option_selected: {
     backgroundColor: theme.color.primary.dark,
     borderColor: theme.color.primary.dark,
+  },
+  expense_type_container: {
+    flexDirection: 'row',
+    gap: 8,
+    /* borderWidth: 1, */
+    /* borderRadius: 8, */
+    /* borderColor: theme.color.neutral.dark */
+  },
+  expense_type_option: {
+    padding: 8,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: theme.color.neutral.dark,
+  },
+  expense_type_selected: {
+    backgroundColor: theme.color.primary.dark,
+    borderColor: theme.color.primary.dark,
+  },
+  expense_type_text: {
+    fontSize: theme.fontSize.md,
+    color: theme.color.neutral.dark,
+    fontWeight: '500'
+  },
+  expense_type_selected_text: {
+    color: theme.color.neutral.lightest
   }
 });

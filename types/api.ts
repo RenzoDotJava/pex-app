@@ -20,7 +20,7 @@ type MutationProps<T> = {
 type QueryProps = {
 	startDate?: string;
 	endDate?: string;
-	onlyMajor?: boolean;
+	expenseType?: 'both' | 'minor' | 'major';
 	onSuccess?: (data: any) => void;
 	onError?: (error: any) => void;
 	select?: (data: any) => void;

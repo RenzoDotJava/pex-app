@@ -68,7 +68,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
 			dispatch(setCategories(data));
 		}
 	});
-	const { isLoading: isLoadingExpenseCenters, refetch } = useGetExpenseCenters({
+	const { isLoading: isLoadingExpenseCenters } = useGetExpenseCenters({
 		onSuccess: (data) => {
 			dispatch(setExpenseCenters(data));
 		}

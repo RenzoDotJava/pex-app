@@ -18,6 +18,7 @@ const BottomSheet = forwardRef<BottomSheetModal, BottomSheetProps>(({ snapPoints
       backdropComponent={renderBackdrop}
       onChange={(index) => index === -1 ? onClose && onClose() : onOpen && onOpen()}
       {...props}
+      /* backgroundStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.01)' }} */
     /* keyboardBehavior={Platform.OS === 'android' ? 'extend' : 'interactive'} */
     /* keyboardBlurBehavior="restore" */
     >

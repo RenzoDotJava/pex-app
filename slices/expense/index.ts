@@ -72,7 +72,8 @@ const initialState: ExpenseState = {
 	mode: 'daily',
 	startDate: getCurrentDateToString(),
 	endDate: getCurrentDateToString(),
-	onlyMajor: false
+	onlyMajor: false,
+	expenseType: 'both'
 };
 
 export const expenseSlice = createSlice({
@@ -221,6 +222,9 @@ export const expenseSlice = createSlice({
 		},
 		setOnlyMajor: (state, action: PayloadAction<boolean>) => {
 			state.onlyMajor = action.payload;
+		},
+		setExpenseType: (state, action: PayloadAction<'both' | 'minor' | 'major'>) => {
+			state.expenseType = action.payload;
 		}
 	}
 });
@@ -240,7 +244,8 @@ export const {
 	setYear,
 	setDate,
 	setYearMonth,
-	setOnlyMajor
+	setOnlyMajor,
+	setExpenseType
 } = expenseSlice.actions;
 
 export const getTotalDeleteListAmount = (state: RootState): number =>

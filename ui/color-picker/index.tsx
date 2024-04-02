@@ -1,16 +1,15 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import ColorPicker from 'react-native-wheel-color-picker';
 import { BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import { Controller } from 'react-hook-form';
 import BottomSheet from '../bottom-sheet';
 import { theme } from '../../styles';
 import { getVariantStyle } from '../../utils';
 import { FormControllerProps, type ColorPickerProps } from '../../types/ui';
-import { Controller } from 'react-hook-form';
 
 const ColorPickerRN: React.FC<ColorPickerProps> = ({ variant, value, onChange }) => {
   const ref = useRef<BottomSheetModal>(null);
-  /* const [color, setColor] = useState(theme.color.primary.medium.toLocaleLowerCase()); */
 
   const handleSnapPress = useCallback(() => {
     ref.current?.present();
@@ -44,6 +43,21 @@ const ColorPickerRN: React.FC<ColorPickerProps> = ({ variant, value, onChange })
               sliderSize={30}
               noSnap={true}
               row={false}
+              /* swatches={false} */
+              /* swatchesOnly */
+              /* discrete */
+              /* palette={[
+                '#ffffff',
+                '#878787',
+                '#ed1c23',
+                '#d31bd6',
+                '#1632e5',
+                '#00afef',
+                '#00c65c',
+                '#57ff0a',
+                '#ffdc16',
+                '#f26321'
+              ]} */
             />
           </View>
         </BottomSheetScrollView>

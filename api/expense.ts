@@ -3,22 +3,23 @@ import { supabase } from '../supabase';
 import { MutationProps, QueryProps } from '../types/api';
 import { ExpenseFormInputs } from '../types/components';
 
-const getExpenses = async (startDate?: string, endDate?: string, onlyMajor: boolean = false) => {
+const typeFilter = {
+	'both': [true, false],
+	'minor': [false],
+	'major': [true]
+}
+
+const getExpenses = async (startDate?: string, endDate?: string, expenseType: 'both' | 'minor' | 'major' = 'both') => {
 	const { data } = await supabase.auth.getUser();
 
 	if (!data.user) throw new Error('Usuario no encontrado');
-
-	let majorArray = []; //TODO: change this way to filter major expense ASAP UWU
-
-	if (onlyMajor) majorArray = [true]
-	else majorArray = [true, false]
 
 	const { data: expenses, error } = await supabase
 		.from('expense')
 		.select(
 			'id, amount, date, remark, major, expense_center (id, name), category (id, name), payment_method (id, name), place (id, name)'
 		)
-		.in('major', majorArray)
+		.in('major', typeFilter[expenseType])
 		.gte('date', startDate)
 		.lte('date', endDate)
 		.eq('active', true)
@@ -29,22 +30,17 @@ const getExpenses = async (startDate?: string, endDate?: string, onlyMajor: bool
 	return expenses;
 };
 
-const getExpensesBetweenDates = async ({ startDate, endDate, onlyMajor = false }: { startDate: string, endDate: string, onlyMajor: boolean }) => {
+const getExpensesBetweenDates = async ({ startDate, endDate, expenseType = 'both' }: { startDate: string, endDate: string, expenseType: 'both' | 'minor' | 'major' }) => {
 	const { data } = await supabase.auth.getUser();
 
 	if (!data.user) throw new Error('Usuario no encontrado');
-
-	let majorArray = []; //TODO: change this way to filter major expense ASAP UWU
-
-	if (onlyMajor) majorArray = [true]
-	else majorArray = [true, false]
 
 	const { data: expenses, error } = await supabase
 		.from('expense')
 		.select(
 			'id, amount, date, remark, major, expense_center (id, name), category (id, name), payment_method (id, name, color), place (id, name)'
 		)
-		.in('major', majorArray)
+		.in('major', typeFilter[expenseType])
 		.gte('date', startDate)
 		.lte('date', endDate)
 		.eq('active', true)
@@ -149,14 +145,14 @@ const deleteExpenses = async (deleteList: number[]) => {
 export const useGetExpenses = ({
 	startDate,
 	endDate,
-	onlyMajor,
+	expenseType,
 	onSuccess,
 	onError,
 	select
 }: QueryProps) => {
 	const getExpensesQuery = useQuery({
-		queryKey: ['expense', startDate, endDate, onlyMajor],
-		queryFn: () => getExpenses(startDate, endDate, onlyMajor),
+		queryKey: ['expense', startDate, endDate, expenseType],
+		queryFn: () => getExpenses(startDate, endDate, expenseType),
 		onSuccess,
 		onError,
 		select,
@@ -168,7 +164,7 @@ export const useGetExpenses = ({
 export const useGetExpensesBetweenDates = ({
 	onSuccess,
 	onError,
-}: MutationProps<{ startDate: string, endDate: string }>) => {
+}: MutationProps<{ startDate: string, endDate: string, expenseType: 'both' | 'minor' | 'major' }>) => {
 	const getExpensesQuery = useMutation({
 		mutationKey: ['get_expense_between_dates'],
 		mutationFn: getExpensesBetweenDates,
