@@ -17,4 +17,4 @@ web-build/
 .metro-health-check*
 
 .env
-.eas.json
+eas.json
